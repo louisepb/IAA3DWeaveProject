@@ -1,0 +1,1 @@
+call abq2018 job=COH556060 inp=FlatMax8.inp cpus=6
