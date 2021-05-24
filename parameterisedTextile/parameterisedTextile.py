@@ -99,12 +99,14 @@ numWarpLayers = int((Volume - minBinderVolume) / layerVolume)
 #numWarpLayers = int(Volume / layerVolume)
 numWeftLayers = numWarpLayers + 1
 numLayers = numWarpLayers + numWeftLayers
-print("warpYarnArea ", warpYarnArea)
-print("totalyarnVolume ", yarnVolume)
 print("numLayers ", numLayers)
 print("numXYarns ", numXYarns)
 print("numWarps ", numWarps)
 print("numWefts ", numWefts)
+print("warpSpacing ", warpSpacing)
+print("weftSpacing ", weftSpacing)
+print("warpHeight ", warpHeight)
+print("weftHeight ", weftHeight)
 
 def GenerateTextile(numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, weftHeight, warpRatio, binderRatio, length, width, height, numWeftLayers, numWarpLayers, numBinderLayers):
 	
@@ -135,8 +137,6 @@ def GenerateTextile(numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, w
 	Textile.SetBinderYarnPower( 0.2 )
 	Textile.SetWarpYarnPower(1.0)
 	Textile.SetWeftYarnPower(1.0)
-
-
 
 
 	Textile.SetWeftRepeat( WeftRepeat )
@@ -182,7 +182,6 @@ def SetUpLayers(Textile, numWeftLayers, numWarpLayers, numBinderLayers):
 	Textile.AddYLayers();
 
 	Textile.AddBinderLayer();
-		
 	
 	return
 	
