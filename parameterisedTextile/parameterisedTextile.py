@@ -45,7 +45,7 @@ inch = 25.4
 WeftRepeat = True
 
 #numBinderLayers
-numBinderLayers = 2
+numBinderLayers = 1
 
 #convert to per mm
 endsDensity = endsDensity/inch # based off reed size
@@ -100,12 +100,14 @@ numWarpLayers = int((Volume - minBinderVolume) / layerVolume)
 #numWarpLayers = int(Volume / layerVolume)
 numWeftLayers = numWarpLayers + 1
 numLayers = numWarpLayers + numWeftLayers
-print("warpYarnArea ", warpYarnArea)
-print("totalyarnVolume ", yarnVolume)
 print("numLayers ", numLayers)
 print("numXYarns ", numXYarns)
 print("numWarps ", numWarps)
 print("numWefts ", numWefts)
+print("warpSpacing ", warpSpacing)
+print("weftSpacing ", weftSpacing)
+print("warpHeight ", warpHeight)
+print("weftHeight ", weftHeight)
 
 def GenerateTextile(numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, weftHeight, warpRatio, binderRatio, length, width, height, numWeftLayers, numWarpLayers, numBinderLayers):
 	
@@ -129,7 +131,7 @@ def GenerateTextile(numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, w
 
 	Textile.SetBinderPosition(0,6,1)
 	Textile.SetBinderPosition(1,6,1)
-	Textile.SetBinderPosition(2,6,2)
+	Textile.SetBinderPosition(2,6,1)
 	Textile.SetBinderPosition(3,6,1)
 	Textile.SetBinderPosition(4,6,1)
 	Textile.SetBinderPosition(5,6,1)
@@ -183,8 +185,6 @@ def SetUpLayers(Textile, numWeftLayers, numWarpLayers, numBinderLayers):
 	Textile.AddYLayers();
 
 	Textile.AddBinderLayer();
-
-	numYarns = Textile.GetNumYarns()
 	
 	
 	return
