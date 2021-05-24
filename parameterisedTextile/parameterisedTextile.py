@@ -39,13 +39,13 @@ binderHeight = 1*radius
 
 #These could be parameters if exists a range of reed sizes, units per inch 
 endsDensity = 20
-picksDensity = 16
+picksDensity = 20
 inch = 25.4
 
 WeftRepeat = True
 
 #numBinderLayers
-numBinderLayers = 2
+numBinderLayers = 1
 
 #convert to per mm
 endsDensity = endsDensity/inch # based off reed size
@@ -56,7 +56,6 @@ numXYarns = int(endsDensity*length)
 numWefts = int(picksDensity*width)
 
 numWarps = 6 #math.ceil(warpRatio*numXYarns/(warpRatio + binderRatio))
-numBinders = numXYarns - numWarps
 # can think more about this when see more textile data
 
 #spacings 
@@ -67,8 +66,8 @@ print("weftSpacing ", weftSpacing)
 print("warpSpacing ", warpSpacing)
 
 #binders must fit between weft yarns
-if (weftSpacing < weftWidth + binderHeight):
-	raise Exception("Not enough space between wefts, decrease picks density")
+# if (weftSpacing < weftWidth + binderHeight):
+	# raise Exception("Not enough space between wefts, decrease picks density")
 
 #calculate available yarn volume
 yarnfvf = (filamentArea * numberFilamentsWarp) / warpYarnArea
@@ -112,11 +111,21 @@ def GenerateTextile(numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, w
 	#Set up 3D Weave textile
 	Textile = CTextile3DWeave( numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, weftHeight, False)
 
-	SetUpLayers(Textile, numWeftLayers, numWarpLayers, numBinderLayers)
+	
 
 	Textile.SetWarpRatio(warpRatio)
 	Textile.SetBinderRatio(binderRatio)
-
+	
+	SetUpLayers(Textile, numWeftLayers, numWarpLayers, numBinderLayers)
+	
+	Textile.SetBinderPosition(0,6,1)
+	Textile.SetBinderPosition(1,6,1)
+	Textile.SetBinderPosition(2,6,2)
+	Textile.SetBinderPosition(3,6,1)
+	Textile.SetBinderPosition(4,6,1)
+	Textile.SetBinderPosition(5,6,1)
+	Textile.SetBinderPosition(6,6,1)
+	
 	Textile.SetYYarnWidths( weftWidth )
 	Textile.SetXYarnWidths( warpWidth )
 	Textile.SetYYarnHeights( weftHeight )
@@ -127,12 +136,7 @@ def GenerateTextile(numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, w
 	Textile.SetWarpYarnPower(1.0)
 	Textile.SetWeftYarnPower(1.0)
 
-	Textile.SetBinderPosition(0,6,1)
-	Textile.SetBinderPosition(1,6,1)
-	Textile.SetBinderPosition(2,6,2)
-	Textile.SetBinderPosition(3,6,1)
-	Textile.SetBinderPosition(4,6,1)
-	Textile.SetBinderPosition(5,6,1)
+
 
 
 	Textile.SetWeftRepeat( WeftRepeat )
@@ -154,24 +158,19 @@ def GenerateTextile(numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, w
 
 
 def SetUpLayers(Textile, numWeftLayers, numWarpLayers, numBinderLayers):
-	#Add layers and set ratio of warps to binders
-	warpOnlyLayers = numWarpLayers - numBinderLayers+1
+		#Add layers and set ratio of warps to binders
 	Textile.AddNoYarnLayer();
 
 	# Add alternating layers
 	while numWeftLayers > 1:
 
-		Textile.AddYLayers()
+		Textile.AddYLayers();
 		if numWarpLayers > 0:
 		
-			if (warpOnlyLayers > 0 ):
-				Textile.AddWarpLayer()
-				warpOnlyLayers -= 1
-			else:
-				Textile.AddXLayers()
-			numWarpLayers -= 1
+			Textile.AddWarpLayer();
+			numWarpLayers -= 1;
 		
-		numWeftLayers -= 1
+		numWeftLayers -= 1;
 
 	#If more warp than weft layers, add remaining layers
 	while numWarpLayers > 0:
@@ -183,9 +182,7 @@ def SetUpLayers(Textile, numWeftLayers, numWarpLayers, numBinderLayers):
 	Textile.AddYLayers();
 
 	Textile.AddBinderLayer();
-
-	numYarns = Textile.GetNumYarns()
-	
+		
 	
 	return
 	
