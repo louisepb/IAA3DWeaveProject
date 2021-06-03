@@ -39,7 +39,7 @@ binderHeight = 1*radius
 
 #These could be parameters if exists a range of reed sizes, units per inch 
 endsDensity = 20
-picksDensity = 20
+picksDensity = 16
 inch = 25.4
 
 WeftRepeat = True
@@ -77,7 +77,11 @@ print("yarnfvf ", yarnfvf)
 yarnVolume = fibreVolume / yarnfvf
 print("yarnVolume ", yarnVolume)
 
-
+binderYarns = [[0, 1, 2, 1, 1, 1], [3, 4, 5, 6, 4, 3]]
+#Check if length of binderYarns positions equal to numWefts
+for Yarn in binderYarns:
+	if len(Yarn) != numWefts:
+		raise Exception("Too many binder yarn positions specified, must be equal to number of wefts. Change picks density")
 
 
 #calculate the yarn volume in each layer (both warp and weft)
@@ -108,10 +112,10 @@ print("weftSpacing ", weftSpacing)
 print("warpHeight ", warpHeight)
 print("weftHeight ", weftHeight)
 
-def GenerateTextile(numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, weftHeight, warpRatio, binderRatio, length, width, height, numWeftLayers, numWarpLayers, numBinderLayers):
+def GenerateTextile(numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, weftHeight, warpRatio, binderRatio, length, width, height, binderYarns, numWeftLayers, numWarpLayers, numBinderLayers):
 	
 	#Set up 3D Weave textile
-	Textile = CTextile3DWeave( numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, weftHeight, False)
+	Textile = CTextileDecoupled( numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, weftHeight, False)
 
 	
 
@@ -120,19 +124,28 @@ def GenerateTextile(numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, w
 	
 	SetUpLayers(Textile, numWeftLayers, numWarpLayers, numBinderLayers)
 	
-	Textile.SetBinderPosition(0,6,1)
-	Textile.SetBinderPosition(1,6,1)
-	Textile.SetBinderPosition(2,6,2)
-	Textile.SetBinderPosition(3,6,1)
-	Textile.SetBinderPosition(4,6,1)
-	Textile.SetBinderPosition(5,6,1)
-	Textile.SetBinderPosition(6,6,1)
+	#Decompose binder yarn offsets into stacks
+	list=[]
+	for i in range(numWefts):
+		list.append([])
+	
+	for i in range(len(binderYarns)):
+		for j in range(numWefts):
+			list[j].append(binderYarns[i][j])
+		
+	# For now assume one binder, think about how this can be expanded
+	# Problem is knowing the binderpattern beforehand
+	for i in range(numWefts):
+			Textile.SetBinderPosition(i, numWefts ,list[i])
+	
+	
+	Textile.ShapeBinderYarns()
 	
 	Textile.SetYYarnWidths( weftWidth )
 	Textile.SetXYarnWidths( warpWidth )
 	Textile.SetYYarnHeights( weftHeight )
 	Textile.SetXYarnHeights( warpHeight )
-	Textile.SetBinderYarnWidths( binderWidth)
+	Textile.SetBinderYarnWidths( binderWidth )
 	Textile.SetBinderYarnHeights( binderHeight )
 	Textile.SetBinderYarnPower( 0.2 )
 	Textile.SetWarpYarnPower(1.0)
@@ -185,4 +198,4 @@ def SetUpLayers(Textile, numWeftLayers, numWarpLayers, numBinderLayers):
 	
 	return
 	
-GenerateTextile(numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, weftHeight, warpRatio, binderRatio, length, width, height, numWeftLayers, numWarpLayers, numBinderLayers)
+GenerateTextile(numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, weftHeight, warpRatio, binderRatio, length, width, height, binderYarns, numWeftLayers, numWarpLayers, numBinderLayers)
