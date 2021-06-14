@@ -45,7 +45,7 @@ inch = 25.4
 WeftRepeat = True
 
 #numBinderLayers
-numBinderLayers = 1
+numBinderLayers = 2
 
 #convert to per mm
 endsDensity = endsDensity/inch # based off reed size
@@ -115,7 +115,7 @@ print("weftHeight ", weftHeight)
 def GenerateTextile(numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, weftHeight, warpRatio, binderRatio, length, width, height, binderYarns, numWeftLayers, numWarpLayers, numBinderLayers):
 	
 	#Set up 3D Weave textile
-	Textile = CTextileDecoupled( numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, weftHeight, False)
+	Textile = CTextileDecoupled( numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, weftHeight, numBinderLayers, True)
 
 	
 
@@ -139,7 +139,7 @@ def GenerateTextile(numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, w
 			Textile.SetBinderPosition(i, numWefts ,list[i])
 	
 	
-	Textile.ShapeBinderYarns()
+	
 	
 	Textile.SetYYarnWidths( weftWidth )
 	Textile.SetXYarnWidths( warpWidth )
@@ -153,6 +153,8 @@ def GenerateTextile(numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, w
 
 
 	Textile.SetWeftRepeat( WeftRepeat )
+	
+	Textile.BuildTextile()
 
 	Textile.SetFibresPerYarn(WARP, 12000)
 	Textile.SetFibresPerYarn(WEFT, 12000)
