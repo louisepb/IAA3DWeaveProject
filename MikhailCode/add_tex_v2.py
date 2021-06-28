@@ -108,7 +108,7 @@ my_geom = dict(sx=1.25, sy=2.0, hx=0.35, hy=0.38, hb=0.2, wy=1.8, wx=2.1, wb=0.4
 
 # Spacing
 my_sx = [0.0, 0.25, 0.5, 0.75, 1.0, 1.5]
-my_sx = my_sx
+my_sx = my_sx`
 
 my_sy = [0.0, 0.25, 0.5, 0.75, 1.0, 1.5]
 my_sy = my_sy
