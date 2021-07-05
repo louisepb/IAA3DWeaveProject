@@ -79,7 +79,7 @@ print("warpHeight ", warpHeight)
 print("weftHeight ", weftHeight)
 
 #Set up 3D Weave textile
-Textile = CTextileDecoupled( numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, weftHeight, numBinderLayers, True)
+Textile = CTextileDecoupledLToL( numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, weftHeight, numBinderLayers, True)
 
 Textile.SetWarpRatio(warpRatio)
 Textile.SetBinderRatio(binderRatio)
