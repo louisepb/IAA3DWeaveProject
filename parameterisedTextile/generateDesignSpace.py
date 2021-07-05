@@ -113,7 +113,7 @@ def GenerateDesignSpace(path, vf, tol, thickness, numberFilamentsWarp, numberFil
 	cellWidth = weftWidth + 0.05*weftWidth
 	cellLength = warpWidth + 0.05*warpWidth
 	
-	cellVolume = cellWidth  * cellLength * Thickness
+	cellVolume = cellWidth  * cellLength * thickness
 	cellFibreVolume = vf * cellVolume
 	
 	yarnfvf = (filamentArea * numberFilamentsWarp) / warpYarnArea
@@ -134,7 +134,7 @@ def GenerateDesignSpace(path, vf, tol, thickness, numberFilamentsWarp, numberFil
 
 
 	#max number of possible layers with binder and additional weft layer accounted for - George check this is Kosher
-	numWarpLayers = int((cellVolume - minBinderVolume) / cellLayerVolume) 
+	numWarpLayers = int((cellVolume) / cellLayerVolume) 
 	#numWarpLayers = int(Volume / layerVolume)
 	numWeftLayers = numWarpLayers + 1
 	numLayers = numWarpLayers + numWeftLayers
@@ -143,10 +143,13 @@ def GenerateDesignSpace(path, vf, tol, thickness, numberFilamentsWarp, numberFil
 	#max binder volume given by numWarpLayers
 	maxBinderVolume = (numWeftLayers)* binderHeight * cellWidth * cellLength
 	maxnumBinderLayers = numWeftLayers 
-	print("minBinderVolume ", minBinderVolume)
-	
+		
 	#maxSpacing - change this when you have worked out how to do this
-	maxSpacing = 0.5
+	
+	minSpacing = binderHeight
+	upper = (2*cellFibreVolume/(vf-0.5*tol*vf)) - cellVolume
+	maxSpacing = upper/thickness
+	print("maxSpacing ", maxSpacing)
 
 	
 	return numWeftLayers, numWarpLayers, maxnumBinderLayers, maxSpacing
@@ -160,7 +163,7 @@ numberFilamentsWarp = 12000
 numberFilamentsWeft = 12000
 numberFilamentsBinder = 12000
 
-numWeftLayers, numWarpLayers, numBinderLayers, maxSpacing = GenerateDesignSpace(vf, tol, thickness, numberFilamentsWarp, numberFilamentsWeft, numberFilamentsBinder)
+numWeftLayers, numWarpLayers, maxnumBinderLayers, maxSpacing = GenerateDesignSpace(path, vf, tol, thickness, numberFilamentsWarp, numberFilamentsWeft, numberFilamentsBinder)
 	#pass numlayers from here into Matlab and have matlab generate the binder pattern + spacings that will set the unit cell size
 modelName = "weave"
 file = open(path + modelName +  "DesignSpace.txt", "a")
