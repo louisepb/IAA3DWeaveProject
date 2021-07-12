@@ -150,9 +150,10 @@ def GenerateDesignSpace(path, vf, tol, thickness, numberFilamentsWarp, numberFil
 	upper = (2*cellFibreVolume/(vf-0.5*tol*vf)) - cellVolume
 	maxSpacing = upper/thickness
 	print("maxSpacing ", maxSpacing)
+	
 
 	
-	return numWeftLayers, numWarpLayers, maxnumBinderLayers, maxSpacing
+	return numWeftLayers, numWarpLayers, maxnumBinderLayers, maxSpacing, warpHeight, warpWidth, weftHeight, weftWidth, binderHeight, binderWidth 
 	
 	
 	
@@ -163,9 +164,9 @@ numberFilamentsWarp = 12000
 numberFilamentsWeft = 12000
 numberFilamentsBinder = 12000
 
-numWeftLayers, numWarpLayers, maxnumBinderLayers, maxSpacing = GenerateDesignSpace(path, vf, tol, thickness, numberFilamentsWarp, numberFilamentsWeft, numberFilamentsBinder)
+numWeftLayers, numWarpLayers, maxnumBinderLayers, maxSpacing, warpHeight, warpWidth, weftHeight, weftWidth, binderHeight, binderWidth  = GenerateDesignSpace(path, vf, tol, thickness, numberFilamentsWarp, numberFilamentsWeft, numberFilamentsBinder)
 	#pass numlayers from here into Matlab and have matlab generate the binder pattern + spacings that will set the unit cell size
 modelName = "weave"
 file = open(path + modelName +  "DesignSpace.txt", "a")
-file.write(str(numWeftLayers) + ", " + str(maxnumBinderLayers) + str(maxSpacing))
-	
+file.write(str(numWeftLayers) + ", " + str(maxnumBinderLayers)+ ", " + str(maxSpacing) + ", " + str(warpHeight) + ", " + str(warpWidth) + ", " + str(weftHeight) + ", " + str(weftWidth) + ", " + str(binderHeight) + ", " + str(binderWidth) + "\n")
+file.close()	
