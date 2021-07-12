@@ -1,7 +1,9 @@
+""" Module to generate a parameterised textile """
+
 from TexGen.Core import *
 import math
 import sys
-path = "c:\\users\\emxghs\\desktop\\IAA3DWeaveProject\\parameterisedTextile\\"
+
 #user specified properties
 
 # #size of unit cell
@@ -156,7 +158,15 @@ path = "c:\\users\\emxghs\\desktop\\IAA3DWeaveProject\\parameterisedTextile\\"
 
 
 def GenerateTextile(numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, weftHeight, warpRatio, binderRatio, length, width, height, binderYarns, numWeftLayers, numWarpLayers, numBinderLayers):
-	
+	'''Function to generate a textile 
+
+    Args:
+        numXYarns (int): Total number of warp and binder yarns
+
+    Returns:
+        (None)
+        
+    '''
 	#Set up 3D Weave textile
 	numXYarns=28
 	numWefts=14
@@ -261,41 +271,42 @@ def GenerateTextile(numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, w
 	
 	# return
 
-
-# numXYarns = sys.argv[0]
-# numWefts = sys.argv[1]
-# warpSpacing = sys.argv[2]
-# weftSpacing = sys.argv[3]
-# warpHeight = sys.argv[4]
-# weftHeight = sys.argv[5]
-# warpRatio = sys.argv[6]
-# binderRatio = sys.argv[7]
-# length = sys.argv[8]
-# width = sys.argv[9]
-# height = sys.argv[10]
-# binderYarns = sys.argv[11]
-# numWeftLayers = sys.argv[12]
-# numWarpLayers = sys.argv[13]
-# numBinderLayers = sys.argv[14]
-numXYarns = 28
-numWefts = 14
-warpSpacing = 0.5
-weftSpacing = 0.5
-warpHeight = 0.3
-weftHeight = 0.3
-warpRatio = 1
-binderRatio = 1
-length = 14
-width = 7
-height = 8.1
-file=open("binderpattern.dat", "r")
-allLines=file.readlines()
-print(allLines)
-lastLine=allLines[-1]
-x = lastLine
-binderYarns = x.split()
-file.close()
-numWeftLayers = 14
-numWarpLayers = 13
-numBinderLayers = 1
-GenerateTextile(numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, weftHeight, warpRatio, binderRatio, length, width, height, binderYarns, numWeftLayers, numWarpLayers, numBinderLayers)
+if __name__ == '__main__':
+    path = "c:\\users\\emxghs\\desktop\\IAA3DWeaveProject\\parameterisedTextile\\"
+    # numXYarns = sys.argv[0]
+    # numWefts = sys.argv[1]
+    # warpSpacing = sys.argv[2]
+    # weftSpacing = sys.argv[3]
+    # warpHeight = sys.argv[4]
+    # weftHeight = sys.argv[5]
+    # warpRatio = sys.argv[6]
+    # binderRatio = sys.argv[7]
+    # length = sys.argv[8]
+    # width = sys.argv[9]
+    # height = sys.argv[10]
+    # binderYarns = sys.argv[11]
+    # numWeftLayers = sys.argv[12]
+    # numWarpLayers = sys.argv[13]
+    # numBinderLayers = sys.argv[14]
+    numXYarns = 28
+    numWefts = 14
+    warpSpacing = 0.5
+    weftSpacing = 0.5
+    warpHeight = 0.3
+    weftHeight = 0.3
+    warpRatio = 1
+    binderRatio = 1
+    length = 14
+    width = 7
+    height = 8.1
+    file=open("binderpattern.dat", "r")
+    allLines=file.readlines()
+    print(allLines)
+    lastLine=allLines[-1]
+    x = lastLine
+    binderYarns = x.split()
+    file.close()
+    numWeftLayers = 14
+    numWarpLayers = 13
+    numBinderLayers = 1
+    GenerateTextile(numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, weftHeight, warpRatio, binderRatio, length, width, height, binderYarns, numWeftLayers, numWarpLayers, numBinderLayers)
