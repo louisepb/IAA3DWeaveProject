@@ -1,123 +1,179 @@
 from TexGen.Core import *
 import math
-
+import sys
+path = "c:\\users\\emxghs\\desktop\\IAA3DWeaveProject\\parameterisedTextile\\"
 #user specified properties
 
-#size of unit cell
-length=10
-width=10
-height=8
-Volume = length * width * height
+# #size of unit cell
+# length=10
+# width=10
+# height=8
+# Volume = length * width * height
 
-#ratios of warp:weft:binder channels per unit cell
-warpRatio=6
-binderRatio=1
+# #ratios of warp:weft:binder channels per unit cell
+# warpRatio=6
+# binderRatio=1
 
-vf = 0.6
-fibreVolume = vf * Volume
-
-#yarn size could be parameter, initally assuming all single type of yarn, below is Hexcel IM7 tow, max packing fraction of 0.9
-filamentArea = math.pi * ((0.0026)**2)
-numberFilamentsWarp = 12000
-warpYarnArea = (filamentArea*numberFilamentsWarp)/0.9
-radius = math.sqrt(warpYarnArea/math.pi)
-warpWidth = 4*radius
-warpHeight = 1*radius
-
-numberFilamentsWeft = 12000
-weftYarnArea = (filamentArea*numberFilamentsWeft)/0.9
-radius = math.sqrt(warpYarnArea/math.pi)
-weftWidth = 4*radius
-weftHeight = 1*radius
-
-numberFilamentsBinder = 12000
-binderYarnArea = (filamentArea*numberFilamentsBinder)/0.9
-radius = math.sqrt(warpYarnArea/math.pi)
-binderWidth = 4*radius
-binderHeight = 1*radius
+# vf = 0.6
+# fibreVolume = vf * Volume
 
 
-#These could be parameters if exists a range of reed sizes, units per inch 
-endsDensity = 20
-picksDensity = 16
-inch = 25.4
 
-WeftRepeat = True
 
-#numBinderLayers
-numBinderLayers = 2
+# #These could be parameters if exists a range of reed sizes, units per inch 
+# endsDensity = 20
+# picksDensity = 16
+# inch = 25.4
 
-#convert to per mm
-endsDensity = endsDensity/inch # based off reed size
-picksDensity = picksDensity/inch
+# #numBinderLayers
+# numBinderLayers = 2
 
-#calculate numbers of wefts and warps in a layer in unit cell
-numXYarns = int(endsDensity*length)
-numWefts = int(picksDensity*width)
+# #convert to per mm
+# endsDensity = endsDensity/inch # based off reed size
+# picksDensity = picksDensity/inch
 
-numWarps = 6 #math.ceil(warpRatio*numXYarns/(warpRatio + binderRatio))
+# #calculate numbers of wefts and warps in a layer in unit cell
+# numXYarns = int(endsDensity*length)
+# numWefts = int(picksDensity*width)
+
+# numWarps = 6 #math.ceil(warpRatio*numXYarns/(warpRatio + binderRatio))
 # can think more about this when see more textile data
 
-#spacings 
-warpSpacing = float(length) / numXYarns
-weftSpacing = float(width) / numWefts
-print(length, width, numXYarns, numWefts)
-print("weftSpacing ", weftSpacing)
-print("warpSpacing ", warpSpacing)
+# #spacings 
+# warpSpacing = float(length) / numXYarns
+# weftSpacing = float(width) / numWefts
+# print(length, width, numXYarns, numWefts)
+# print("weftSpacing ", weftSpacing)
+# print("warpSpacing ", warpSpacing)
 
-#binders must fit between weft yarns
-# if (weftSpacing < weftWidth + binderHeight):
-	# raise Exception("Not enough space between wefts, decrease picks density")
-
-#calculate available yarn volume
-yarnfvf = (filamentArea * numberFilamentsWarp) / warpYarnArea
-print("yarnfvf ", yarnfvf)
+# #binders must fit between weft yarns
+# # if (weftSpacing < weftWidth + binderHeight):
+	# # raise Exception("Not enough space between wefts, decrease picks density")
 
 
-yarnVolume = fibreVolume / yarnfvf
-print("yarnVolume ", yarnVolume)
-
-binderYarns = [[0, 1, 2, 1, 1, 1], [3, 4, 5, 6, 4, 3]]
-#Check if length of binderYarns positions equal to numWefts
-for Yarn in binderYarns:
-	if len(Yarn) != numWefts:
-		raise Exception("Too many binder yarn positions specified, must be equal to number of wefts. Change picks density")
+# binderYarns = [[0, 1, 2, 1, 1, 1], [3, 4, 5, 6, 4, 3]]
+# #Check if length of binderYarns positions equal to numWefts
+# for Yarn in binderYarns:
+	# if len(Yarn) != numWefts: 
+		# raise Exception("Too many binder yarn positions specified, must be equal to number of wefts. Change picks density")
 
 
-#calculate the yarn volume in each layer (both warp and weft)
-layerVolume = (warpHeight + weftHeight)*length*width
-print("layerVolume ", layerVolume)
+# #calculate the yarn volume in each layer (both warp and weft)
+# layerVolume = (warpHeight + weftHeight)*length*width
+# print("layerVolume ", layerVolume)
 
-#extra weft layer volume 
-weftlayerVolume = weftHeight*length*width
-print("weftlayerVolume ", weftlayerVolume)
+# #extra weft layer volume 
+# weftlayerVolume = weftHeight*length*width
+# print("weftlayerVolume ", weftlayerVolume)
 
-#reserve a min binder volume for layers above and below textile
-minBinderVolume = 2 * binderHeight * width * length
-print("minBinderVolume ", minBinderVolume)
+# #reserve a min binder volume for layers above and below textile
+# minBinderVolume = 2 * binderHeight * width * length
+# print("minBinderVolume ", minBinderVolume)
 
 
 
-#max number of possible layers with binder and additional weft layer accounted for - George check this is Kosher
-numWarpLayers = int((Volume - minBinderVolume) / layerVolume) 
-#numWarpLayers = int(Volume / layerVolume)
-numWeftLayers = numWarpLayers + 1
-numLayers = numWarpLayers + numWeftLayers
-print("numLayers ", numLayers)
-print("numXYarns ", numXYarns)
-print("numWarps ", numWarps)
-print("numWefts ", numWefts)
-print("warpSpacing ", warpSpacing)
-print("weftSpacing ", weftSpacing)
-print("warpHeight ", warpHeight)
-print("weftHeight ", weftHeight)
+# #max number of possible layers with binder and additional weft layer accounted for - George check this is Kosher
+# numWarpLayers = int((Volume - minBinderVolume) / layerVolume) 
+# #numWarpLayers = int(Volume / layerVolume)
+# numWeftLayers = numWarpLayers + 1
+# numLayers = numWarpLayers + numWeftLayers
+
+
+
+# def GenerateDesignSpace(path, vf, tol, thickness, numberFilamentsWarp, numberFilamentsWeft, numberFilamentsBinder):
+	# """
+	# Function to set the design space based on user input. Takes the target volume fraction, volume fraction tolerance
+	# and thickness and returns the number of layers, actual volume fraction and spacings.
+	
+	# Binder pattern and other geometrical values then generated by optimisation
+	
+	# """
+	# #size of single cell dependent on the yarn type
+	# #Assume for now the yarn type is fized at 12k
+	# #yarn size could be parameter, initally assuming all single type of yarn, below is Hexcel IM7 tow, max packing fraction of 0.9
+	# filamentArea = math.pi * ((0.0026)**2)
+	# #numberFilamentsWarp = 12000
+	# warpYarnArea = (filamentArea*numberFilamentsWarp)/0.9
+	# radius = math.sqrt(warpYarnArea/math.pi)
+	# warpWidth = 4*radius
+	# warpHeight = 1*radius
+
+	# #numberFilamentsWeft = 12000
+	# weftYarnArea = (filamentArea*numberFilamentsWeft)/0.9
+	# radius = math.sqrt(warpYarnArea/math.pi)
+	# weftWidth = 4*radius
+	# weftHeight = 1*radius
+
+	# #numberFilamentsBinder = 12000
+	# binderYarnArea = (filamentArea*numberFilamentsBinder)/0.9
+	# radius = math.sqrt(warpYarnArea/math.pi)
+	# binderWidth = 4*radius
+	# binderHeight = 1*radius
+	
+	
+	# cellWidth = weftWidth + 0.1*weftWidth
+	# cellLength = warpWidth + 0.1*warpWidth
+	
+	# cellVolume = cellWidth  * cellLength * Thickness
+	# cellFibreVolume = vf * cellVolume
+	
+	# yarnfvf = (filamentArea * numberFilamentsWarp) / warpYarnArea
+	
+	# cellYarnVolume = cellVolume * vf / yarnfvf
+	
+	# #calculate the yarn volume in each layer (both warp and weft)
+	# cellLayerVolume = (warpHeight + weftHeight)*cellLength*cellWidth
+	# print("cellLayerVolume is ", cellLayerVolume)
+	
+	# weftlayerVolume = weftHeight*cellLength*cellWidth
+	
+	# numLayers = int(cellYarnVolume / cellLayerVolume)
+	# print("numLayers = ", numLayers)
+	
+	# #reserve a min binder volume for layers above and below textile
+	# minBinderVolume = 2 * binderHeight * cellWidth * cellLength
+	# print("minBinderVolume ", minBinderVolume)
+
+
+
+	# #max number of possible layers with binder and additional weft layer accounted for - George check this is Kosher
+	# numWarpLayers = int((cellVolume - minBinderVolume) / cellLayerVolume) 
+	# #numWarpLayers = int(Volume / layerVolume)
+	# numWeftLayers = numWarpLayers + 1
+	# numLayers = numWarpLayers + numWeftLayers
+	# print("numLayers = ", numLayers)
+	
+	# #pass numlayers from here into Matlab and have matlab generate the binder pattern + spacings that will set the unit cell size
+	# modelName = "weave"
+	# file = open(path + modelName +  "DesignSpace.txt", "a")
+	# file.write(str(numWeftLayers))
+	
+	# return numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, weftHeight, warpRatio, binderRatio, length, width, height, binderYarns, numWeftLayers, numWarpLayers, numBinderLayers
+
+
+
+
+
 
 def GenerateTextile(numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, weftHeight, warpRatio, binderRatio, length, width, height, binderYarns, numWeftLayers, numWarpLayers, numBinderLayers):
 	
 	#Set up 3D Weave textile
-	Textile = CTextileDecoupledLToL( numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, weftHeight, numBinderLayers, True)
-
+	numXYarns=28
+	numWefts=14
+	weftSpacing=0.5
+	warpSpacing=0.5
+	warpHeight=0.3
+	weftheight=0.3
+	numBinderLayers=1
+	file=open("binderpattern.dat", "r")
+	allLines=file.readlines()
+	file.close()
+	print(allLines)
+	lastLine=allLines[-1]
+	x = lastLine
+	binderYarns = x.split()
 	
+	Textile = CTextileDecoupledLToL( numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, weftHeight, numBinderLayers, True)
 
 	Textile.SetWarpRatio(warpRatio)
 	Textile.SetBinderRatio(binderRatio)
@@ -135,8 +191,9 @@ def GenerateTextile(numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, w
 		
 	# For now assume one binder, think about how this can be expanded
 	# Problem is knowing the binderpattern beforehand
-	for i in range(numWefts):
-			Textile.SetBinderPosition(i, numWefts ,list[i])
+	for j in range(len(list)):
+		for i in range(numWefts):
+			Textile.SetBinderPosition(i, j*2 ,list[i])
 	
 	
 	
@@ -151,11 +208,12 @@ def GenerateTextile(numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, w
 	Textile.SetWarpYarnPower(1.0)
 	Textile.SetWeftYarnPower(1.0)
 
-
+	WeftRepeat = True
 	Textile.SetWeftRepeat( WeftRepeat )
 	
 	Textile.BuildTextile()
 
+	#George - remember to change this
 	Textile.SetFibresPerYarn(WARP, 12000)
 	Textile.SetFibresPerYarn(WEFT, 12000)
 	Textile.SetFibresPerYarn(BINDER, 12000)
@@ -168,6 +226,9 @@ def GenerateTextile(numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, w
 	Textile.AssignDomain( domain )
 
 	AddTextile( Textile )
+	
+	#save TG model
+	SaveToXML(r"C:\\Users\\emxghs\\IAA3DWeaveProject\\parameterisedTextile\\ptextile.tg3", "3DWeave(W:2,H:3)", OUTPUT_STANDARD)
 	
 	return
 
@@ -199,5 +260,42 @@ def GenerateTextile(numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, w
 	# Textile.AddBinderLayer();
 	
 	# return
-	
+
+
+# numXYarns = sys.argv[0]
+# numWefts = sys.argv[1]
+# warpSpacing = sys.argv[2]
+# weftSpacing = sys.argv[3]
+# warpHeight = sys.argv[4]
+# weftHeight = sys.argv[5]
+# warpRatio = sys.argv[6]
+# binderRatio = sys.argv[7]
+# length = sys.argv[8]
+# width = sys.argv[9]
+# height = sys.argv[10]
+# binderYarns = sys.argv[11]
+# numWeftLayers = sys.argv[12]
+# numWarpLayers = sys.argv[13]
+# numBinderLayers = sys.argv[14]
+numXYarns = 28
+numWefts = 14
+warpSpacing = 0.5
+weftSpacing = 0.5
+warpHeight = 0.3
+weftHeight = 0.3
+warpRatio = 1
+binderRatio = 1
+length = 14
+width = 7
+height = 8.1
+file=open("binderpattern.dat", "r")
+allLines=file.readlines()
+print(allLines)
+lastLine=allLines[-1]
+x = lastLine
+binderYarns = x.split()
+file.close()
+numWeftLayers = 14
+numWarpLayers = 13
+numBinderLayers = 1
 GenerateTextile(numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, weftHeight, warpRatio, binderRatio, length, width, height, binderYarns, numWeftLayers, numWarpLayers, numBinderLayers)
