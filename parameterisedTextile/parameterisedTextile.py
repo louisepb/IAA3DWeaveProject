@@ -122,7 +122,7 @@ def GenerateTextile(numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, w
 	Textile.SetWarpRatio(warpRatio)
 	Textile.SetBinderRatio(binderRatio)
 	
-	SetUpLayers(Textile, numWeftLayers, numWarpLayers, numBinderLayers)
+	Textile.SetupLayers(numWarpLayers, numWeftLayers, numBinderLayers)
 	
 	#Decompose binder yarn offsets into stacks
 	list=[]
@@ -172,32 +172,32 @@ def GenerateTextile(numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, w
 	return
 
 
-def SetUpLayers(Textile, numWeftLayers, numWarpLayers, numBinderLayers):
-		#Add layers and set ratio of warps to binders
-	Textile.AddNoYarnLayer();
+# def SetUpLayers(Textile, numWeftLayers, numWarpLayers, numBinderLayers):
+		# #Add layers and set ratio of warps to binders
+	# Textile.AddNoYarnLayer();
 
-	# Add alternating layers
-	while numWeftLayers > 1:
+	# # Add alternating layers
+	# while numWeftLayers > 1:
 
-		Textile.AddYLayers();
-		if numWarpLayers > 0:
+		# Textile.AddYLayers();
+		# if numWarpLayers > 0:
 		
-			Textile.AddWarpLayer();
-			numWarpLayers -= 1;
+			# Textile.AddWarpLayer();
+			# numWarpLayers -= 1;
 		
-		numWeftLayers -= 1;
+		# numWeftLayers -= 1;
 
-	#If more warp than weft layers, add remaining layers
-	while numWarpLayers > 0:
+	# #If more warp than weft layers, add remaining layers
+	# while numWarpLayers > 0:
 
-		Textile.AddWarpLayer();
-		numWarpLayers -= 1;
+		# Textile.AddWarpLayer();
+		# numWarpLayers -= 1;
 
-	#Must have weft layer next to binders
-	Textile.AddYLayers();
+	# #Must have weft layer next to binders
+	# Textile.AddYLayers();
 
-	Textile.AddBinderLayer();
+	# Textile.AddBinderLayer();
 	
-	return
+	# return
 	
 GenerateTextile(numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, weftHeight, warpRatio, binderRatio, length, width, height, binderYarns, numWeftLayers, numWarpLayers, numBinderLayers)
