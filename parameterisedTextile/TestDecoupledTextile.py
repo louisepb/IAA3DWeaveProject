@@ -56,7 +56,7 @@ Textile = CTextileDecoupledLToL( numXYarns, numWefts, warpSpacing, weftSpacing, 
 Textile.SetWarpRatio(warpRatio)
 Textile.SetBinderRatio(binderRatio)
 
-SetUpLayers(Textile, numWeftLayers, numWarpLayers, numBinderLayers)
+Textile.SetupLayers(numWarpLayers, numWeftLayers, numBinderLayers)
 
 #Decompose binder yarn offsets into stacks
 list=[]
