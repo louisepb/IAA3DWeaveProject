@@ -1,34 +1,6 @@
 from TexGen.Core import *
 import math
 
-def SetUpLayers(Textile, numWeftLayers, numWarpLayers, numBinderLayers):
-		#Add layers and set ratio of warps to binders
-	Textile.AddNoYarnLayer();
-
-	# Add alternating layers
-	while numWeftLayers > 1:
-
-		Textile.AddYLayers();
-		if numWarpLayers > 0:
-		
-			Textile.AddWarpLayer();
-			numWarpLayers -= 1;
-		
-		numWeftLayers -= 1;
-
-	#If more warp than weft layers, add remaining layers
-	while numWarpLayers > 0:
-
-		Textile.AddWarpLayer();
-		numWarpLayers -= 1;
-
-	#Must have weft layer next to binders
-	Textile.AddYLayers();
-
-	Textile.AddBinderLayer();
-	
-	return
-
 #ratios of warp:weft:binder channels per unit cell
 warpRatio=1
 binderRatio=1
@@ -84,7 +56,7 @@ Textile = CTextileDecoupledLToL( numXYarns, numWefts, warpSpacing, weftSpacing, 
 Textile.SetWarpRatio(warpRatio)
 Textile.SetBinderRatio(binderRatio)
 
-SetUpLayers(Textile, numWeftLayers, numWarpLayers, numBinderLayers)
+Textile.SetupLayers(numWarpLayers, numWeftLayers, numBinderLayers)
 
 #Decompose binder yarn offsets into stacks
 list=[]

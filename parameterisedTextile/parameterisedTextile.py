@@ -1,23 +1,33 @@
+""" Module to generate a parameterised textile """
+
 from TexGen.Core import *
 import math
 import sys
 path = "c:\\users\\emxghs\\desktop\\IAA3DWeaveProject\\parameterisedTextile\\"
 
+#user specified properties
+
 def chunks(lst, n):
     return [lst[i:i+n] for i in xrange(0, len(lst), n)]
 
-def GenerateTextile(numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, warpWidth, weftHeight, weftWidth, binderHeight, binderWidth, warpRatio, binderRatio, length, width, height, binderYarns, numWeftLayers, numWarpLayers, numBinderLayers):
-	
-	#print(numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, weftHeight, numBinderLayers)
-	#print("Inside function")
+
+def GenerateTextile(numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, weftHeight, warpRatio, binderRatio, length, width, height, binderYarns, numWeftLayers, numWarpLayers, numBinderLayers):
+	'''Function to generate a textile 
+
+    Args:
+        numXYarns (int): Total number of warp and binder yarns
+
+    Returns:
+        (None)
+        
+    '''
 	#Set up 3D Weave textile
 	Textile = CTextileDecoupledLToL( numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, weftHeight, numBinderLayers, True)
 
 	Textile.SetWarpRatio(warpRatio)
 	Textile.SetBinderRatio(binderRatio)
 	
-	# SetUpLayers(Textile, numWeftLayers, numWarpLayers, numBinderLayers)
-	
+		
 	#Decompose binder yarn offsets into yarn lengths
 	binderYarns = [int(i) for i in binderYarns]
 	binderYarns=chunks(binderYarns, numWefts)
@@ -77,64 +87,37 @@ def GenerateTextile(numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, w
 	return
 
 
-# def SetUpLayers(Textile, numWeftLayers, numWarpLayers, numBinderLayers):
-		# #Add layers and set ratio of warps to binders
-	# Textile.AddNoYarnLayer();
-
-	# # Add alternating layers
-	# while numWeftLayers > 1:
-
-		# Textile.AddYLayers();
-		# if numWarpLayers > 0:
-		
-			# Textile.AddWarpLayer();
-			# numWarpLayers -= 1;
-		
-		# numWeftLayers -= 1;
-
-	# #If more warp than weft layers, add remaining layers
-	# while numWarpLayers > 0:
-
-		# Textile.AddWarpLayer();
-		# numWarpLayers -= 1;
-
-	# #Must have weft layer next to binders
-	# Textile.AddYLayers();
-
-	# Textile.AddBinderLayer();
-	
-	# return
+if __name__ == '__main__':
+	path = "c:\\users\\emxghs\\desktop\\IAA3DWeaveProject\\parameterisedTextile\\"
+	print(sys.argv)
+	numXYarns = int(sys.argv[1])
+	numWefts = int(sys.argv[2])
+	warpSpacing = float(sys.argv[3])
+	weftSpacing = float(sys.argv[4])
+	warpHeight = float(sys.argv[5])
+	warpWidth =float(sys.argv[6])
+	weftHeight = float(sys.argv[7])
+	weftWidth = float(sys.argv[8])
+	binderHeight = float(sys.argv[9])
+	binderWidth = float(sys.argv[10])
+	warpRatio = int(sys.argv[11])
+	binderRatio = int(sys.argv[12])
+	length = float(sys.argv[13])
+	width = float(sys.argv[14])
+	height = float(sys.argv[15])
+	numWeftLayers = int(sys.argv[17])
+	numWarpLayers = int(sys.argv[18])
+	numBinderLayers = int(sys.argv[19])
 
 
-print(sys.argv)
-numXYarns = int(sys.argv[1])
-numWefts = int(sys.argv[2])
-warpSpacing = float(sys.argv[3])
-weftSpacing = float(sys.argv[4])
-warpHeight = float(sys.argv[5])
-warpWidth =float(sys.argv[6])
-weftHeight = float(sys.argv[7])
-weftWidth = float(sys.argv[8])
-binderHeight = float(sys.argv[9])
-binderWidth = float(sys.argv[10])
-warpRatio = int(sys.argv[11])
-binderRatio = int(sys.argv[12])
-length = float(sys.argv[13])
-width = float(sys.argv[14])
-height = float(sys.argv[15])
-numWeftLayers = int(sys.argv[17])
-numWarpLayers = int(sys.argv[18])
-numBinderLayers = int(sys.argv[19])
+	file=open("binderpattern.dat", "r")
+	allLines=file.readlines()
+	lastLine=allLines[-1]
+	x = lastLine
+	binderYarns = x.split()
+	file.close()
 
-
-file=open("binderpattern.dat", "r")
-allLines=file.readlines()
-lastLine=allLines[-1]
-x = lastLine
-binderYarns = x.split()
-file.close()
-
-#numWeftLayers = 14
-#numWarpLayers = 13
-#numBinderLayers = 1
-GenerateTextile(numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, warpWidth, weftHeight, weftWidth, binderHeight, binderWidth, warpRatio, binderRatio, length, width, height, binderYarns, numWeftLayers, numWarpLayers, numBinderLayers)
+	#numWeftLayers = 14
+	#numWarpLayers = 13
+	#numBinderLayers = 1
+	GenerateTextile(numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, warpWidth, weftHeight, weftWidth, binderHeight, binderWidth, warpRatio, binderRatio, length, width, height, binderYarns, numWeftLayers, numWarpLayers, numBinderLayers)
