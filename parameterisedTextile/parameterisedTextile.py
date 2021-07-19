@@ -11,11 +11,30 @@ def chunks(lst, n):
     return [lst[i:i+n] for i in xrange(0, len(lst), n)]
 
 
-def GenerateTextile(numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, weftHeight, warpRatio, binderRatio, length, width, height, binderYarns, numWeftLayers, numWarpLayers, numBinderLayers):
+def GenerateTextile(numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, warpWidth, weftHeight, weftWidth, binderHeight, binderWidth, warpRatio, binderRatio, length, width, height, binderYarns, numWeftLayers, numWarpLayers, numBinderLayers):
 	'''Function to generate a textile 
 
     Args:
         numXYarns (int): Total number of warp and binder yarns
+		numWefts (int) : Total number of weft yarns
+		warpSpacing (float) : Space between warp and binder yarns
+		weftSpacing (float) : Space between weft yarns
+		warpHeight (float) : Height of warp yarn
+		warpWidth (float) : Width of warp yarn
+		weftHeight (float) : Height of weft yarn
+		weftWidth (float) : Width of weft yarn
+		binderHeight (float) : Height of binder yarn
+		binderWidth (float) : Width of binder yarn
+		warpRatio (int) : Ratio of warp to binder yarns
+		binderRatio (int) : Ratio of binder to warp
+		
+		length (float) : Length of unit cell
+		width (float) : Width of unit cell
+		height (float) : Height of unit cell
+		binderYarns (list of ints) : Binder yarn offset positions
+		numWeftLayers (int) : Number of weft layers
+		numWarpLayers (int) : Number of warp layers
+		numBinderLayers (int) : Number of binder layers
 
     Returns:
         (None)
@@ -27,6 +46,8 @@ def GenerateTextile(numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, w
 	Textile.SetWarpRatio(warpRatio)
 	Textile.SetBinderRatio(binderRatio)
 	
+	print(numWarpLayers, numWeftLayers)
+	Textile.SetupLayers( numWarpLayers, numWeftLayers, numBinderLayers )
 		
 	#Decompose binder yarn offsets into yarn lengths
 	binderYarns = [int(i) for i in binderYarns]
@@ -74,7 +95,7 @@ def GenerateTextile(numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, w
 	Textile.SetFibreDiameter(BINDER, 0.0026, "mm")
 
 
-	domain = CDomainPlanes(XYZ(0, 0, 0), XYZ(length, width, height))
+	domain = CDomainPlanes(XYZ(0, 0, -binderHeight), XYZ(length, width, height))
 	Textile.AssignDomain( domain )
 
 	AddTextile( Textile )
@@ -105,9 +126,9 @@ if __name__ == '__main__':
 	length = float(sys.argv[13])
 	width = float(sys.argv[14])
 	height = float(sys.argv[15])
-	numWeftLayers = int(sys.argv[17])
-	numWarpLayers = int(sys.argv[18])
-	numBinderLayers = int(sys.argv[19])
+	numWeftLayers = int(sys.argv[16])
+	numWarpLayers = int(sys.argv[17])
+	numBinderLayers = int(sys.argv[18])
 
 
 	file=open("binderpattern.dat", "r")
@@ -117,7 +138,4 @@ if __name__ == '__main__':
 	binderYarns = x.split()
 	file.close()
 
-	#numWeftLayers = 14
-	#numWarpLayers = 13
-	#numBinderLayers = 1
 	GenerateTextile(numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, warpWidth, weftHeight, weftWidth, binderHeight, binderWidth, warpRatio, binderRatio, length, width, height, binderYarns, numWeftLayers, numWarpLayers, numBinderLayers)

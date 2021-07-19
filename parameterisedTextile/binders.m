@@ -105,13 +105,10 @@ fclose(fileID);
 
 string1 = [numXYarns numWefts warpSpacing weftSpacing warpHeight warpWidth weftHeight weftWidth binderHeight binderWidth warpRatio binderRatio Length width height];
 format1 = "%d %d %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %d %d %.2f %.2f %.2f";
-string2 = [binderYarns];
-format2 = " %s"; 
 string3 = [numWeftLayers numWarpLayers numBinderLayers];
 format3 = " %d %d %d";
 [cmdLine1, errmsg1] = sprintf('python parameterisedTextile.py ' + format1, string1 );
-[cmdLine2, errmsg2] = sprintf(format2, string2);
 [cmdLine3, errmsg3] = sprintf(format3, string3);
 
-cmdLine = cmdLine1 + cmdLine2 + cmdLine3;
+cmdLine = cmdLine1 + cmdLine3;
 [status, cmdout2] = system(cmdLine);
