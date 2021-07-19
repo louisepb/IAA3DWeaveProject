@@ -1,3 +1,6 @@
+clc;
+
+
 [status, cmdout1] = system('python generateDesignSpace.py');
 input='c:\\users\\emxghs\\desktop\\parameterisedTextile python generateDesignSpace.py';
 A=dlmread("weaveDesignSpace.txt");
@@ -15,10 +18,10 @@ binderWidth=A(9);
 numWarpLayers = numWeftLayers -1;
 %these will be parameters from optimisation
 passOverRatio=1;
-SteppingRatio=2;
+SteppingRatio=1;
 offset = 1;
-warpSpacing = 0.5;
-weftSpacing = 0.5;
+warpSpacing = 1.5;
+weftSpacing = 1.5;
 numBinderLayers = 1;
 
 
@@ -40,7 +43,7 @@ numXYarns = 2 * numBinderYarns;
 %calculate length, width and height of UC
 Length = warpSpacing * numXYarns;
 width = weftSpacing * numWefts;
-height = (2*numWeftLayers - 1)*weftHeight;
+height = 1.1*((2*numWeftLayers - 1)*weftHeight);
 
 %if SteppingRatio = 0, only need two binders to cover the space. 
 %numBinderYarns = 2
@@ -100,10 +103,10 @@ format = format + "\n"
 fprintf(fileID, format, pattern);
 fclose(fileID);
 
-string1 = [numXYarns numWefts warpSpacing weftSpacing warpHeight weftHeight warpRatio binderRatio Length width height];
-format1 = "%d %d %.2f %.2f %.2f %.2f %d %d %.2f %.2f %.2f";
+string1 = [numXYarns numWefts warpSpacing weftSpacing warpHeight warpWidth weftHeight weftWidth binderHeight binderWidth warpRatio binderRatio Length width height];
+format1 = "%d %d %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %d %d %.2f %.2f %.2f";
 string2 = [binderYarns];
-format2 = "%s"; 
+format2 = " %s"; 
 string3 = [numWeftLayers numWarpLayers numBinderLayers];
 format3 = " %d %d %d";
 [cmdLine1, errmsg1] = sprintf('python parameterisedTextile.py ' + format1, string1 );
