@@ -1,5 +1,6 @@
 from TexGen.Core import *
 import math
+import cmath
 path = "c:\\users\\emxghs\\desktop\\IAA3DWeaveProject\\parameterisedTextile\\"
 
 
@@ -53,8 +54,11 @@ def GenerateDesignSpace(path, vf, tol, thickness, numberFilamentsWarp, numberFil
 	cellFibreVolume = vf * cellVolume
 	
 	yarnfvf = (filamentArea * numberFilamentsWarp) / warpYarnArea
+	print("yarnfvf ", yarnfvf)
 	
 	cellYarnVolume = cellVolume * vf / yarnfvf
+	print("cellVolume ", cellVolume)
+	print("cellYarnVolume ", cellYarnVolume)
 	
 	#calculate the yarn volume in each layer (both warp and weft)
 	cellLayerVolume = (warpHeight + weftHeight)*cellLength*cellWidth
@@ -82,11 +86,34 @@ def GenerateDesignSpace(path, vf, tol, thickness, numberFilamentsWarp, numberFil
 		
 	#maxSpacing - change this when you have worked out how to do this
 	
-	minSpacing = binderHeight
-	upper = (2*cellFibreVolume/(vf-0.5*tol*vf)) - cellVolume
-	maxSpacing = (upper/thickness)**0.5
-	print("maxSpacing ", maxSpacing)
+	binderVolume=binderYarnArea*weftWidth
 	
+	minSpacing = binderHeight
+	#upper = ((2*cellYarnVolume*yarnfvf + (binderVolume+cellYarnVolume)*yarnfvf)/(vf-tol*vf)) - cellVolume
+	X = (1.5*cellYarnVolume*yarnfvf + (binderVolume)*yarnfvf)/0.8
+	print("X ", X)
+	#X = (2*(weftWidth))/0.6
+	# a=1
+	# b=4*weftWidth
+	# c= (X/thickness) - 4*(weftWidth)**2
+	
+	
+		
+	# # calculating  the discriminant
+	# dis = (b**2) - (4 * a*c)
+	# print(dis)
+	  
+	# # find two results
+	# ans1 = (-b-cmath.sqrt(dis))/(2 * a)
+	# ans2 = (-b + cmath.sqrt(dis))/(2 * a)
+	
+	ans2 = (X)/(warpWidth*thickness) - weftWidth
+	
+	print(ans2)
+	maxSpacing = ans2
+	print("maxSpacing ", maxSpacing)
+	print("minVolume ", 2*cellVolume)
+	print("actVolume ", (maxSpacing)*thickness*warpWidth + cellVolume)
 
 	
 	return numWeftLayers, numWarpLayers, maxnumBinderLayers, maxSpacing, warpHeight, warpWidth, weftHeight, weftWidth, binderHeight, binderWidth 

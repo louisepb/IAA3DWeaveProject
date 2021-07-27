@@ -22,11 +22,11 @@ SteppingRatio=1;
 offset = 1;
 warpSpacing = 1.5;
 weftSpacing = 1.5;
-numBinderLayers = 1;
+numBinderLayers = 2;
 
 
 %numwefts needed given parameters
-numWefts = 2 * (numWeftLayers/SteppingRatio);
+numWefts = 2 * (numWeftLayers-(numBinderLayers-1)/SteppingRatio);
 warpRatio = 1;
 binderRatio=1;
 
@@ -41,66 +41,94 @@ numBinderYarns=numWefts/passOverRatio;
 numXYarns = 2 * numBinderYarns;
 
 %calculate length, width and height of UC
-Length = warpSpacing * numXYarns;
-width = weftSpacing * numWefts;
+width = warpSpacing * numXYarns;
+Length = weftSpacing * numWefts;
 height = 1.1*((2*numWeftLayers - 1)*weftHeight);
 
 %if SteppingRatio = 0, only need two binders to cover the space. 
 %numBinderYarns = 2
 
-pattern=zeros(1, numBinderYarns*numWefts);
-list=zeros(1, numWefts);
+bpattern=zeros(1, numBinderYarns*numWefts*numBinderLayers);
+pattern=zeros(1, numWefts);
+
 %path of binder down through textile
 first = true;
-for i=1:(numWeftLayers/SteppingRatio)+1
+for i=1:(numWeftLayers-(numBinderLayers-1)/SteppingRatio)+1
     i;
     if first
         pattern(1) = 0;
-        list(1) = pattern(1);
         first = false;
     else
         pattern(i) = pattern(i-1) + SteppingRatio;
-        list(i) = pattern(i);
     end
     
 end
 
 %back up through textile
-for i=numWeftLayers/SteppingRatio+2:numWefts
+for i=numWeftLayers-(numBinderLayers-1)/SteppingRatio+2:numWefts
     pattern(i) = pattern(i-1) - SteppingRatio;
-    list(i) = pattern( i);
 end
 
-length(list)
 %Generate pattern for the rest of yarns using offset
 %wrap function
 wrapN = @(i, N) (1 + mod(i-1, N));
 
-binderNumber=1;
+binderNumber=0;
 weftIndex = 1;
-for i=numWefts+1:numWefts*numBinderYarns
+
+
+for i=1: numWefts*numBinderLayers: length(bpattern)
     %pattern(i) = list(mod((i + offset), length(list)) );
-    pattern(i) = list(wrapN((i+offset*binderNumber), length(list)));
-    weftIndex = weftIndex + 1;
+    x=i;
+    for j=1:length(pattern)
+        bpattern(i) = pattern(wrapN((j+offset*binderNumber), length(pattern)));
+        weftIndex = weftIndex + 1;
+        i=i+1;
     
-    if weftIndex > numWefts
-        binderNumber = binderNumber +1;
-        weftIndex=1;
+        if weftIndex > numWefts
+            binderNumber = binderNumber +1;
+            weftIndex=1;
+        end
     end
+    i=x;
 end
+
+
+binderNumber=0;
+weftIndex = 1;
+
+for i=numWefts+1: numWefts*numBinderLayers: length(bpattern)
+    %pattern(i) = list(mod((i + offset), length(list)) );
+    x=i;
+    for j=1:length(pattern)
+        bpattern(i) = pattern(wrapN((j+offset*binderNumber), length(pattern))) + 1;
+        weftIndex = weftIndex + 1;
+        i=i+1;
+    
+        if weftIndex > numWefts
+            binderNumber = binderNumber +1;
+            weftIndex=1;
+        end
+    end
+    i=x;
+end
+
+
+bpattern
+
 binderNumber
-binderYarns = mat2str(pattern);
+binderYarns = mat2str(bpattern);
 
 %write to .dat file
 fileID=fopen("binderpattern.dat", "a");
 format="";
 
-for i=1:length(pattern)
+for i=1:length(bpattern)
     format = format + "%d ";
 end
 format = format + "\n"
 
-fprintf(fileID, format, pattern);
+fprintf(fileID, format, bpattern);
 fclose(fileID);
 
 string1 = [numXYarns numWefts warpSpacing weftSpacing warpHeight warpWidth weftHeight weftWidth binderHeight binderWidth warpRatio binderRatio Length width height];
