@@ -1,11 +1,15 @@
-clc;
+%
+% This function effectively builds a textile using weaveDesignSpace +
+% param_optims + optimisation input
+%
+function [res] = binders(input)
 
-
-[status, cmdout1] = system('python generateDesignSpace.py');
-input='c:\\users\\emxghs\\desktop\\parameterisedTextile python generateDesignSpace.py';
+%clc;
+%[status, cmdout1] = system('python generateDesignSpace.py');
+%input='c:\\users\\emxghs\\desktop\\parameterisedTextile python generateDesignSpace.py';
 A=dlmread("weaveDesignSpace.txt");
 %need these numbers from generateDesignSpace 
-numWeftLayers=A(1)
+numWeftLayers = A(1);
 maxnumBinderLayers=A(2);
 maxSpacing=A(3);
 warpHeight=A(4);
@@ -16,23 +20,22 @@ binderHeight=A(8);
 binderWidth=A(9);
 
 numWarpLayers = numWeftLayers -1;
-%these will be parameters from optimisation
-passOverRatio=1;
-SteppingRatio=1;
-offset = 1;
-warpSpacing = 1.5;
-weftSpacing = 1.5;
-numBinderLayers = 2;
 
+% Parameters from the optimisation run
+optim_params = dlmread('optim_params.txt', ' ', 1, 0); % Skip the header
+warpSpacing = optim_params(1, input(1));
+weftSpacing = warpSpacing;
+numBinderLayers = optim_params(2, input(2));
+passOverRatio = optim_params(3, input(3));
+SteppingRatio = optim_params(4, input(4));
+offset = optim_params(5, input(5));
 
 %numwefts needed given parameters
-numWefts = 2 * (numWeftLayers-(numBinderLayers-1)/SteppingRatio);
+numWefts = 2 * (numWeftLayers-(numBinderLayers-1))/SteppingRatio; % Was (numWeftLayers-(numBinderLayers-1)/SteppingRatio)
 warpRatio = 1;
 binderRatio=1;
 
-
 %constraint: numWeftLayers % SteppingRatio == 0, provided SteppingRatio > 0
-
 
 %number of binding channels req'd assuming all offset
 numBinderYarns=numWefts/passOverRatio;
@@ -65,7 +68,8 @@ for i=1:(numWeftLayers-(numBinderLayers-1)/SteppingRatio)+1
 end
 
 %back up through textile
-for i=numWeftLayers-(numBinderLayers-1)/SteppingRatio+2:numWefts
+% George's original code: for i=numWeftLayers-(numBinderLayers-1)/SteppingRatio+2:numWefts
+for i=numWeftLayers-floor((numBinderLayers-1)/SteppingRatio+2):numWefts
     pattern(i) = pattern(i-1) - SteppingRatio;
 end
 
@@ -114,9 +118,9 @@ for i=numWefts+1: numWefts*numBinderLayers: length(bpattern)
 end
 
 
-bpattern
+bpattern;
 
-binderNumber
+binderNumber;
 binderYarns = mat2str(bpattern);
 
 %write to .dat file
@@ -139,4 +143,6 @@ format3 = " %d %d %d";
 [cmdLine3, errmsg3] = sprintf(format3, string3);
 
 cmdLine = cmdLine1 + cmdLine3;
-[status, cmdout2] = system(cmdLine);
+%[status, cmdout2] = system(cmdLine);
+
+end
