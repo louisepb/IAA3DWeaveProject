@@ -6,15 +6,23 @@ A=dlmread("weaveDesignSpace.txt");
 %need these numbers from generateDesignSpace 
 numWeftLayers = A(1);
 
-if ( mod(numWeftLayers - (input(2) - 1), input(4)) ~= 0 )
+optim_params = dlmread('optim_params.txt', ' ', 1, 0); % Skip the header
+warpSpacing = optim_params(1, input(1));
+weftSpacing = warpSpacing;
+numBinderLayers = optim_params(2, input(2));
+passOverRatio = optim_params(3, input(3));
+SteppingRatio = optim_params(4, input(4));
+offset = optim_params(5, input(5));
+
+if ( mod(numWeftLayers - (numBinderLayers - 1), SteppingRatio) ~= 0 )
     cons = [10];
     f = [1e6 2];
     return;
 end
 
-numWefts = 2 * (numWeftLayers-(input(2)-1))/input(4);
+numWefts = 2 * (numWeftLayers - (numBinderLayers - 1))/SteppingRatio;
 
-if ( mod(numWefts, input(3)) ~= 0 )
+if ( mod(numWefts, passOverRatio) ~= 0 )
     cons = [10];
     f = [1e6 2];
     return;

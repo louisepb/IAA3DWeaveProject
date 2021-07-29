@@ -69,7 +69,7 @@ end
 
 %back up through textile
 % George's original code: for i=numWeftLayers-(numBinderLayers-1)/SteppingRatio+2:numWefts
-for i=numWeftLayers-floor((numBinderLayers-1)/SteppingRatio+2):numWefts
+for i=(numWeftLayers-(numBinderLayers-1))/SteppingRatio+2:numWefts
     pattern(i) = pattern(i-1) - SteppingRatio;
 end
 
