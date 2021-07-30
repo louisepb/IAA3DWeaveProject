@@ -92,21 +92,7 @@ def GenerateDesignSpace(path, vf, tol, thickness, numberFilamentsWarp, numberFil
 	#upper = ((2*cellYarnVolume*yarnfvf + (binderVolume+cellYarnVolume)*yarnfvf)/(vf-tol*vf)) - cellVolume
 	X = (1.5*cellYarnVolume*yarnfvf + (binderVolume)*yarnfvf)/0.8
 	print("X ", X)
-	#X = (2*(weftWidth))/0.6
-	# a=1
-	# b=4*weftWidth
-	# c= (X/thickness) - 4*(weftWidth)**2
-	
-	
-		
-	# # calculating  the discriminant
-	# dis = (b**2) - (4 * a*c)
-	# print(dis)
-	  
-	# # find two results
-	# ans1 = (-b-cmath.sqrt(dis))/(2 * a)
-	# ans2 = (-b + cmath.sqrt(dis))/(2 * a)
-	
+
 	ans2 = (X)/(warpWidth*thickness) - weftWidth
 	
 	print(ans2)
