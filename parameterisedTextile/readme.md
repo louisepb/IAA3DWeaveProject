@@ -1,3 +1,8 @@
 TexGen updates:
 
-* Added new CTextileDecoupled class - to be renamed later. This allows multiple binder positions to be set anywhere in stack.
+* Added new CTextileDecoupledLToL class. This allows multiple binder positions to be set anywhere in stack.
+
+
+Optimisation work flow: 
+
+* 
