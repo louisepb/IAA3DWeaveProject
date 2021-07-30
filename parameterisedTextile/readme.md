@@ -5,4 +5,4 @@ TexGen updates:
 
 Optimisation work flow: 
 
-* 
+* generateDesignSpace.py -> start_optimisation.m -> fitnessFunWrapper.m -> binders.m -> fitnessFun.py 
