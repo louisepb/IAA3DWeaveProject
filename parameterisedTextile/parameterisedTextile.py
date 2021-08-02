@@ -45,7 +45,7 @@ def GenerateTextile(numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, w
 	#Textile = CTextileLayerToLayer( numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, weftHeight, numBinderLayers, True)
 	
 	repeat = binderRatio + warpRatio
-	NumBinderYarns = numXYarns * (binderRatio / repeat)
+	NumBinderYarns = int((numXYarns *binderRatio) / repeat)
 
 	Textile.SetWarpRatio(warpRatio)
 	Textile.SetBinderRatio(binderRatio)
@@ -68,8 +68,6 @@ def GenerateTextile(numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, w
 				raise Exception("Too many binder yarn positions specified, must be equal to number of wefts.")
 	
 
-	
-
 	# Loop for the number of binder yarn stacks
 	for z in range(NumBinderYarns):
 		# Loop through the weft stacks
@@ -79,8 +77,8 @@ def GenerateTextile(numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, w
 			for y in range( numBinderLayers):
 				list.append(binderYarns[z][y][x])
 			# Calculate the binder y position (ie warp yarn index)
-			ind = z/BinderRatio
-			BinderIndex = WarpRatio + (ind * repeat) + z%BinderRatio
+			ind = z/binderRatio
+			BinderIndex = warpRatio + (ind * repeat) + z%binderRatio
 			Textile.SetBinderPosition(x, BinderIndex, list)
 	
 	
@@ -115,60 +113,67 @@ def GenerateTextile(numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, w
 	
 	#save TG model
 	print("Saving textile model")
+	voxelSize = 0.2
 	SaveToXML(r"C:\\Users\\emxghs\\Desktop\\IAA3DWeaveProject\\parameterisedTextile\\ptextile.tg3", Textile.GetName(), OUTPUT_STANDARD)
+	XVoxNum = int(length / voxelSize)
+	YVoxNum = int(width  / voxelSize)
+	ZVoxNum = int(height / voxelSize)
+	Mesh = COctreeVoxelMesh("CPeriodicBoundaries")
+	#CTextile &Textile, string OutputFilename, int XVoxNum, int YVoxNum, int ZVoxNum, int min_level, int refine_level, bool smoothing, int smoothIter, double smooth1, double smooth2, bool surfaceOuput
+	Mesh.SaveVoxelMesh(Textile, "FileName", XVoxNum, YVoxNum, ZVoxNum, 2, 5, False, 0, 0, 0, False)
 	
 	
 	return
 
 
-# if __name__ == '__main__':
-	# path = "c:\\users\\emxghs\\desktop\\IAA3DWeaveProject\\parameterisedTextile\\"
-	# print(sys.argv)
-	# numXYarns = int(sys.argv[1])
-	# numWefts = int(sys.argv[2])
-	# warpSpacing = float(sys.argv[3])
-	# weftSpacing = float(sys.argv[4])
-	# warpHeight = float(sys.argv[5])
-	# warpWidth =float(sys.argv[6])
-	# weftHeight = float(sys.argv[7])
-	# weftWidth = float(sys.argv[8])
-	# binderHeight = float(sys.argv[9])
-	# binderWidth = float(sys.argv[10])
-	# warpRatio = int(sys.argv[11])
-	# binderRatio = int(sys.argv[12])
-	# length = float(sys.argv[13])
-	# width = float(sys.argv[14])
-	# height = float(sys.argv[15])
-	# numWeftLayers = int(sys.argv[16])
-	# numWarpLayers = int(sys.argv[17])
-	# numBinderLayers = int(sys.argv[18])
+if __name__ == '__main__':
+	path = "c:\\users\\emxghs\\desktop\\IAA3DWeaveProject\\parameterisedTextile\\"
+	#print(sys.argv)
+	numXYarns = int(sys.argv[1])
+	numWefts = int(sys.argv[2])
+	warpSpacing = float(sys.argv[3])
+	weftSpacing = float(sys.argv[4])
+	warpHeight = float(sys.argv[5])
+	warpWidth =float(sys.argv[6])
+	weftHeight = float(sys.argv[7])
+	weftWidth = float(sys.argv[8])
+	binderHeight = float(sys.argv[9])
+	binderWidth = float(sys.argv[10])
+	warpRatio = int(sys.argv[11])
+	binderRatio = int(sys.argv[12])
+	length = float(sys.argv[13])
+	width = float(sys.argv[14])
+	height = float(sys.argv[15])
+	numWeftLayers = int(sys.argv[16])
+	numWarpLayers = int(sys.argv[17])
+	numBinderLayers = int(sys.argv[18])
 	
 	
-numXYarns = 24
-numWefts = 12
-warpSpacing = 1.5
-weftSpacing = 1.5
-warpHeight = 0.3
-warpWidth = 1.2
-weftHeight = 0.3
-weftWidth = 1.2
-binderHeight = 0.3
-binderWidth = 1.2
-warpRatio = 1
-binderRatio = 1
-length = 18
-width = 36
-height = 4.29
-numWeftLayers = 7
-numWarpLayers = 6
-numBinderLayers = 2
+# numXYarns = 24
+# numWefts = 12
+# warpSpacing = 1.5
+# weftSpacing = 1.5
+# warpHeight = 0.3
+# warpWidth = 1.2
+# weftHeight = 0.3
+# weftWidth = 1.2
+# binderHeight = 0.3
+# binderWidth = 1.2
+# warpRatio = 1
+# binderRatio = 1
+# length = 18
+# width = 36
+# height = 4.29
+# numWeftLayers = 7
+# numWarpLayers = 6
+# numBinderLayers = 2
 
 
-file=open("binderpattern.dat", "r")
-allLines=file.readlines()
-lastLine=allLines[-1]
-x = lastLine
-binderYarns = x.split()
-file.close()
+	file=open("binderpattern.dat", "r")
+	allLines=file.readlines()
+	lastLine=allLines[-1]
+	x = lastLine
+	binderYarns = x.split()
+	file.close()
 
-GenerateTextile(numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, warpWidth, weftHeight, weftWidth, binderHeight, binderWidth, warpRatio, binderRatio, length, width, height, binderYarns, numWeftLayers, numWarpLayers, numBinderLayers)
+	GenerateTextile(numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, warpWidth, weftHeight, weftWidth, binderHeight, binderWidth, warpRatio, binderRatio, length, width, height, binderYarns, numWeftLayers, numWarpLayers, numBinderLayers)
