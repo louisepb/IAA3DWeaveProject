@@ -27,24 +27,25 @@ def GenerateDesignSpace(path, vf, tol, thickness, numberFilamentsWarp, numberFil
 	#size of single cell dependent on the yarn type
 	#Assume for now the yarn type is fized at 12k
 	#yarn size could be parameter, initally assuming all single type of yarn, below is Hexcel IM7 tow, max packing fraction of 0.9
+	# assume rectangular cross section
 	filamentArea = math.pi * ((0.0026)**2)
 	#numberFilamentsWarp = 12000
 	warpYarnArea = (filamentArea*numberFilamentsWarp)/0.9
 	radius = math.sqrt(warpYarnArea/math.pi)
-	warpWidth = 4*radius
-	warpHeight = 1*radius
+	warpWidth = math.sqrt(warpYarnArea/2)
+	warpHeight = math.sqrt(2* warpYarnArea )
 
 	#numberFilamentsWeft = 12000
 	weftYarnArea = (filamentArea*numberFilamentsWeft)/0.9
 	radius = math.sqrt(warpYarnArea/math.pi)
-	weftWidth = 4*radius
-	weftHeight = 1*radius
+	weftWidth = math.sqrt(weftYarnArea/2)
+	weftHeight = math.sqrt(2* weftYarnArea )
 
 	#numberFilamentsBinder = 12000
 	binderYarnArea = (filamentArea*numberFilamentsBinder)/0.9
-	radius = math.sqrt(warpYarnArea/math.pi)
-	binderWidth = 4*radius
-	binderHeight = 1*radius
+	radius = math.sqrt(binderYarnArea/math.pi)
+	binderWidth = math.sqrt(binderYarnArea/2)
+	binderHeight = math.sqrt(2* binderYarnArea)
 	
 	
 	cellWidth = weftWidth
@@ -86,7 +87,7 @@ def GenerateDesignSpace(path, vf, tol, thickness, numberFilamentsWarp, numberFil
 		
 	#maxSpacing - change this when you have worked out how to do this
 	
-	binderVolume=binderYarnArea*weftWidth
+	binderVolume=6*binderYarnArea*weftWidth
 	
 	minSpacing = binderHeight
 	#upper = ((2*cellYarnVolume*yarnfvf + (binderVolume+cellYarnVolume)*yarnfvf)/(vf-tol*vf)) - cellVolume

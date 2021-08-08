@@ -1,2 +1,5 @@
 *.pyc
 *.tg3
+
+#Ignore temp directory
+/temp

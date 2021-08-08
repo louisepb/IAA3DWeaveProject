@@ -63,7 +63,7 @@ pattern=zeros(1, numWefts);
 
 %path of binder down through textile
 first = true;
-for i=1:(numWeftLayers-(numBinderLayers-1)/SteppingRatio)+1
+for i=1:((numWeftLayers-(numBinderLayers-1))/SteppingRatio)+1
     i;
     if first
         pattern(1) = 0;
@@ -142,7 +142,7 @@ format = format + "\n"
 fprintf(fileID, format, bpattern);
 fclose(fileID);
 
-string1 = [numXYarns numWefts warpSpacing weftSpacing warpHeight warpWidth weftHeight weftWidth binderHeight binderWidth warpRatio binderRatio Length width height];
+string1 = [numXYarns numWefts warpSpacing weftSpacing warpHeight warpWidth weftHeight weftWidth binderHeight binderWidth warpRatio binderRatio Length width height, input];
 format1 = "%d %d %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %d %d %.2f %.2f %.2f";
 string3 = [numWeftLayers numWarpLayers numBinderLayers];
 format3 = " %d %d %d";
@@ -151,5 +151,7 @@ format3 = " %d %d %d";
 
 cmdLine = cmdLine1 + cmdLine3;
 [status, cmdout2] = system(cmdLine);
+
+ArealDensity = str2double(split(cmdout2));
 
 end

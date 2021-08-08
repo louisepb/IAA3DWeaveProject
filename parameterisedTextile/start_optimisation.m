@@ -101,7 +101,7 @@ ub = [length(spacings) length(num_binders) length(binder_over) length(stepping_r
 % the parameters in other scripts
 optim_param_file = fopen('optim_params.txt', 'w');
 fprintf(optim_param_file, 'spacings, num_binders, binder_over, stepping_ratios, offsets\n');
-fprintf(optim_param_file, [repmat('%d ', 1, length(spacings)), '\n'], spacings);
+fprintf(optim_param_file, [repmat('%.2f ', 1, length(spacings)), '\n'], spacings);
 fprintf(optim_param_file, [repmat('%d ', 1, length(num_binders)), '\n'], num_binders);
 fprintf(optim_param_file, [repmat('%d ', 1, length(binder_over)), '\n'], binder_over);
 fprintf(optim_param_file, [repmat('%d ', 1, length(stepping_ratios)), '\n'], stepping_ratios);

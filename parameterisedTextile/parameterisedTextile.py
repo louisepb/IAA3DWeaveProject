@@ -3,6 +3,7 @@
 from TexGen.Core import *
 import math
 import sys
+import os
 path = "c:\\users\\emxghs\\desktop\\IAA3DWeaveProject\\parameterisedTextile\\"
 
 #user specified properties
@@ -37,7 +38,10 @@ def GenerateTextile(numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, w
 		numBinderLayers (int) : Number of binder layers
 
     Returns:
-        (None)
+        Textile (CTextileDecoupledLToL): Textile object
+		XVoxNum (int) : Number of voxels in x direction
+		YVoxNum (int) : Number of voxels in y direction
+		ZVoxNum (int) : Number of voxels in z direction 
         
     '''
 	#Set up 3D Weave textile
@@ -104,27 +108,92 @@ def GenerateTextile(numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, w
 	Textile.SetFibreDiameter(WARP, 0.0026, "mm")
 	Textile.SetFibreDiameter(WEFT, 0.0026, "mm")
 	Textile.SetFibreDiameter(BINDER, 0.0026, "mm")
+	
+	# Yarn material properties
+	Yarns=Textile.GetYarns()
+	for index in range(len(Yarns)):
+		Yarns[index].SetYoungsModulusX(174.4, 'GPa')
+		Yarns[index].SetYoungsModulusY(8.9, 'GPa')
+		Yarns[index].SetYoungsModulusZ(8.9, 'GPa')
+		Yarns[index].SetShearModulusXY(4.2, 'GPa')
+		Yarns[index].SetShearModulusXZ(4.2, 'GPa')
+		Yarns[index].SetShearModulusYZ(3, 'GPa')
+		Yarns[index].SetPoissonsRatioX(0.3)
+		Yarns[index].SetPoissonsRatioY(0.3)
+		Yarns[index].SetPoissonsRatioZ(0.3)
+		Yarns[index].SetAlphaX(5.4)
+		Yarns[index].SetAlphaY(5.4)
+		Yarns[index].SetAlphaZ(5.4)
 
+
+
+	# Matrix material properties
+	Textile.SetMatrixYoungsModulus(3.5, 'GPa')
+	Textile.SetMatrixPoissonsRatio(0.35)
+	Textile.SetMatrixAlpha(52.7e-6)
+	
 
 	domain = CDomainPlanes(XYZ(0, 0, -binderHeight), XYZ(length, width, height))
 	Textile.AssignDomain( domain )
-
 	AddTextile( Textile )
 	
 	#save TG model
-	print("Saving textile model")
-	voxelSize = 0.2
+	# print("Saving textile model")
+	# voxelSize = 0.1
 	SaveToXML(r"C:\\Users\\emxghs\\Desktop\\IAA3DWeaveProject\\parameterisedTextile\\ptextile.tg3", Textile.GetName(), OUTPUT_STANDARD)
 	XVoxNum = int(length / voxelSize)
 	YVoxNum = int(width  / voxelSize)
 	ZVoxNum = int(height / voxelSize)
-	Mesh = COctreeVoxelMesh("CPeriodicBoundaries")
-	#CTextile &Textile, string OutputFilename, int XVoxNum, int YVoxNum, int ZVoxNum, int min_level, int refine_level, bool smoothing, int smoothIter, double smooth1, double smooth2, bool surfaceOuput
-	Mesh.SaveVoxelMesh(Textile, "FileName", XVoxNum, YVoxNum, ZVoxNum, 2, 5, False, 0, 0, 0, False)
+	numVoxels = XVoxNum * YVoxNum * ZVoxNum
 	
+	# #Get input file name
+	
+	# # Form the file name and open the file
+	# input = 
+	# results_id = "_".join([str(x) for x in input])
+	
+	# if numVoxels < 100000:
+		# Mesh = COctreeVoxelMesh("CPeriodicBoundaries")
+		# #CTextile &Textile, string OutputFilename, int XVoxNum, int YVoxNum, int ZVoxNum, int min_level, int refine_level, bool smoothing, int smoothIter, double smooth1, double smooth2, bool surfaceOuput
+		# Mesh.SaveVoxelMesh(Textile, os.getcwd() + "\\FileName", XVoxNum, YVoxNum, ZVoxNum, 1, 3, False, 0, 0, 0, False)
+	# else:
+		# Mesh = CRectangularVoxelMesh("CPeriodicBoundaries")
+		# Mesh.SaveVoxelMesh(Textile, os.getcwd() + "\\FileName", XVoxNum, YVoxNum, ZVoxNum, True, True, MATERIAL_CONTINUUM, 0 )
+	
+	return Textile, XVoxNum, YVoxNum, ZVoxNum, Textile.GetArealDensity()
+	
+def SaveMesh(Textile, XVoxNum, YVoxNum, ZVoxNum, input):
+	
+	"""
+	Function to save mesh
+	
+	Args:
+		Textile (CTextileDecoupledLToL): Textile object
+		XVoxNum (int) : Number of voxels in x direction
+		YVoxNum (int) : Number of voxels in y direction
+		ZVoxNum (int) : Number of voxels in z direction
+		input (list of ints) : Parameter list from optimisation algorithm
+		
+	Returns:
+		None
+	"""
+
+	voxelSize = 0.1
+	
+		#Get input file name
+	
+	# Form the file name and open the file
+	results_id = "_".join([str(x) for x in input])
+	
+	if numVoxels < 100000:
+		Mesh = COctreeVoxelMesh("CPeriodicBoundaries")
+		#CTextile &Textile, string OutputFilename, int XVoxNum, int YVoxNum, int ZVoxNum, int min_level, int refine_level, bool smoothing, int smoothIter, double smooth1, double smooth2, bool surfaceOuput
+		Mesh.SaveVoxelMesh(Textile, os.getcwd() + "\\" + results_id, XVoxNum, YVoxNum, ZVoxNum, 1, 3, False, 0, 0, 0, False)
+	else:
+		Mesh = CRectangularVoxelMesh("CPeriodicBoundaries")
+		Mesh.SaveVoxelMesh(Textile, os.getcwd() + "\\" + results_id, XVoxNum, YVoxNum, ZVoxNum, True, True, MATERIAL_CONTINUUM, 0 )
 	
 	return
-
 
 if __name__ == '__main__':
 	path = "c:\\users\\emxghs\\desktop\\IAA3DWeaveProject\\parameterisedTextile\\"
@@ -147,6 +216,7 @@ if __name__ == '__main__':
 	numWeftLayers = int(sys.argv[16])
 	numWarpLayers = int(sys.argv[17])
 	numBinderLayers = int(sys.argv[18])
+	input = sys.argv[19]
 	
 	
 # numXYarns = 24
@@ -176,4 +246,8 @@ if __name__ == '__main__':
 	binderYarns = x.split()
 	file.close()
 
-	GenerateTextile(numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, warpWidth, weftHeight, weftWidth, binderHeight, binderWidth, warpRatio, binderRatio, length, width, height, binderYarns, numWeftLayers, numWarpLayers, numBinderLayers)
+	Textile, XVoxNum, YVoxNum, ZVoxNum, ArealDensity = GenerateTextile(numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, warpWidth, weftHeight, weftWidth, binderHeight, binderWidth, warpRatio, binderRatio, length, width, height, binderYarns, numWeftLayers, numWarpLayers, numBinderLayers)
+	#SaveMesh(Textile, XVoxNum, YVoxNum, ZVoxNum, input)
+	
+	sys.stdout.write(str(ArealDensity))
+	sys.stdout.flush()

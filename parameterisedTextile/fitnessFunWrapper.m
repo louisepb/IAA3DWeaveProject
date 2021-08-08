@@ -1,5 +1,5 @@
 function [f, cons] = fitnessFunWrapper(input)
-
+input = [2 2 2 2 2];
 % Check the constraints
 % 
 A=dlmread("weaveDesignSpace.txt");
@@ -28,8 +28,9 @@ if ( mod(numWefts, passOverRatio) ~= 0 )
     return;
 end
 
-binders(input); % Build textile here - need to be rewritten (?)
-[status, cmdout] = system(char("C:\Python27\python.exe fitnessFun.py " + ' ' + strcat(num2str(input)) ));
+[ArealDensity] = binders(input); % Build textile here - need to be rewritten (?)
+
+[status, cmdout] = system(char("C:\Python27\python.exe fitnessFun.py " + ' ' + strcat(num2str(input)) + strcat(num2str(ArealDensity )) ));
 
 if ( status )
     % Format: N, f_1, f_2, .. f_N, M, c_1, c_2, ..., c_M 
