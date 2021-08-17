@@ -66,8 +66,9 @@ params = dlmread('weaveDesignSpace.txt', ',');
 %       - how many yarns over
 %       - stepping ratio
 %       - offset
-min_spacing = 0;
+%min_spacing = 0;
 max_spacing = params(end, 3); % Max spacing from weaveDesignSpace.txt
+min_spacing = max_spacing;
 spacings = linspace(min_spacing, max_spacing, 3);
 
 min_binder_layers = 1; % Read from the file ?

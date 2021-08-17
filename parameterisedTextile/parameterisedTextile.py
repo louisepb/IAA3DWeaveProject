@@ -93,8 +93,8 @@ def GenerateTextile(numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, w
 	Textile.SetBinderYarnWidths( binderWidth )
 	Textile.SetBinderYarnHeights( binderHeight )
 	Textile.SetBinderYarnPower( 0.2 )
-	Textile.SetWarpYarnPower(1.0)
-	Textile.SetWeftYarnPower(1.0)
+	Textile.SetWarpYarnPower(0.0)
+	Textile.SetWeftYarnPower(0.0)
 
 	WeftRepeat = True
 	Textile.SetWeftRepeat( WeftRepeat )
@@ -139,7 +139,7 @@ def GenerateTextile(numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, w
 	
 	#save TG model
 	# print("Saving textile model")
-	# voxelSize = 0.1
+	voxelSize = 0.1
 	SaveToXML(r"C:\\Users\\emxghs\\Desktop\\IAA3DWeaveProject\\parameterisedTextile\\ptextile.tg3", Textile.GetName(), OUTPUT_STANDARD)
 	XVoxNum = int(length / voxelSize)
 	YVoxNum = int(width  / voxelSize)
@@ -177,8 +177,8 @@ def SaveMesh(Textile, XVoxNum, YVoxNum, ZVoxNum, input):
 	Returns:
 		None
 	"""
-
-	voxelSize = 0.1
+	
+	numVoxels = XVoxNum * YVoxNum *ZVoxNum
 	
 		#Get input file name
 	
@@ -216,27 +216,8 @@ if __name__ == '__main__':
 	numWeftLayers = int(sys.argv[16])
 	numWarpLayers = int(sys.argv[17])
 	numBinderLayers = int(sys.argv[18])
-	input = sys.argv[19]
+	input = sys.argv[19:24]
 	
-	
-# numXYarns = 24
-# numWefts = 12
-# warpSpacing = 1.5
-# weftSpacing = 1.5
-# warpHeight = 0.3
-# warpWidth = 1.2
-# weftHeight = 0.3
-# weftWidth = 1.2
-# binderHeight = 0.3
-# binderWidth = 1.2
-# warpRatio = 1
-# binderRatio = 1
-# length = 18
-# width = 36
-# height = 4.29
-# numWeftLayers = 7
-# numWarpLayers = 6
-# numBinderLayers = 2
 
 
 	file=open("binderpattern.dat", "r")
@@ -249,5 +230,8 @@ if __name__ == '__main__':
 	Textile, XVoxNum, YVoxNum, ZVoxNum, ArealDensity = GenerateTextile(numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, warpWidth, weftHeight, weftWidth, binderHeight, binderWidth, warpRatio, binderRatio, length, width, height, binderYarns, numWeftLayers, numWarpLayers, numBinderLayers)
 	#SaveMesh(Textile, XVoxNum, YVoxNum, ZVoxNum, input)
 	
-	sys.stdout.write(str(ArealDensity))
+	#Going to need to write this to a file
+	file = open("ArealDensity.txt", "a")
+	file.write(str(ArealDensity) + "\n")
+	file.close()
 	sys.stdout.flush()

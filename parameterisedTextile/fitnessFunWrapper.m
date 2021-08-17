@@ -28,9 +28,11 @@ if ( mod(numWefts, passOverRatio) ~= 0 )
     return;
 end
 
-[ArealDensity] = binders(input); % Build textile here - need to be rewritten (?)
+ArealDensity = binders(input); % Build textile here - need to be rewritten (?)
 
-[status, cmdout] = system(char("C:\Python27\python.exe fitnessFun.py " + ' ' + strcat(num2str(input)) + strcat(num2str(ArealDensity )) ));
+ArealDensity
+
+[status, cmdout] = system(char("abaqus cae noGUI=fitnessFun.py " + ' -- ' + strcat(num2str(input)) + '  ' + strcat(num2str(ArealDensity )) ));
 
 if ( status )
     % Format: N, f_1, f_2, .. f_N, M, c_1, c_2, ..., c_M 
@@ -39,7 +41,7 @@ if ( status )
     %vals = str2double(regexp(cmdout, '\d*', 'match'));
     vals = str2double(split(cmdout));
     f = [vals(2:vals(1) + 1) + rand()]'; 
-    cons = vals(vals(1) + 3:end);
+    %cons = vals(vals(1) + 3:end);
 end
 
 end

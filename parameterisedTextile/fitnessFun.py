@@ -13,8 +13,9 @@ import visualization
 
 
 # Collect input parameters
-input = map(int, sys.argv[1:len(sys.argv)-1])
-ArealDensity = map(double, sys.argv[-1])
+print(sys.argv)
+input = map(int, sys.argv[-6:-1])
+ArealDensity = map(float, sys.argv[-1])
 
 # Form the results file name
 results_id = "_".join([str(x) for x in input])
@@ -26,27 +27,27 @@ results_id = "_".join([str(x) for x in input])
 history_filename = "optimisation_history.txt"
 results_not_found = 1
 with open(history_filename, "r") as history_file:
-  for my_line in history_file:
-    my_list = my_line.split()
-    params = map(int, my_list)
-    if ( params == input):
-      results_not_found = 0
+	for my_line in history_file:
+		my_list = my_line.split()
+		params = map(int, my_list)
+		if ( params == input):
+			results_not_found = 0
 	  
-	  with open("optim_" + results_id + "_results.txt") as old_res_file:
-		allLines=old_res_file.readlines()
-		ArealDensity_res_line=allLines[3]
-		E0_x_res_line=allLines[4]
-		OFV1 = int(E0_x_res_line[7])
-		#This won't work but reminder - George
-		OFV2 = double(ArealDensity_res_line[15:18])
-      break            
+			with open("optim_" + results_id + "_results.txt") as old_res_file:
+				allLines=old_res_file.readlines()
+				ArealDensity_res_line=allLines[3]
+				E0_x_res_line=allLines[4]
+				OFV1 = int(E0_x_res_line[7])
+				#This won't work but reminder - George
+				OFV2 = float(ArealDensity_res_line[15])
+			break            
 
 # Line not found - append it to the file
 if ( results_not_found ):
-  #print 'Not found'
-  with open(history_filename, "a") as history_file:
-    my_string = [str(x) for x in input] 
-    history_file.write(" ".join(my_string) + "\n")
+	#print 'Not found'
+	with open(history_filename, "a") as history_file:
+		my_string = [str(x) for x in input] 
+		history_file.write(" ".join(my_string) + "\n")
     
 
 
@@ -174,8 +175,8 @@ if ( results_not_found ):
 # Suggested format: N, f_1, f_2, .. f_N, M, c_1, c_2, ..., c_M 
 # N - number of objective function values, f_i - i-th objective function value
 # M - number of constraints values, c_i - i-th constraints value  
-return_vals = str(OFV1) + " " + str(OFV2) + 
-sys.stdout.write("2 1.3 3.2 1 -1")
+return_vals = str(OFV1) + " " + str(OFV2)
+sys.stdout.write(return_vals )
 sys.stdout.flush()
 sys.exit(1)
 

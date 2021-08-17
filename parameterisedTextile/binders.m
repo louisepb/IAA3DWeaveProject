@@ -2,7 +2,7 @@
 % This function effectively builds a textile using weaveDesignSpace +
 % param_optims + optimisation input
 %
-function [res] = binders(input)
+function [ArealDensity] = binders(input)
 
 %clc;
 %[status, cmdout1] = system('python generateDesignSpace.py');
@@ -142,16 +142,21 @@ format = format + "\n"
 fprintf(fileID, format, bpattern);
 fclose(fileID);
 
-string1 = [numXYarns numWefts warpSpacing weftSpacing warpHeight warpWidth weftHeight weftWidth binderHeight binderWidth warpRatio binderRatio Length width height, input];
+string1 = [numXYarns numWefts warpSpacing weftSpacing warpHeight warpWidth weftHeight weftWidth binderHeight binderWidth warpRatio binderRatio Length width height];
 format1 = "%d %d %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %d %d %.2f %.2f %.2f";
-string3 = [numWeftLayers numWarpLayers numBinderLayers];
-format3 = " %d %d %d";
+string3 = [numWeftLayers numWarpLayers numBinderLayers ];
+format3 = " %d %d %d ";
 [cmdLine1, errmsg1] = sprintf('python parameterisedTextile.py ' + format1, string1 );
 [cmdLine3, errmsg3] = sprintf(format3, string3);
 
-cmdLine = cmdLine1 + cmdLine3;
+cmdLine = cmdLine1 + cmdLine3 + strcat(num2str(input));
 [status, cmdout2] = system(cmdLine);
 
-ArealDensity = str2double(split(cmdout2));
+cmdout2
+
+%ArealDensityFile = fopen("ArealDensity.txt", "r");
+ArealDensityFile = dlmread("ArealDensity.txt");
+%formatSpec = '%f';
+ArealDensity = ArealDensityFile(end);
 
 end
