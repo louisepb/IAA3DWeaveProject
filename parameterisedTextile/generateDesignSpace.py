@@ -95,7 +95,7 @@ def GenerateDesignSpace(path, vf, tol, thickness, numberFilamentsWarp, numberFil
 	
 	binderVolume=6*binderYarnArea*weftWidth
 	
-	minSpacing = binderHeight
+	minSpacing = binderHeight + weftWidth
 	#upper = ((2*cellYarnVolume*yarnfvf + (binderVolume+cellYarnVolume)*yarnfvf)/(vf-tol*vf)) - cellVolume
 	X = (1.5*cellYarnVolume*yarnfvf + (binderVolume)*yarnfvf)/0.8
 	#print("X ", X)

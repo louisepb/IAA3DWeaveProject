@@ -1,5 +1,4 @@
 function [f, cons] = fitnessFunWrapper(input)
-input = [2 2 2 2 2];
 % Check the constraints
 % 
 A=dlmread("weaveDesignSpace.txt");
@@ -14,7 +13,7 @@ passOverRatio = optim_params(3, input(3));
 SteppingRatio = optim_params(4, input(4));
 offset = optim_params(5, input(5));
 
-if ( mod(numWeftLayers - (numBinderLayers - 1), SteppingRatio) ~= 0 )
+if ( mod(numWeftLayers - (numBinderLayers-1), SteppingRatio) ~= 0 )
     cons = [10];
     f = [1e6 2];
     return;
@@ -39,9 +38,39 @@ if ( status )
     % N - number of objective function values, f_i - i-th objective function value
     % M - number of constraints values, c_i - i-th constraints value
     %vals = str2double(regexp(cmdout, '\d*', 'match'));
-    vals = str2double(split(cmdout));
-    f = [vals(2:vals(1) + 1) + rand()]'; 
-    %cons = vals(vals(1) + 3:end);
+    fileid=sprintf("optim_%d_%d_%d_%d_%d_results.txt", input);
+    text=fileread(fileid);
+    expr1='[^\n]*E0_x[^\n]*'
+    expr2='[^\n]*ArealDensity[^\n]*'
+    matches1 = string(regexp(text,expr1,'match'));
+    matches2 = string(regexp(text,expr2,'match'));
+    val1 = matches1{1}(8:strlength(matches1{1}));
+    val2 = matches2{1}(16:strlength(matches2{1}));
+    
+    
+    %vals = str2double(split(cmdout));
+    
+    f = [str2double(val1) str2double(val2)];
+    cons=[0];
+    
+    delete *.odb
+    delete *.log
+    delete *.sim
+    delete *.dat
+    delete *.msg
+    delete *.prt
+    delete *.com
+    delete *.sta
+    delete *.inp
+    delete *.eld
+    delete *.ori
+else
+    f = [0 0];
+    cons=[0];
 end
+
+return
+    %cons = vals(vals(1) + 3:end);
+% end
 
 end

@@ -93,13 +93,18 @@ def GenerateTextile(numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, w
 	Textile.SetBinderYarnWidths( binderWidth )
 	Textile.SetBinderYarnHeights( binderHeight )
 	Textile.SetBinderYarnPower( 0.2 )
-	Textile.SetWarpYarnPower(0.0)
-	Textile.SetWeftYarnPower(0.0)
+	Textile.SetWarpYarnPower(1.0)
+	Textile.SetWeftYarnPower(1.0)
 
 	WeftRepeat = True
 	Textile.SetWeftRepeat( WeftRepeat )
 	
 	Textile.BuildTextile()
+	
+	Density = Textile.SetFibreDensity(WARP, 1780)
+	Textile.SetFibreDensity(WEFT, 1780)
+	Textile.SetFibreDensity(BINDER, 1780)
+	
 
 	#George - remember to change this
 	Textile.SetFibresPerYarn(WARP, 12000)
@@ -132,6 +137,8 @@ def GenerateTextile(numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, w
 	Textile.SetMatrixPoissonsRatio(0.35)
 	Textile.SetMatrixAlpha(52.7e-6)
 	
+	ArealWeight = (Textile.GetYarnVolume()*1780) / (length*width*height)
+	
 
 	domain = CDomainPlanes(XYZ(0, 0, -binderHeight), XYZ(length, width, height))
 	Textile.AssignDomain( domain )
@@ -139,7 +146,7 @@ def GenerateTextile(numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, w
 	
 	#save TG model
 	# print("Saving textile model")
-	voxelSize = 0.1
+	voxelSize = 0.075
 	SaveToXML(r"C:\\Users\\emxghs\\Desktop\\IAA3DWeaveProject\\parameterisedTextile\\ptextile.tg3", Textile.GetName(), OUTPUT_STANDARD)
 	XVoxNum = int(length / voxelSize)
 	YVoxNum = int(width  / voxelSize)
@@ -160,7 +167,7 @@ def GenerateTextile(numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, w
 		# Mesh = CRectangularVoxelMesh("CPeriodicBoundaries")
 		# Mesh.SaveVoxelMesh(Textile, os.getcwd() + "\\FileName", XVoxNum, YVoxNum, ZVoxNum, True, True, MATERIAL_CONTINUUM, 0 )
 	
-	return Textile, XVoxNum, YVoxNum, ZVoxNum, Textile.GetArealDensity()
+	return Textile, XVoxNum, YVoxNum, ZVoxNum, ArealWeight
 	
 def SaveMesh(Textile, XVoxNum, YVoxNum, ZVoxNum, input):
 	
@@ -177,6 +184,7 @@ def SaveMesh(Textile, XVoxNum, YVoxNum, ZVoxNum, input):
 	Returns:
 		None
 	"""
+	print("Save mesh")
 	
 	numVoxels = XVoxNum * YVoxNum *ZVoxNum
 	
@@ -185,13 +193,16 @@ def SaveMesh(Textile, XVoxNum, YVoxNum, ZVoxNum, input):
 	# Form the file name and open the file
 	results_id = "_".join([str(x) for x in input])
 	
-	if numVoxels < 100000:
-		Mesh = COctreeVoxelMesh("CPeriodicBoundaries")
-		#CTextile &Textile, string OutputFilename, int XVoxNum, int YVoxNum, int ZVoxNum, int min_level, int refine_level, bool smoothing, int smoothIter, double smooth1, double smooth2, bool surfaceOuput
-		Mesh.SaveVoxelMesh(Textile, os.getcwd() + "\\" + results_id, XVoxNum, YVoxNum, ZVoxNum, 1, 3, False, 0, 0, 0, False)
-	else:
-		Mesh = CRectangularVoxelMesh("CPeriodicBoundaries")
-		Mesh.SaveVoxelMesh(Textile, os.getcwd() + "\\" + results_id, XVoxNum, YVoxNum, ZVoxNum, True, True, MATERIAL_CONTINUUM, 0 )
+	# if numVoxels < 100000:
+		# print("saving octree mesh")
+		# print(os.getcwd() + "\\" + "optim_" + results_id)
+		# Mesh = COctreeVoxelMesh("CPeriodicBoundaries")
+		# # CTextile &Textile, string OutputFilename, int XVoxNum, int YVoxNum, int ZVoxNum, int min_level, int refine_level, bool smoothing, int smoothIter, double smooth1, double smooth2, bool surfaceOuput
+		# Mesh.SaveVoxelMesh(Textile, os.getcwd() + "\\" + "optim_" + results_id, XVoxNum, YVoxNum, ZVoxNum, 1, 3, False, 0, 0, 0, False)
+	# else:
+		# print("saving rectangular mesh")
+	Mesh = CRectangularVoxelMesh("CPeriodicBoundaries")
+	Mesh.SaveVoxelMesh(Textile, os.getcwd() + "\\" + "optim_" + results_id, XVoxNum, YVoxNum, ZVoxNum, True, True, MATERIAL_CONTINUUM, 0 )
 	
 	return
 
@@ -228,7 +239,8 @@ if __name__ == '__main__':
 	file.close()
 
 	Textile, XVoxNum, YVoxNum, ZVoxNum, ArealDensity = GenerateTextile(numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, warpWidth, weftHeight, weftWidth, binderHeight, binderWidth, warpRatio, binderRatio, length, width, height, binderYarns, numWeftLayers, numWarpLayers, numBinderLayers)
-	#SaveMesh(Textile, XVoxNum, YVoxNum, ZVoxNum, input)
+	
+	SaveMesh(Textile, XVoxNum, YVoxNum, ZVoxNum, input)
 	
 	#Going to need to write this to a file
 	file = open("ArealDensity.txt", "a")

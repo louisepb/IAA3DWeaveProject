@@ -39,7 +39,7 @@ defaultopt = struct(...
     'outputfuns',{{@output2file}},...   % output function
     'outputfile', 'populations.txt',... % output file name
     'outputInterval', 1,...             % interval of output
-    'plotInterval', 5,...               % interval between two call of "plotnsga".
+    'plotInterval', 1,...               % interval between two call of "plotnsga".
 ... % Genetic algorithm operators
     'crossover', {{'intermediate', 1.2}},...         % crossover operator (Ratio=1.2)
     'mutation', {{'gaussian',0.1, 0.5}},...          % mutation operator (scale=0.1, shrink=0.5)
@@ -112,16 +112,16 @@ fclose(optim_param_file);
 
 options = nsgaopt();
 options.numVar = 5;
-options.popsize = popsize;
-options.numObj = numObjFun;
-options.numCons = numConstr;
+options.popsize = 30;
+options.numObj = 2;
+options.numCons = 1;
 options.lb = lb;
 options.ub = ub;
 options.objfun = @fitnessFunWrapper;
 
 options.useParallel = 'no';
 options.poolsize = 1;
-options.maxGen = maxGen;
+options.maxGen = 30;
 options.vartype = 2*ones(options.numVar, 1)'; % All variables are integers
 options.plotInterval = 1; 
 

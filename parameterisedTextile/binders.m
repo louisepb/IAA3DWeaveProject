@@ -22,20 +22,20 @@ binderWidth=A(9);
 numWarpLayers = numWeftLayers -1;
 
 % Parameters from the optimisation run
-% optim_params = dlmread('optim_params.txt', ' ', 1, 0); % Skip the header
-% warpSpacing = optim_params(1, input(1));
-% weftSpacing = warpSpacing;
-% numBinderLayers = optim_params(2, input(2));
-% passOverRatio = optim_params(3, input(3));
-% SteppingRatio = optim_params(4, input(4));
-% offset = optim_params(5, input(5));
-
-warpSpacing = 1.5
+optim_params = dlmread('optim_params.txt', ' ', 1, 0); % Skip the header
+warpSpacing = optim_params(1, input(1));
 weftSpacing = warpSpacing;
-numBinderLayers = 2
-passOverRatio = 1
-SteppingRatio = 1
-offset = 1
+numBinderLayers = optim_params(2, input(2));
+passOverRatio = optim_params(3, input(3));
+SteppingRatio = optim_params(4, input(4));
+offset = optim_params(5, input(5));
+
+% warpSpacing = 0.8
+% weftSpacing = warpSpacing;
+% numBinderLayers = 2
+% passOverRatio = 1
+% SteppingRatio = 1
+% offset = 1
 
 %numwefts needed given parameters
 numWefts = 2 * (numWeftLayers-(numBinderLayers-1))/SteppingRatio; % Was (numWeftLayers-(numBinderLayers-1)/SteppingRatio)

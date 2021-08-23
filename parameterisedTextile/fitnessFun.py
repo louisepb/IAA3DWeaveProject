@@ -13,9 +13,9 @@ import visualization
 
 
 # Collect input parameters
-print(sys.argv)
+print(float(sys.argv[-1]))
 input = map(int, sys.argv[-6:-1])
-ArealDensity = map(float, sys.argv[-1])
+ArealDensity = float(sys.argv[-1])
 
 # Form the results file name
 results_id = "_".join([str(x) for x in input])
@@ -32,14 +32,13 @@ with open(history_filename, "r") as history_file:
 		params = map(int, my_list)
 		if ( params == input):
 			results_not_found = 0
-	  
 			with open("optim_" + results_id + "_results.txt") as old_res_file:
 				allLines=old_res_file.readlines()
 				ArealDensity_res_line=allLines[3]
 				E0_x_res_line=allLines[4]
 				OFV1 = int(E0_x_res_line[7])
 				#This won't work but reminder - George
-				OFV2 = float(ArealDensity_res_line[15])
+				OFV2 = float(ArealDensity_res_line[15:18])
 			break            
 
 # Line not found - append it to the file
@@ -56,20 +55,19 @@ if ( results_not_found ):
 	  # Run Abaqus model and wait for it to complete (check it's OK run)
 
 
-	ModelName= results_id
+	ModelName= "optim_" + results_id
 
-	mdb.JobFromInputFile(name=ModelName, inputFileName=filepath + ModelName+'.inp',
-						numCpus=4,numDomains=4, memory=90, parallelizationMethodExplicit=DOMAIN, scratch='C:\\users\\emxghs\\Desktop\\IAA3DWeave\\temp')
+	JobfromInput=mdb.JobFromInputFile(name="optim_" + results_id, inputFileName="optim_" + results_id +'.inp', numCpus=4,numDomains=4, memory=60)
 
 
 	#submit job and wait for completion for about 30 mins
-	mdb.jobs[ModelName].submit(consistencyChecking=OFF)
+	JobfromInput.submit(consistencyChecking=OFF)
 
-	mdb.jobs[ModelName].waitForCompletion()
+	JobfromInput.waitForCompletion()
 
 	#write output to fitness value file
 
-	fileName = filepath + '\\' + ModelName + '.odb'
+	fileName = "optim_" + results_id + '.odb'
 	resultODB=visualization.openOdb(path=fileName, readOnly=True)
 
 	# The load-cases are held in frames.
@@ -153,23 +151,24 @@ if ( results_not_found ):
 	
 	
 	# Read the results  
-	with open("optim_" + results_id + "_results.txt") as res_file:
-		res_file.write("Results file for weave " + results_id + "\n")
-		res_file.write("Thickness : " + str(Thickness) + "\n")
-		res_file.write("Volume Fraction : " + str(vf) + "\n")
-		res_file.write("ArealDensity : " + str(ArealDensity) + "\n")
-		res_file.write("E0_x : " + str(E0_x) + "\n")
-		res_file.write("E0_y : " + str(E0_y) + "\n")
-		res_file.write("E0_z : " + str(E0_z) + "\n")
-		res_file.write("v0_xy : " + str(v0_xy) + "\n")
-		res_file.write("v0_xz : " + str(v0_xz) + "\n")
-		res_file.write("v0_yx : " + str(v0_yx) + "\n")
-		res_file.write("v0_yz : " + str(v0_yz) + "\n")
-		res_file.write("v0_zx : " + str(v0_zx) + "\n")
-		res_file.write("v0_zy : " + str(v0_zy) + "\n")
-		res_file.write("G0_xy : " + str(G0_xy) + "\n")
-		res_file.write("G0_yz : " + str(G0_yz) + "\n")
-		res_file.write("G0_zx : " + str(G0_zx) + "\n")
+	res_file = open("optim_" + results_id + "_results.txt", "w")
+	res_file.write("Results file for weave " + results_id + "\n")
+	#res_file.write("Thickness : " + str(Thickness) + "\n")
+	#res_file.write("Volume Fraction : " + str(vf) + "\n")
+	res_file.write("ArealDensity : " + str(ArealDensity) + "\n")
+	res_file.write("E0_x : " + str(E0_x) + "\n")
+	res_file.write("E0_y : " + str(E0_y) + "\n")
+	res_file.write("E0_z : " + str(E0_z) + "\n")
+	res_file.write("v0_xy : " + str(v0_xy) + "\n")
+	res_file.write("v0_xz : " + str(v0_xz) + "\n")
+	res_file.write("v0_yx : " + str(v0_yx) + "\n")
+	res_file.write("v0_yz : " + str(v0_yz) + "\n")
+	res_file.write("v0_zx : " + str(v0_zx) + "\n")
+	res_file.write("v0_zy : " + str(v0_zy) + "\n")
+	res_file.write("G0_xy : " + str(G0_xy) + "\n")
+	res_file.write("G0_yz : " + str(G0_yz) + "\n")
+	res_file.write("G0_zx : " + str(G0_zx) + "\n")
+	res_file.close()
 	
 # Send the return values to stdout for Matlab
 # Suggested format: N, f_1, f_2, .. f_N, M, c_1, c_2, ..., c_M 
