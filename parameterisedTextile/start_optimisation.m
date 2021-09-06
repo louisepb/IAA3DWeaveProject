@@ -112,7 +112,7 @@ fclose(optim_param_file);
 
 options = nsgaopt();
 options.numVar = 5;
-options.popsize = 30;
+options.popsize = 50;
 options.numObj = 2;
 options.numCons = 1;
 options.lb = lb;

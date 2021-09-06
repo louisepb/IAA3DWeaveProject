@@ -3,7 +3,7 @@
 % param_optims + optimisation input
 %
 function [ArealDensity] = binders(input)
-
+input=[3 4 1 1 1]
 %clc;
 %[status, cmdout1] = system('python generateDesignSpace.py');
 %input='c:\\users\\emxghs\\desktop\\parameterisedTextile python generateDesignSpace.py';
@@ -84,45 +84,46 @@ end
 %wrap function
 wrapN = @(i, N) (1 + mod(i-1, N));
 
-binderNumber=0;
-weftIndex = 1;
 
 
-for i=1: numWefts*numBinderLayers: length(bpattern)
-    %pattern(i) = list(mod((i + offset), length(list)) );
-    x=i;
-    for j=1:length(pattern)
-        bpattern(i) = pattern(wrapN((j+offset*binderNumber), length(pattern)));
-        weftIndex = weftIndex + 1;
-        i=i+1;
-    
-        if weftIndex > numWefts
-            binderNumber = binderNumber +1;
-            weftIndex=1;
+for k = 0:numBinderLayers-1
+    binderNumber=0;
+    weftIndex = 1;
+    for i=(1 + k*numWefts): numWefts*numBinderLayers: length(bpattern)
+        %pattern(i) = list(mod((i + offset), length(list)) );
+        x=i;
+        for j=1:length(pattern)
+            bpattern(i) = pattern(wrapN((j+offset*binderNumber), length(pattern))) + k;
+            weftIndex = weftIndex + 1;
+            i=i+1;
+
+            if weftIndex > numWefts
+                binderNumber = binderNumber +1;
+                weftIndex=1;
+            end
         end
+        i=x;
     end
-    i=x;
 end
 
-
-binderNumber=0;
-weftIndex = 1;
-
-for i=numWefts+1: numWefts*numBinderLayers: length(bpattern)
-    %pattern(i) = list(mod((i + offset), length(list)) );
-    x=i;
-    for j=1:length(pattern)
-        bpattern(i) = pattern(wrapN((j+offset*binderNumber), length(pattern))) + 1;
-        weftIndex = weftIndex + 1;
-        i=i+1;
-    
-        if weftIndex > numWefts
-            binderNumber = binderNumber +1;
-            weftIndex=1;
-        end
-    end
-    i=x;
-end
+% binderNumber=0;
+% weftIndex = 1;
+% 
+% for i=numWefts+1: numWefts*numBinderLayers: length(bpattern)
+%     %pattern(i) = list(mod((i + offset), length(list)) );
+%     x=i;
+%     for j=1:length(pattern)
+%         bpattern(i) = pattern(wrapN((j+offset*binderNumber), length(pattern))) + 1;
+%         weftIndex = weftIndex + 1;
+%         i=i+1;
+%     
+%         if weftIndex > numWefts
+%             binderNumber = binderNumber +1;
+%             weftIndex=1;
+%         end
+%     end
+%     i=x;
+% end
 
 
 bpattern;
@@ -137,7 +138,7 @@ format="";
 for i=1:length(bpattern)
     format = format + "%d ";
 end
-format = format + "\n"
+format = format + "\n";
 
 fprintf(fileID, format, bpattern);
 fclose(fileID);

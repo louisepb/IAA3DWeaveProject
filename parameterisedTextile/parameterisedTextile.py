@@ -44,6 +44,10 @@ def GenerateTextile(numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, w
 		ZVoxNum (int) : Number of voxels in z direction 
         
     '''
+	
+
+	
+	
 	#Set up 3D Weave textile
 	Textile = CTextileDecoupledLToL( numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, weftHeight, numBinderLayers, True)
 	#Textile = CTextileLayerToLayer( numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, weftHeight, numBinderLayers, True)
@@ -146,7 +150,7 @@ def GenerateTextile(numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, w
 	
 	#save TG model
 	# print("Saving textile model")
-	voxelSize = 0.075
+	voxelSize = 0.05
 	SaveToXML(r"C:\\Users\\emxghs\\Desktop\\IAA3DWeaveProject\\parameterisedTextile\\ptextile.tg3", Textile.GetName(), OUTPUT_STANDARD)
 	XVoxNum = int(length / voxelSize)
 	YVoxNum = int(width  / voxelSize)
