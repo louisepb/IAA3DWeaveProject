@@ -3,8 +3,8 @@
 % param_optims + optimisation input
 %
 function [ArealDensity] = binders(input)
-input=[3 4 1 1 1]
 %clc;
+input=[3 1 1 1 6];
 %[status, cmdout1] = system('python generateDesignSpace.py');
 %input='c:\\users\\emxghs\\desktop\\parameterisedTextile python generateDesignSpace.py';
 A=dlmread("weaveDesignSpace.txt");

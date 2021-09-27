@@ -1,6 +1,5 @@
 function [f, cons] = fitnessFunWrapper(input)
 % Check the constraints
-% 
 A=dlmread("weaveDesignSpace.txt");
 %need these numbers from generateDesignSpace 
 numWeftLayers = A(1);
@@ -31,7 +30,7 @@ ArealDensity = binders(input); % Build textile here - need to be rewritten (?)
 
 ArealDensity
 
-[status, cmdout] = system(char("abaqus cae noGUI=fitnessFun.py " + ' -- ' + strcat(num2str(input)) + '  ' + strcat(num2str(ArealDensity )) ));
+%[status, cmdout] = system(char("abaqus cae noGUI=fitnessFun.py " + ' -- ' + strcat(num2str(input)) + '  ' + strcat(num2str(ArealDensity )) ));
 
 
 % Format: N, f_1, f_2, .. f_N, M, c_1, c_2, ..., c_M 

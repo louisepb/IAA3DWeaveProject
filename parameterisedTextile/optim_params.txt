@@ -1,6 +1,7 @@
 spacings, num_binders, binder_over, stepping_ratios, offsets
-0.75 0.75 0.75 
+0.71 0.71 0.71 
 1 2 3 4 5 6 7 
 1 
 1 2 3 4 5 6 7 
 1 2 3 4 5 6 
+
