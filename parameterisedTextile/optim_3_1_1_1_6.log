@@ -1,0 +1,62 @@
+Analysis initiated from SIMULIA established products
+Abaqus JOB optim_3_1_1_1_6
+Abaqus 3DEXPERIENCE R2019x
+Abaqus License Manager checked out the following licenses:
+Abaqus/Foundation checked out 5 tokens from Flexnet server abaqus.licences.nottingham.ac.uk.
+<163 out of 317 licenses remain available>.
+Begin Analysis Input File Processor
+9/8/2021 9:42:10 AM
+Run pre.exe
+9/8/2021 9:48:45 AM
+End Analysis Input File Processor
+Begin Abaqus/Standard Analysis
+9/8/2021 9:48:45 AM
+Run standard.exe
+*** Error: could not write file 'c:\users\emxghs\desktop\iaa3dweaveproject\temp\emxghs_optim_3_1forrtl: There is not enough space on the disk.
+forrtl: severe (38): error during write, unit 7, file C:\Users\emxghs\Desktop\IAA3DWeaveProject\parameterisedTextile\optim_3_1_1_1_6.msg
+Image              PC                Routine            Line        Source             
+libifcoremd.dll    00007FFF507EA335  Unknown               Unknown  Unknown
+libifcoremd.dll    00007FFF50881C6B  Unknown               Unknown  Unknown
+ABQSMAAspSupport.  00007FFF37356F3D  Unknown               Unknown  Unknown
+ABQSMAAspSupport.  00007FFF37332F3B  Unknown               Unknown  Unknown
+ABQSMAAspSupport.  00007FFF374E4A62  Unknown               Unknown  Unknown
+ABQSMAIomCore.dll  00007FFF7912CA77  Unknown               Unknown  Unknown
+ABQSMAIomCore.dll  00007FFF7912C8A4  Unknown               Unknown  Unknown
+ABQSMAIomCore.dll  00007FFF791243C3  Unknown               Unknown  Unknown
+ABQSMAIomCore.dll  00007FFF7912E24B  Unknown               Unknown  Unknown
+ABQSMAIomCore.dll  00007FFF7912DCCC  Unknown               Unknown  Unknown
+ABQSMAIomCore.dll  00007FFF79138D2E  Unknown               Unknown  Unknown
+ABQSMAIomCore.dll  00007FFF79128EFA  Unknown               Unknown  Unknown
+ABQSMAAncAdbModul  00007FFF432C2123  Unknown               Unknown  Unknown
+ABQSMAAncAdbModul  00007FFF432CDF09  Unknown               Unknown  Unknown
+ABQSMAAncAdbModul  00007FFF432CC291  Unknown               Unknown  Unknown
+ABQSMAAncAdbModul  00007FFF432BDED7  Unknown               Unknown  Unknown
+ABQSMAAncAdbModul  00007FFF432990EA  Unknown               Unknown  Unknown
+ABQSMAAncAdbModul  00007FFF432E9784  Unknown               Unknown  Unknown
+ABQSMAAncAdbModul  00007FFF432DA03A  Unknown               Unknown  Unknown
+ABQSMAStaCore.dll  00007FFF15B735FF  Unknown               Unknown  Unknown
+ABQSMAAspSupport.  00007FFF374E8B5B  Unknown               Unknown  Unknown
+ABQSMAAspSupport.  00007FFF374E51DF  Unknown               Unknown  Unknown
+ABQSMAAspSupport.  00007FFF37356215  Unknown               Unknown  Unknown
+ABQSMAAspSupport.  00007FFF37332F40  Unknown               Unknown  Unknown
+ABQSMAAspSupport.  00007FFF374E4A62  Unknown               Unknown  Unknown
+ABQSMAIomCore.dll  00007FFF7912CA77  Unknown               Unknown  Unknown
+ABQSMAIomCore.dll  00007FFF7912C8A4  Unknown               Unknown  Unknown
+ABQSMAIomCore.dll  00007FFF7912CDA2  Unknown               Unknown  Unknown
+ABQSMAIomCore.dll  00007FFF7912CDEE  Unknown               Unknown  Unknown
+ABQSMABasCoreUtil  00007FFF79780AB8  Unknown               Unknown  Unknown
+ABQSMABasCoreUtil  00007FFF797809BE  Unknown               Unknown  Unknown
+ABQSMABasCoreUtil  00007FFF7977F4D9  Unknown               Unknown  Unknown
+ABQSMAAbuBasicUti  00007FFF3A789AA6  Unknown               Unknown  Unknown
+ucrtbase.dll       00007FFF8ACF10B2  Unknown               Unknown  Unknown
+KERNEL32.DLL       00007FFF8C237C24  Unknown               Unknown  Unknown
+ntdll.dll          00007FFF8DA0D721  Unknown               Unknown  Unknown
+9/8/2021 10:10:15 AM
+Abaqus Error: Abaqus/Standard Analysis exited with an error - Please see the 
+message file for possible error messages if the file exists.
+Begin Convert MFS to SFS
+9/8/2021 10:10:16 AM
+Run SMASimUtility.exe
+9/8/2021 10:10:16 AM
+End Convert MFS to SFS
+Abaqus/Analysis exited with errors

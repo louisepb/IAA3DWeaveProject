@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<resource xmlns="http://www.wxwidgets.org/wxxrc" version="2.5.3.0">
+	<object class="wxDialog" name="Window">
+		<style>wxDEFAULT_DIALOG_STYLE</style>
+		<size>561,329</size>
+		<title>Generate Design Space</title>
+		<centered>1</centered>
+		<object class="wxBoxSizer">
+			<orient>wxVERTICAL</orient>
+			<object class="sizeritem">
+				<option>1</option>
+				<flag>wxEXPAND</flag>
+				<border>5</border>
+				<object class="wxGridBagSizer">
+					<vgap>0</vgap>
+					<hgap>0</hgap>
+					<growablecols></growablecols>
+					<growablerows></growablerows>
+					<object class="sizeritem">
+						<cellpos>7,3</cellpos>
+						<cellspan>1,1</cellspan>
+						<flag>wxALL</flag>
+						<border>5</border>
+						<object class="wxButton" name="DesignSpace">
+							<tooltip>Generate design space.</tooltip>
+							<label>Generate Design Space</label>
+							<default>0</default>
+							<auth_needed>0</auth_needed>
+							<markup>0</markup>
+							<bitmap />
+						</object>
+					</object>
+					<object class="sizeritem">
+						<cellpos>1,1</cellpos>
+						<cellspan>1,1</cellspan>
+						<flag>wxALL</flag>
+						<border>5</border>
+						<object class="wxStaticText" name="m_staticText75">
+							<label>Composite Thickness (mm):</label>
+							<wrap>-1</wrap>
+						</object>
+					</object>
+					<object class="sizeritem">
+						<cellpos>1,2</cellpos>
+						<cellspan>1,1</cellspan>
+						<flag>wxALL</flag>
+						<border>5</border>
+						<object class="wxTextCtrl" name="m_textCtrl62">
+							<value></value>
+						</object>
+					</object>
+					<object class="sizeritem">
+						<cellpos>3,1</cellpos>
+						<cellspan>1,1</cellspan>
+						<flag>wxALL</flag>
+						<border>5</border>
+						<object class="wxStaticText" name="m_staticText76">
+							<label>Volume Fraction (%):</label>
+							<wrap>-1</wrap>
+						</object>
+					</object>
+					<object class="sizeritem">
+						<cellpos>3,2</cellpos>
+						<cellspan>1,1</cellspan>
+						<flag>wxALL</flag>
+						<border>5</border>
+						<object class="wxTextCtrl" name="m_textCtrl61">
+							<value></value>
+						</object>
+					</object>
+					<object class="sizeritem">
+						<cellpos>5,1</cellpos>
+						<cellspan>1,1</cellspan>
+						<flag>wxALL</flag>
+						<border>5</border>
+						<object class="wxRadioBox" name="m_radioBox1">
+							<style>wxRA_SPECIFY_COLS</style>
+							<label>Number of Warp Filaments</label>
+							<selection>2</selection>
+							<content>
+								<item>6K</item>
+								<item>12K</item>
+								<item>24K</item>
+							</content>
+							<dimension>1</dimension>
+						</object>
+					</object>
+					<object class="sizeritem">
+						<cellpos>5,2</cellpos>
+						<cellspan>1,1</cellspan>
+						<flag>wxALL</flag>
+						<border>5</border>
+						<object class="wxRadioBox" name="m_radioBox11">
+							<style>wxRA_SPECIFY_COLS</style>
+							<label>Number of Weft Filaments</label>
+							<selection>1</selection>
+							<content>
+								<item>6K</item>
+								<item>12K</item>
+								<item>24K</item>
+							</content>
+							<dimension>1</dimension>
+						</object>
+					</object>
+					<object class="sizeritem">
+						<cellpos>5,3</cellpos>
+						<cellspan>1,1</cellspan>
+						<flag>wxALL</flag>
+						<border>5</border>
+						<object class="wxRadioBox" name="m_radioBox12">
+							<style>wxRA_SPECIFY_COLS</style>
+							<label>Number of Binder Filaments</label>
+							<selection>0</selection>
+							<content>
+								<item>6K</item>
+								<item>12K</item>
+								<item>24K</item>
+							</content>
+							<dimension>1</dimension>
+						</object>
+					</object>
+				</object>
+			</object>
+		</object>
+	</object>
+	<object class="wxWizard" name="MyWizard1">
+		<style>wxDEFAULT_DIALOG_STYLE</style>
+		<size>556,313</size>
+		<title>Generate Design Space</title>
+		<centered>1</centered>
+		<object class="wxWizardPageSimple" name="m_wizPage1">
+			<object class="wxGridBagSizer">
+				<vgap>0</vgap>
+				<hgap>0</hgap>
+				<growablecols></growablecols>
+				<growablerows></growablerows>
+				<object class="sizeritem">
+					<cellpos>0,0</cellpos>
+					<cellspan>1,1</cellspan>
+					<flag>wxALL</flag>
+					<border>5</border>
+					<object class="wxStaticText" name="m_staticText3">
+						<label>Composite Thickness (mm):</label>
+						<wrap>-1</wrap>
+					</object>
+				</object>
+				<object class="sizeritem">
+					<cellpos>0,1</cellpos>
+					<cellspan>1,1</cellspan>
+					<flag>wxALL</flag>
+					<border>5</border>
+					<object class="wxTextCtrl" name="m_textCtrl3">
+						<value></value>
+					</object>
+				</object>
+				<object class="sizeritem">
+					<cellpos>2,0</cellpos>
+					<cellspan>1,1</cellspan>
+					<flag>wxALL</flag>
+					<border>5</border>
+					<object class="wxStaticText" name="m_staticText4">
+						<label>Volume Fraction (%):</label>
+						<wrap>-1</wrap>
+					</object>
+				</object>
+				<object class="sizeritem">
+					<cellpos>2,1</cellpos>
+					<cellspan>1,1</cellspan>
+					<flag>wxALL</flag>
+					<border>5</border>
+					<object class="wxTextCtrl" name="m_textCtrl4">
+						<value></value>
+					</object>
+				</object>
+				<object class="sizeritem">
+					<cellpos>3,3</cellpos>
+					<cellspan>1,1</cellspan>
+					<flag>wxALL</flag>
+					<border>5</border>
+					<object class="wxRadioBox" name="m_radioBox6">
+						<style>wxRA_SPECIFY_COLS</style>
+						<label>Binder Filament Count</label>
+						<selection>2</selection>
+						<content>
+							<item>6K</item>
+							<item>12K</item>
+							<item>24K</item>
+						</content>
+						<dimension>1</dimension>
+					</object>
+				</object>
+				<object class="sizeritem">
+					<cellpos>3,1</cellpos>
+					<cellspan>1,1</cellspan>
+					<flag>wxALL</flag>
+					<border>5</border>
+					<object class="wxRadioBox" name="m_radioBox5">
+						<style>wxRA_SPECIFY_COLS</style>
+						<label>Weft Filament Count</label>
+						<selection>0</selection>
+						<content>
+							<item>6K</item>
+							<item>12K</item>
+							<item>24K</item>
+						</content>
+						<dimension>1</dimension>
+					</object>
+				</object>
+				<object class="sizeritem">
+					<cellpos>3,0</cellpos>
+					<cellspan>1,1</cellspan>
+					<flag>wxALL</flag>
+					<border>5</border>
+					<object class="wxRadioBox" name="m_radioBox4">
+						<style>wxRA_SPECIFY_COLS</style>
+						<label>Warp Filament Count</label>
+						<selection>0</selection>
+						<content>
+							<item>6K</item>
+							<item>12K</item>
+							<item>24K</item>
+						</content>
+						<dimension>1</dimension>
+					</object>
+				</object>
+			</object>
+		</object>
+		<object class="wxWizardPageSimple" name="m_wizPage2" />
+	</object>
+</resource>
