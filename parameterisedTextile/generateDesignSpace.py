@@ -121,7 +121,7 @@ vf=0.6
 thickness = 2
 numberFilamentsWarp = 12000
 numberFilamentsWeft = 12000
-numberFilamentsBinder = 12000
+numberFilamentsBinder = 6000
 
 numWeftLayers, numWarpLayers, maxnumBinderLayers, maxSpacing, warpHeight, warpWidth, weftHeight, weftWidth, binderHeight, binderWidth  = GenerateDesignSpace(path, vf, tol, thickness, numberFilamentsWarp, numberFilamentsWeft, numberFilamentsBinder)
 	#pass numlayers from here into Matlab and have matlab generate the binder pattern + spacings that will set the unit cell size

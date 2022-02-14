@@ -9,7 +9,7 @@ path = "c:\\users\\emxghs\\desktop\\IAA3DWeaveProject\\parameterisedTextile\\"
 #user specified properties
 
 def chunks(lst, n):
-    return [lst[i:i+n] for i in xrange(0, len(lst), n)]
+    return [lst[i:i+n] for i in range(0, len(lst), n)]
 
 
 def GenerateTextile(numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, warpWidth, weftHeight, weftWidth, binderHeight, binderWidth, warpRatio, binderRatio, length, width, height, binderYarns, numWeftLayers, numWarpLayers, numBinderLayers):
