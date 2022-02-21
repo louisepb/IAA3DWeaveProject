@@ -10,6 +10,7 @@ import subprocess
 import re
 import math
 import os
+import re
 
 class FitnessFunction(Problem):
 
@@ -17,6 +18,10 @@ class FitnessFunction(Problem):
 		self.xl = xl
 		self.xu = xu
 		super().__init__(n_var=5, n_obj=2, xl=self.xl, xu=self.xu)
+		
+	# %wrap function
+	def wrapN(i, N):
+		return (1 + mod(i-1, N))
 	
 	def _evaluate(self, x, out, *args, **kwargs):
 		# f1 = 100 * (x[:, 0]**2 + x[:, 1]**2)
@@ -34,7 +39,17 @@ class FitnessFunction(Problem):
 		weaveDesignSpace_file = open("weaveDesignSpace.txt", "r")
 		#need these numbers from generateDesignSpace 
 		design_space = weaveDesignSpace_file.readlines()
+		weaveDesignSpace_file.close()
+		design_space = design_space[0].split(', ')
 		numWeftLayers = int(design_space[0])
+		maxnumBinderLayers=int(design_space[1])
+		maxSpacing=float(design_space[2])
+		warpHeight=float(design_space[3])
+		warpWidth=float(design_space[4])
+		weftHeight=float(design_space[5])
+		weftWidth=float(design_space[6])
+		binderHeight=float(design_space[7])
+		binderWidth=float(design_space[8])
 
 		optim_params_file = open("optim_params.txt", "r")
 		optim_params = optim_params_file.readlines()
@@ -46,14 +61,14 @@ class FitnessFunction(Problem):
 		SteppingRatio = int(optim_params[4][input[4]])
 		offset = int(optim_params[5][input[5]])
 
-		if ( numWeftLayers - (numBinderLayers-1) % SteppingRatio != 0 )
+		if mod( numWeftLayers - (numBinderLayers-1), SteppingRatio != 0 ):
 			cons = [10]
 			f = [1e6, 2]
 			return
 
 		numWefts = 2 * (numWeftLayers - (numBinderLayers - 1))/SteppingRatio
 
-		if ( numWefts % passOverRatio != 0 )
+		if ( numWefts % passOverRatio != 0 ):
 			cons = [10]
 			f = [1e6, 2]
 			return
@@ -71,44 +86,51 @@ class FitnessFunction(Problem):
 		# vals = str2double(regexp(cmdout, '\d*', 'match'));
 		fileid="optim_{}_{}_{}_{}_{}_results.txt".format(*input)
 		text=Path(fileid).read_text()
-		text = text.replace('\n', '')
+		#text = text.replace('\n', '')
 		expr1='[^\n]*E0_x[^\n]*'
 		expr2='[^\n]*ArealDensity[^\n]*'
-		matches1 = str(regexp(text,expr1,'match'));
-		matches2 = str(regexp(text,expr2,'match'));
-		val1 = matches1{1}(8:strlength(matches1{1}));
-		val2 = matches2{1}(16:strlength(matches2{1}));
+		#check to see what variable this produces
+		matches1 = str(re.search(expr1,text))
+		matches2 = str(re.search(expr2,text))
+		val1 = matches1[0][8:strlength[matches1[0]]]
+		val2 = matches2[0][16:strlength[matches2[0]]]
 
 
-		%vals = str2double(split(cmdout));
+		# %vals = str2double(split(cmdout));
 
-		f = [-str2double(val1) str2double(val2)];
-		cons=[0];
+		f = [-str2double(val1) str2double(val2)]
+		cons=[0]
 		
-	def _GenerateModel():
+	def _GenerateModel(input):
 		
-		A=dlmread("weaveDesignSpace.txt");
-		# %need these numbers from generateDesignSpace 
-		numWeftLayers = A(1);
-		maxnumBinderLayers=A(2);
-		maxSpacing=A(3);
-		warpHeight=A(4);
-		warpWidth=A(5);
-		weftHeight=A(6);
-		weftWidth=A(7);
-		binderHeight=A(8);
-		binderWidth=A(9);
+		weaveDesignSpace_file = open("weaveDesignSpace.txt", "r")
+		#need these numbers from generateDesignSpace 
+		design_space = weaveDesignSpace_file.readlines()
+		weaveDesignSpace_file.close()
+		design_space = design_space[0].split(', ')
+		numWeftLayers = int(design_space[0])
+		maxnumBinderLayers=int(design_space[1])
+		maxSpacing=float(design_space[2])
+		warpHeight=float(design_space[3])
+		warpWidth=float(design_space[4])
+		weftHeight=float(design_space[5])
+		weftWidth=float(design_space[6])
+		binderHeight=float(design_space[7])
+		binderWidth=float(design_space[8])
 
-		numWarpLayers = numWeftLayers -1;
+		numWarpLayers = numWeftLayers -1
 
 		# % Parameters from the optimisation run
-		optim_params = dlmread('optim_params.txt', ' ', 1, 0); % Skip the header
-		warpSpacing = optim_params(1, input(1));
-		weftSpacing = warpSpacing;
-		numBinderLayers = optim_params(2, input(2));
-		passOverRatio = optim_params(3, input(3));
-		SteppingRatio = optim_params(4, input(4));
-		offset = optim_params(5, input(5));
+		optim_params_file = open("optim_params.txt", "r")
+		optim_params = optim_params_file.readlines()
+		optim_param_file.close()
+		warpSpacing = float(optim_params[1][input[1]])
+		weftSpacing = warpSpacing
+		numBinderLayers = int(optim_params[2][input[2]])
+		passOverRatio = int(optim_params[3][input[3]])
+		SteppingRatio = int(optim_params[4][input[4]])
+		offset = int(optim_params[5][input[5]])
+		
 
 		# % warpSpacing = 0.8
 		# % weftSpacing = warpSpacing;
@@ -118,124 +140,94 @@ class FitnessFunction(Problem):
 		# % offset = 1
 
 		# %numwefts needed given parameters
-		numWefts = 2 * (numWeftLayers-(numBinderLayers-1))/SteppingRatio; % Was (numWeftLayers-(numBinderLayers-1)/SteppingRatio)
-		warpRatio = 1;
-		binderRatio=1;
+		numWefts = 2 * (numWeftLayers-(numBinderLayers-1))/SteppingRatio #% Was (numWeftLayers-(numBinderLayers-1)/SteppingRatio)
+		warpRatio = 1
+		binderRatio=1
 
 		# %constraint: numWeftLayers % SteppingRatio == 0, provided SteppingRatio > 0
 
 		# %number of binding channels req'd assuming all offset
-		numBinderYarns=numWefts/passOverRatio;
+		numBinderYarns=numWefts/passOverRatio
 
 		# %create a set binder pattern, for now 1 warp : 1 binder
-		numXYarns = 2 * numBinderYarns;
+		numXYarns = 2 * numBinderYarns
 
 		# %calculate length, width and height of UC
-		width = warpSpacing * numXYarns;
-		Length = weftSpacing * (numWefts);
-		height = 1.1*((2*numWeftLayers - 1)*weftHeight);
+		width = warpSpacing * numXYarns
+		Length = weftSpacing * (numWefts)
+		height = 1.1*((2*numWeftLayers - 1)*weftHeight)
 
 		# %if SteppingRatio = 0, only need two binders to cover the space. 
 		# %numBinderYarns = 2
 
-		bpattern=zeros(1, numBinderYarns*numWefts*numBinderLayers);
-		pattern=zeros(1, numWefts);
+		bpattern=np.zeros((1, numBinderYarns*numWefts*numBinderLayers))
+		pattern=np.zeros((1, numWefts))
 
 		# %path of binder down through textile
-		first = true;
-		for i=1:((numWeftLayers-(numBinderLayers-1))/SteppingRatio)+1
-			i;
-			if first
-				pattern(1) = 0;
-				first = false;
+		first = True
+		for i in range(1,((numWeftLayers-(numBinderLayers-1))/SteppingRatio)+1):
+			if first:
+				pattern[0][0] = 0
+				first = false
 			else
-				pattern(i) = pattern(i-1) + SteppingRatio;
-			end
-			
-		end
+				pattern[0][i] = pattern(i-1) + SteppingRatio
+
 
 		# %back up through textile
 		# % George's original code: for i=numWeftLayers-(numBinderLayers-1)/SteppingRatio+2:numWefts
-		for i=(numWeftLayers-(numBinderLayers-1))/SteppingRatio+2:numWefts
-			pattern(i) = pattern(i-1) - SteppingRatio;
-		end
+		for i in range(1, (numWeftLayers-(numBinderLayers-1))/SteppingRatio+2, numWefts):
+			pattern[0][i] = pattern[0][i-1] - SteppingRatio
 
-		%Generate pattern for the rest of yarns using offset
-		%wrap function
-		wrapN = @(i, N) (1 + mod(i-1, N));
+		# %Generate pattern for the rest of yarns using offset
 
 
 
-		for k = 0:numBinderLayers-1
-			binderNumber=0;
-			weftIndex = 1;
-			for i=(1 + k*numWefts): numWefts*numBinderLayers: length(bpattern)
+
+		for k in range(0,numBinderLayers-1):
+			binderNumber=0
+			weftIndex = 1
+			for i in range((1 + k*numWefts), numWefts*numBinderLayers, length(bpattern))
 				# %pattern(i) = list(mod((i + offset), length(list)) );
-				x=i;
-				for j=1:length(pattern)
-					bpattern(i) = pattern(wrapN((j+offset*binderNumber), length(pattern))) + k;
-					weftIndex = weftIndex + 1;
-					i=i+1;
+				x=i
+				for j in range(1, length(pattern))
+					bpattern[0][i] = pattern[0][wrapN((j+offset*binderNumber), length(pattern))] + k
+					weftIndex = weftIndex + 1
+					i=i+1
 
-					if weftIndex > numWefts
-						binderNumber = binderNumber +1;
-						weftIndex=1;
-					end
-				end
-				i=x;
-			end
-		end
+					if weftIndex > numWefts:
+						binderNumber = binderNumber +1
+						weftIndex=1
 
-		# binderNumber=0;
-		# weftIndex = 1;
-		# 
-		# for i=numWefts+1: numWefts*numBinderLayers: length(bpattern)
-		#     %pattern(i) = list(mod((i + offset), length(list)) );
-		#     x=i;
-		#     for j=1:length(pattern)
-		#         bpattern(i) = pattern(wrapN((j+offset*binderNumber), length(pattern))) + 1;
-		#         weftIndex = weftIndex + 1;
-		#         i=i+1;
-		#     
-		#         if weftIndex > numWefts
-		#             binderNumber = binderNumber +1;
-		#             weftIndex=1;
-		#         end
-		#     end
-		#     i=x;
-		# end
+				i=x
 
 
-		binderYarns = mat2str(bpattern);
 
-		%write to .dat file
-		fileID=fopen("binderpattern.dat", "a");
-		format="";
+		binderYarns = np.array2string(bpattern)
 
-		for i=1:length(bpattern)
-			format = format + "%d ";
-		end
-		format = format + "\n";
 
-		fprintf(fileID, format, bpattern);
-		fclose(fileID);
+		fileID=open("binderpattern.dat", "a")
+		format=""
 
-		string1 = [numXYarns numWefts warpSpacing weftSpacing warpHeight warpWidth weftHeight weftWidth binderHeight binderWidth warpRatio binderRatio Length width height];
-		format1 = "%d %d %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %d %d %.2f %.2f %.2f";
-		string3 = [numWeftLayers numWarpLayers numBinderLayers ];
-		format3 = " %d %d %d ";
-		[cmdLine1, errmsg1] = sprintf('python parameterisedTextile.py ' + format1, string1 );
-		[cmdLine3, errmsg3] = sprintf(format3, string3);
+		for i in range(1:length(bpattern[0]))
+			format = format + "%d "
+			
+		format = format + "\n"
 
-		cmdLine = cmdLine1 + cmdLine3 + strcat(num2str(input));
-		cmdLine
-		[status, cmdout2] = system(cmdLine);
+		fileID.write(format, bpattern)
+		fileID.close()
 
-		%ArealDensityFile = fopen("ArealDensity.txt", "r");
-		ArealDensityFile = dlmread("ArealDensity.txt");
-		%formatSpec = '%f';
-		cmdout2
-		ArealDensity = ArealDensityFile(end);
+		string1 = [numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, warpWidth, weftHeight, weftWidth, binderHeight, binderWidth, warpRatio, binderRatio, Length, width, height]
+		format1 = "{} {} {} {} {} {} {} {} {} {} {} {} {} {} {}"
+		string3 = [numWeftLayers, numWarpLayers, numBinderLayers ]
+		format3 = " {} {} {} "
+		cmdLine1= 'python parameterisedTextile.py ' + format1.format( *string1 )
+		cmdLine3= format3.format(*string3)
+
+		cmdLine = cmdLine1 + cmdLine3 + str(input[0]) + str(input[1]) + str(input[2]) + str(input[3]) + str(input[4])
+		status= subprocess.call(cmdLine)
+
+		ArealDensityFile = open("ArealDensity.txt", "r")
+		ArealDensity = ArealDensityFile.readlines()[-1]
 		return ArealDensity
 
 
@@ -331,4 +323,4 @@ def RunOptimisation(path):
 	plot.show()
 	return
 
-RunOptimisation('C:\\Users\\emxghs\\Desktop\\OptimisationGUI')
+RunOptimisation('C:\\Users\\emxghs\\Desktop\\IAA3DWeaveProject\\OptimisationGUI')
