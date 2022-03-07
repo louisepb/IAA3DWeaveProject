@@ -16,6 +16,9 @@ import os
 import sys
 # sys.path.insert(0, os.path.abspath('../parameterisedTextile'))
 sys.path.append(os.path.abspath('../parameterisedTextile'))
+sys.path.append(os.path.abspath('../OptimisationGUI/GDS/GeneticAlgorithm'))
+sys.path.append(os.path.abspath('../OptimisationGUI/GDS/generateDesignSpace'))
+
 
 # -- Creating import mocks  --------------------------------------------------
 

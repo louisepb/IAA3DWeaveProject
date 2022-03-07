@@ -7,6 +7,8 @@ Welcome to IAA 3D Weave Project's documentation!
    :caption: Contents:
 
    intro
+   installation
+   usage
    
 .. toctree::
    :maxdepth: 2

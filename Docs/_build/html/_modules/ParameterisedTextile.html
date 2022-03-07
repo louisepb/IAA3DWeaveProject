@@ -1,19 +1,17 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>parameterisedTextile &#8212; IAA 3D Weave Project  documentation</title>
-    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
    
@@ -38,209 +36,91 @@
 <span class="kn">from</span> <span class="nn">TexGen.Core</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">import</span> <span class="nn">math</span>
 <span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;c:</span><span class="se">\\</span><span class="s2">users</span><span class="se">\\</span><span class="s2">emxghs</span><span class="se">\\</span><span class="s2">desktop</span><span class="se">\\</span><span class="s2">IAA3DWeaveProject</span><span class="se">\\</span><span class="s2">parameterisedTextile</span><span class="se">\\</span><span class="s2">&quot;</span>
 
 <span class="c1">#user specified properties</span>
 
-<span class="c1"># #size of unit cell</span>
-<span class="c1"># length=10</span>
-<span class="c1"># width=10</span>
-<span class="c1"># height=8</span>
-<span class="c1"># Volume = length * width * height</span>
-
-<span class="c1"># #ratios of warp:weft:binder channels per unit cell</span>
-<span class="c1"># warpRatio=6</span>
-<span class="c1"># binderRatio=1</span>
-
-<span class="c1"># vf = 0.6</span>
-<span class="c1"># fibreVolume = vf * Volume</span>
+<span class="k">def</span> <span class="nf">chunks</span><span class="p">(</span><span class="n">lst</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">lst</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="n">n</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">lst</span><span class="p">),</span> <span class="n">n</span><span class="p">)]</span>
 
 
-
-
-<span class="c1"># #These could be parameters if exists a range of reed sizes, units per inch </span>
-<span class="c1"># endsDensity = 20</span>
-<span class="c1"># picksDensity = 16</span>
-<span class="c1"># inch = 25.4</span>
-
-<span class="c1"># #numBinderLayers</span>
-<span class="c1"># numBinderLayers = 2</span>
-
-<span class="c1"># #convert to per mm</span>
-<span class="c1"># endsDensity = endsDensity/inch # based off reed size</span>
-<span class="c1"># picksDensity = picksDensity/inch</span>
-
-<span class="c1"># #calculate numbers of wefts and warps in a layer in unit cell</span>
-<span class="c1"># numXYarns = int(endsDensity*length)</span>
-<span class="c1"># numWefts = int(picksDensity*width)</span>
-
-<span class="c1"># numWarps = 6 #math.ceil(warpRatio*numXYarns/(warpRatio + binderRatio))</span>
-<span class="c1"># can think more about this when see more textile data</span>
-
-<span class="c1"># #spacings </span>
-<span class="c1"># warpSpacing = float(length) / numXYarns</span>
-<span class="c1"># weftSpacing = float(width) / numWefts</span>
-<span class="c1"># print(length, width, numXYarns, numWefts)</span>
-<span class="c1"># print(&quot;weftSpacing &quot;, weftSpacing)</span>
-<span class="c1"># print(&quot;warpSpacing &quot;, warpSpacing)</span>
-
-<span class="c1"># #binders must fit between weft yarns</span>
-<span class="c1"># # if (weftSpacing &lt; weftWidth + binderHeight):</span>
-	<span class="c1"># # raise Exception(&quot;Not enough space between wefts, decrease picks density&quot;)</span>
-
-
-<span class="c1"># binderYarns = [[0, 1, 2, 1, 1, 1], [3, 4, 5, 6, 4, 3]]</span>
-<span class="c1"># #Check if length of binderYarns positions equal to numWefts</span>
-<span class="c1"># for Yarn in binderYarns:</span>
-	<span class="c1"># if len(Yarn) != numWefts: </span>
-		<span class="c1"># raise Exception(&quot;Too many binder yarn positions specified, must be equal to number of wefts. Change picks density&quot;)</span>
-
-
-<span class="c1"># #calculate the yarn volume in each layer (both warp and weft)</span>
-<span class="c1"># layerVolume = (warpHeight + weftHeight)*length*width</span>
-<span class="c1"># print(&quot;layerVolume &quot;, layerVolume)</span>
-
-<span class="c1"># #extra weft layer volume </span>
-<span class="c1"># weftlayerVolume = weftHeight*length*width</span>
-<span class="c1"># print(&quot;weftlayerVolume &quot;, weftlayerVolume)</span>
-
-<span class="c1"># #reserve a min binder volume for layers above and below textile</span>
-<span class="c1"># minBinderVolume = 2 * binderHeight * width * length</span>
-<span class="c1"># print(&quot;minBinderVolume &quot;, minBinderVolume)</span>
-
-
-
-<span class="c1"># #max number of possible layers with binder and additional weft layer accounted for - George check this is Kosher</span>
-<span class="c1"># numWarpLayers = int((Volume - minBinderVolume) / layerVolume) </span>
-<span class="c1"># #numWarpLayers = int(Volume / layerVolume)</span>
-<span class="c1"># numWeftLayers = numWarpLayers + 1</span>
-<span class="c1"># numLayers = numWarpLayers + numWeftLayers</span>
-
-
-
-<span class="c1"># def GenerateDesignSpace(path, vf, tol, thickness, numberFilamentsWarp, numberFilamentsWeft, numberFilamentsBinder):</span>
-	<span class="c1"># &quot;&quot;&quot;</span>
-	<span class="c1"># Function to set the design space based on user input. Takes the target volume fraction, volume fraction tolerance</span>
-	<span class="c1"># and thickness and returns the number of layers, actual volume fraction and spacings.</span>
-	
-	<span class="c1"># Binder pattern and other geometrical values then generated by optimisation</span>
-	
-	<span class="c1"># &quot;&quot;&quot;</span>
-	<span class="c1"># #size of single cell dependent on the yarn type</span>
-	<span class="c1"># #Assume for now the yarn type is fized at 12k</span>
-	<span class="c1"># #yarn size could be parameter, initally assuming all single type of yarn, below is Hexcel IM7 tow, max packing fraction of 0.9</span>
-	<span class="c1"># filamentArea = math.pi * ((0.0026)**2)</span>
-	<span class="c1"># #numberFilamentsWarp = 12000</span>
-	<span class="c1"># warpYarnArea = (filamentArea*numberFilamentsWarp)/0.9</span>
-	<span class="c1"># radius = math.sqrt(warpYarnArea/math.pi)</span>
-	<span class="c1"># warpWidth = 4*radius</span>
-	<span class="c1"># warpHeight = 1*radius</span>
-
-	<span class="c1"># #numberFilamentsWeft = 12000</span>
-	<span class="c1"># weftYarnArea = (filamentArea*numberFilamentsWeft)/0.9</span>
-	<span class="c1"># radius = math.sqrt(warpYarnArea/math.pi)</span>
-	<span class="c1"># weftWidth = 4*radius</span>
-	<span class="c1"># weftHeight = 1*radius</span>
-
-	<span class="c1"># #numberFilamentsBinder = 12000</span>
-	<span class="c1"># binderYarnArea = (filamentArea*numberFilamentsBinder)/0.9</span>
-	<span class="c1"># radius = math.sqrt(warpYarnArea/math.pi)</span>
-	<span class="c1"># binderWidth = 4*radius</span>
-	<span class="c1"># binderHeight = 1*radius</span>
-	
-	
-	<span class="c1"># cellWidth = weftWidth + 0.1*weftWidth</span>
-	<span class="c1"># cellLength = warpWidth + 0.1*warpWidth</span>
-	
-	<span class="c1"># cellVolume = cellWidth  * cellLength * Thickness</span>
-	<span class="c1"># cellFibreVolume = vf * cellVolume</span>
-	
-	<span class="c1"># yarnfvf = (filamentArea * numberFilamentsWarp) / warpYarnArea</span>
-	
-	<span class="c1"># cellYarnVolume = cellVolume * vf / yarnfvf</span>
-	
-	<span class="c1"># #calculate the yarn volume in each layer (both warp and weft)</span>
-	<span class="c1"># cellLayerVolume = (warpHeight + weftHeight)*cellLength*cellWidth</span>
-	<span class="c1"># print(&quot;cellLayerVolume is &quot;, cellLayerVolume)</span>
-	
-	<span class="c1"># weftlayerVolume = weftHeight*cellLength*cellWidth</span>
-	
-	<span class="c1"># numLayers = int(cellYarnVolume / cellLayerVolume)</span>
-	<span class="c1"># print(&quot;numLayers = &quot;, numLayers)</span>
-	
-	<span class="c1"># #reserve a min binder volume for layers above and below textile</span>
-	<span class="c1"># minBinderVolume = 2 * binderHeight * cellWidth * cellLength</span>
-	<span class="c1"># print(&quot;minBinderVolume &quot;, minBinderVolume)</span>
-
-
-
-	<span class="c1"># #max number of possible layers with binder and additional weft layer accounted for - George check this is Kosher</span>
-	<span class="c1"># numWarpLayers = int((cellVolume - minBinderVolume) / cellLayerVolume) </span>
-	<span class="c1"># #numWarpLayers = int(Volume / layerVolume)</span>
-	<span class="c1"># numWeftLayers = numWarpLayers + 1</span>
-	<span class="c1"># numLayers = numWarpLayers + numWeftLayers</span>
-	<span class="c1"># print(&quot;numLayers = &quot;, numLayers)</span>
-	
-	<span class="c1"># #pass numlayers from here into Matlab and have matlab generate the binder pattern + spacings that will set the unit cell size</span>
-	<span class="c1"># modelName = &quot;weave&quot;</span>
-	<span class="c1"># file = open(path + modelName +  &quot;DesignSpace.txt&quot;, &quot;a&quot;)</span>
-	<span class="c1"># file.write(str(numWeftLayers))</span>
-	
-	<span class="c1"># return numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, weftHeight, warpRatio, binderRatio, length, width, height, binderYarns, numWeftLayers, numWarpLayers, numBinderLayers</span>
-
-
-
-
-
-
-<div class="viewcode-block" id="GenerateTextile"><a class="viewcode-back" href="../modules/parameterisedTextile.html#parameterisedTextile.GenerateTextile">[docs]</a><span class="k">def</span> <span class="nf">GenerateTextile</span><span class="p">(</span><span class="n">numXYarns</span><span class="p">,</span> <span class="n">numWefts</span><span class="p">,</span> <span class="n">warpSpacing</span><span class="p">,</span> <span class="n">weftSpacing</span><span class="p">,</span> <span class="n">warpHeight</span><span class="p">,</span> <span class="n">weftHeight</span><span class="p">,</span> <span class="n">warpRatio</span><span class="p">,</span> <span class="n">binderRatio</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">binderYarns</span><span class="p">,</span> <span class="n">numWeftLayers</span><span class="p">,</span> <span class="n">numWarpLayers</span><span class="p">,</span> <span class="n">numBinderLayers</span><span class="p">):</span>
+<div class="viewcode-block" id="GenerateTextile"><a class="viewcode-back" href="../modules/parameterisedTextile.html#parameterisedTextile.GenerateTextile">[docs]</a><span class="k">def</span> <span class="nf">GenerateTextile</span><span class="p">(</span><span class="n">numXYarns</span><span class="p">,</span> <span class="n">numWefts</span><span class="p">,</span> <span class="n">warpSpacing</span><span class="p">,</span> <span class="n">weftSpacing</span><span class="p">,</span> <span class="n">warpHeight</span><span class="p">,</span> <span class="n">warpWidth</span><span class="p">,</span> <span class="n">weftHeight</span><span class="p">,</span> <span class="n">weftWidth</span><span class="p">,</span> <span class="n">binderHeight</span><span class="p">,</span> <span class="n">binderWidth</span><span class="p">,</span> <span class="n">warpRatio</span><span class="p">,</span> <span class="n">binderRatio</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">binderYarns</span><span class="p">,</span> <span class="n">numWeftLayers</span><span class="p">,</span> <span class="n">numWarpLayers</span><span class="p">,</span> <span class="n">numBinderLayers</span><span class="p">):</span>
 	<span class="sd">&#39;&#39;&#39;Function to generate a textile </span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        numXYarns (int): Total number of warp and binder yarns</span>
+<span class="sd">		numWefts (int) : Total number of weft yarns</span>
+<span class="sd">		warpSpacing (float) : Space between warp and binder yarns</span>
+<span class="sd">		weftSpacing (float) : Space between weft yarns</span>
+<span class="sd">		warpHeight (float) : Height of warp yarn</span>
+<span class="sd">		warpWidth (float) : Width of warp yarn</span>
+<span class="sd">		weftHeight (float) : Height of weft yarn</span>
+<span class="sd">		weftWidth (float) : Width of weft yarn</span>
+<span class="sd">		binderHeight (float) : Height of binder yarn</span>
+<span class="sd">		binderWidth (float) : Width of binder yarn</span>
+<span class="sd">		warpRatio (int) : Ratio of warp to binder yarns</span>
+<span class="sd">		binderRatio (int) : Ratio of binder to warp</span>
+<span class="sd">		</span>
+<span class="sd">		length (float) : Length of unit cell</span>
+<span class="sd">		width (float) : Width of unit cell</span>
+<span class="sd">		height (float) : Height of unit cell</span>
+<span class="sd">		binderYarns (list of ints) : Binder yarn offset positions</span>
+<span class="sd">		numWeftLayers (int) : Number of weft layers</span>
+<span class="sd">		numWarpLayers (int) : Number of warp layers</span>
+<span class="sd">		numBinderLayers (int) : Number of binder layers</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        (None)</span>
+<span class="sd">        Textile (CTextileDecoupledLToL): Textile object</span>
+<span class="sd">		XVoxNum (int) : Number of voxels in x direction</span>
+<span class="sd">		YVoxNum (int) : Number of voxels in y direction</span>
+<span class="sd">		ZVoxNum (int) : Number of voxels in z direction </span>
 <span class="sd">        </span>
 <span class="sd">    &#39;&#39;&#39;</span>
-	<span class="c1">#Set up 3D Weave textile</span>
-	<span class="n">numXYarns</span><span class="o">=</span><span class="mi">28</span>
-	<span class="n">numWefts</span><span class="o">=</span><span class="mi">14</span>
-	<span class="n">weftSpacing</span><span class="o">=</span><span class="mf">0.5</span>
-	<span class="n">warpSpacing</span><span class="o">=</span><span class="mf">0.5</span>
-	<span class="n">warpHeight</span><span class="o">=</span><span class="mf">0.3</span>
-	<span class="n">weftheight</span><span class="o">=</span><span class="mf">0.3</span>
-	<span class="n">numBinderLayers</span><span class="o">=</span><span class="mi">1</span>
-	<span class="n">file</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="s2">&quot;binderpattern.dat&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span>
-	<span class="n">allLines</span><span class="o">=</span><span class="n">file</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
-	<span class="n">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-	<span class="nb">print</span><span class="p">(</span><span class="n">allLines</span><span class="p">)</span>
-	<span class="n">lastLine</span><span class="o">=</span><span class="n">allLines</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-	<span class="n">x</span> <span class="o">=</span> <span class="n">lastLine</span>
-	<span class="n">binderYarns</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
 	
+
+	
+	
+	<span class="c1">#Set up 3D Weave textile</span>
 	<span class="n">Textile</span> <span class="o">=</span> <span class="n">CTextileDecoupledLToL</span><span class="p">(</span> <span class="n">numXYarns</span><span class="p">,</span> <span class="n">numWefts</span><span class="p">,</span> <span class="n">warpSpacing</span><span class="p">,</span> <span class="n">weftSpacing</span><span class="p">,</span> <span class="n">warpHeight</span><span class="p">,</span> <span class="n">weftHeight</span><span class="p">,</span> <span class="n">numBinderLayers</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+	<span class="c1">#Textile = CTextileLayerToLayer( numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, weftHeight, numBinderLayers, True)</span>
+	
+	<span class="n">repeat</span> <span class="o">=</span> <span class="n">binderRatio</span> <span class="o">+</span> <span class="n">warpRatio</span>
+	<span class="n">NumBinderYarns</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">numXYarns</span> <span class="o">*</span><span class="n">binderRatio</span><span class="p">)</span> <span class="o">/</span> <span class="n">repeat</span><span class="p">)</span>
 
 	<span class="n">Textile</span><span class="o">.</span><span class="n">SetWarpRatio</span><span class="p">(</span><span class="n">warpRatio</span><span class="p">)</span>
 	<span class="n">Textile</span><span class="o">.</span><span class="n">SetBinderRatio</span><span class="p">(</span><span class="n">binderRatio</span><span class="p">)</span>
 	
-	<span class="n">Textile</span><span class="o">.</span><span class="n">SetupLayers</span><span class="p">(</span><span class="n">numWarpLayers</span><span class="p">,</span> <span class="n">numWeftLayers</span><span class="p">,</span> <span class="n">numBinderLayers</span><span class="p">)</span>
-	
-	<span class="c1">#Decompose binder yarn offsets into stacks</span>
-	<span class="nb">list</span><span class="o">=</span><span class="p">[]</span>
-	<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">numWefts</span><span class="p">):</span>
-		<span class="nb">list</span><span class="o">.</span><span class="n">append</span><span class="p">([])</span>
-	
-	<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">binderYarns</span><span class="p">)):</span>
-		<span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">numWefts</span><span class="p">):</span>
-			<span class="nb">list</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">binderYarns</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">])</span>
+	<span class="n">Textile</span><span class="o">.</span><span class="n">SetupLayers</span><span class="p">(</span> <span class="n">numWarpLayers</span><span class="p">,</span> <span class="n">numWeftLayers</span><span class="p">,</span> <span class="n">numBinderLayers</span> <span class="p">)</span>
 		
-	<span class="c1"># For now assume one binder, think about how this can be expanded</span>
-	<span class="c1"># Problem is knowing the binderpattern beforehand</span>
-	<span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">)):</span>
-		<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">numWefts</span><span class="p">):</span>
-			<span class="n">Textile</span><span class="o">.</span><span class="n">SetBinderPosition</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="o">*</span><span class="mi">2</span> <span class="p">,</span><span class="nb">list</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+	<span class="c1">#Decompose binder yarn offsets into yarn lengths</span>
+	<span class="n">binderYarns</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">binderYarns</span><span class="p">]</span>
+	<span class="n">binderYarnLayers</span><span class="o">=</span><span class="n">chunks</span><span class="p">(</span><span class="n">binderYarns</span><span class="p">,</span> <span class="n">numWefts</span><span class="o">*</span><span class="n">numBinderLayers</span><span class="p">)</span>
+		
+	<span class="n">layerlist</span><span class="o">=</span><span class="p">[]</span>
+	<span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="n">binderYarnLayers</span><span class="p">:</span>
+		<span class="n">layerlist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">chunks</span><span class="p">(</span><span class="n">layer</span><span class="p">,</span> <span class="n">numWefts</span><span class="p">))</span>
+		
+	<span class="n">binderYarns</span><span class="o">=</span><span class="n">layerlist</span>
+		<span class="c1">#Check if length of binderYarns positions equal to numWefts</span>
+	<span class="k">for</span> <span class="n">z</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">NumBinderYarns</span><span class="p">):</span>
+		<span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span> <span class="n">numBinderLayers</span> <span class="p">):</span>
+			<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">binderYarns</span><span class="p">[</span><span class="n">z</span><span class="p">][</span><span class="n">y</span><span class="p">])</span> <span class="o">!=</span> <span class="n">numWefts</span><span class="p">:</span>
+				<span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Too many binder yarn positions specified, must be equal to number of wefts.&quot;</span><span class="p">)</span>
 	
-	
+
+	<span class="c1"># Loop for the number of binder yarn stacks</span>
+	<span class="k">for</span> <span class="n">z</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">NumBinderYarns</span><span class="p">):</span>
+		<span class="c1"># Loop through the weft stacks</span>
+		<span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span> <span class="n">numWefts</span> <span class="p">):</span>
+			<span class="nb">list</span><span class="o">=</span><span class="p">[]</span>
+			<span class="c1"># Loop through binder layers</span>
+			<span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span> <span class="n">numBinderLayers</span><span class="p">):</span>
+				<span class="nb">list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">binderYarns</span><span class="p">[</span><span class="n">z</span><span class="p">][</span><span class="n">y</span><span class="p">][</span><span class="n">x</span><span class="p">])</span>
+			<span class="c1"># Calculate the binder y position (ie warp yarn index)</span>
+			<span class="n">ind</span> <span class="o">=</span> <span class="n">z</span><span class="o">/</span><span class="n">binderRatio</span>
+			<span class="n">BinderIndex</span> <span class="o">=</span> <span class="n">warpRatio</span> <span class="o">+</span> <span class="p">(</span><span class="n">ind</span> <span class="o">*</span> <span class="n">repeat</span><span class="p">)</span> <span class="o">+</span> <span class="n">z</span><span class="o">%</span><span class="n">binderRatio</span>
+			<span class="n">Textile</span><span class="o">.</span><span class="n">SetBinderPosition</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">BinderIndex</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span>
 	
 	
 	<span class="n">Textile</span><span class="o">.</span><span class="n">SetYYarnWidths</span><span class="p">(</span> <span class="n">weftWidth</span> <span class="p">)</span>
@@ -257,6 +137,11 @@
 	<span class="n">Textile</span><span class="o">.</span><span class="n">SetWeftRepeat</span><span class="p">(</span> <span class="n">WeftRepeat</span> <span class="p">)</span>
 	
 	<span class="n">Textile</span><span class="o">.</span><span class="n">BuildTextile</span><span class="p">()</span>
+	
+	<span class="n">Density</span> <span class="o">=</span> <span class="n">Textile</span><span class="o">.</span><span class="n">SetFibreDensity</span><span class="p">(</span><span class="n">WARP</span><span class="p">,</span> <span class="mi">1780</span><span class="p">)</span>
+	<span class="n">Textile</span><span class="o">.</span><span class="n">SetFibreDensity</span><span class="p">(</span><span class="n">WEFT</span><span class="p">,</span> <span class="mi">1780</span><span class="p">)</span>
+	<span class="n">Textile</span><span class="o">.</span><span class="n">SetFibreDensity</span><span class="p">(</span><span class="n">BINDER</span><span class="p">,</span> <span class="mi">1780</span><span class="p">)</span>
+	
 
 	<span class="c1">#George - remember to change this</span>
 	<span class="n">Textile</span><span class="o">.</span><span class="n">SetFibresPerYarn</span><span class="p">(</span><span class="n">WARP</span><span class="p">,</span> <span class="mi">12000</span><span class="p">)</span>
@@ -265,86 +150,140 @@
 	<span class="n">Textile</span><span class="o">.</span><span class="n">SetFibreDiameter</span><span class="p">(</span><span class="n">WARP</span><span class="p">,</span> <span class="mf">0.0026</span><span class="p">,</span> <span class="s2">&quot;mm&quot;</span><span class="p">)</span>
 	<span class="n">Textile</span><span class="o">.</span><span class="n">SetFibreDiameter</span><span class="p">(</span><span class="n">WEFT</span><span class="p">,</span> <span class="mf">0.0026</span><span class="p">,</span> <span class="s2">&quot;mm&quot;</span><span class="p">)</span>
 	<span class="n">Textile</span><span class="o">.</span><span class="n">SetFibreDiameter</span><span class="p">(</span><span class="n">BINDER</span><span class="p">,</span> <span class="mf">0.0026</span><span class="p">,</span> <span class="s2">&quot;mm&quot;</span><span class="p">)</span>
+	
+	<span class="c1"># Yarn material properties</span>
+	<span class="n">Yarns</span><span class="o">=</span><span class="n">Textile</span><span class="o">.</span><span class="n">GetYarns</span><span class="p">()</span>
+	<span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">Yarns</span><span class="p">)):</span>
+		<span class="n">Yarns</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">SetYoungsModulusX</span><span class="p">(</span><span class="mf">174.4</span><span class="p">,</span> <span class="s1">&#39;GPa&#39;</span><span class="p">)</span>
+		<span class="n">Yarns</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">SetYoungsModulusY</span><span class="p">(</span><span class="mf">8.9</span><span class="p">,</span> <span class="s1">&#39;GPa&#39;</span><span class="p">)</span>
+		<span class="n">Yarns</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">SetYoungsModulusZ</span><span class="p">(</span><span class="mf">8.9</span><span class="p">,</span> <span class="s1">&#39;GPa&#39;</span><span class="p">)</span>
+		<span class="n">Yarns</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">SetShearModulusXY</span><span class="p">(</span><span class="mf">4.2</span><span class="p">,</span> <span class="s1">&#39;GPa&#39;</span><span class="p">)</span>
+		<span class="n">Yarns</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">SetShearModulusXZ</span><span class="p">(</span><span class="mf">4.2</span><span class="p">,</span> <span class="s1">&#39;GPa&#39;</span><span class="p">)</span>
+		<span class="n">Yarns</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">SetShearModulusYZ</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;GPa&#39;</span><span class="p">)</span>
+		<span class="n">Yarns</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">SetPoissonsRatioX</span><span class="p">(</span><span class="mf">0.3</span><span class="p">)</span>
+		<span class="n">Yarns</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">SetPoissonsRatioY</span><span class="p">(</span><span class="mf">0.3</span><span class="p">)</span>
+		<span class="n">Yarns</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">SetPoissonsRatioZ</span><span class="p">(</span><span class="mf">0.3</span><span class="p">)</span>
+		<span class="n">Yarns</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">SetAlphaX</span><span class="p">(</span><span class="mf">5.4</span><span class="p">)</span>
+		<span class="n">Yarns</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">SetAlphaY</span><span class="p">(</span><span class="mf">5.4</span><span class="p">)</span>
+		<span class="n">Yarns</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">SetAlphaZ</span><span class="p">(</span><span class="mf">5.4</span><span class="p">)</span>
 
 
-	<span class="n">domain</span> <span class="o">=</span> <span class="n">CDomainPlanes</span><span class="p">(</span><span class="n">XYZ</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">XYZ</span><span class="p">(</span><span class="n">length</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">))</span>
+
+	<span class="c1"># Matrix material properties</span>
+	<span class="n">Textile</span><span class="o">.</span><span class="n">SetMatrixYoungsModulus</span><span class="p">(</span><span class="mf">3.5</span><span class="p">,</span> <span class="s1">&#39;GPa&#39;</span><span class="p">)</span>
+	<span class="n">Textile</span><span class="o">.</span><span class="n">SetMatrixPoissonsRatio</span><span class="p">(</span><span class="mf">0.35</span><span class="p">)</span>
+	<span class="n">Textile</span><span class="o">.</span><span class="n">SetMatrixAlpha</span><span class="p">(</span><span class="mf">52.7e-6</span><span class="p">)</span>
+	
+	<span class="n">ArealWeight</span> <span class="o">=</span> <span class="p">(</span><span class="n">Textile</span><span class="o">.</span><span class="n">GetYarnVolume</span><span class="p">()</span><span class="o">*</span><span class="mi">1780</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">length</span><span class="o">*</span><span class="n">width</span><span class="o">*</span><span class="n">height</span><span class="p">)</span>
+	
+
+	<span class="n">domain</span> <span class="o">=</span> <span class="n">CDomainPlanes</span><span class="p">(</span><span class="n">XYZ</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">binderHeight</span><span class="p">),</span> <span class="n">XYZ</span><span class="p">(</span><span class="n">length</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">))</span>
 	<span class="n">Textile</span><span class="o">.</span><span class="n">AssignDomain</span><span class="p">(</span> <span class="n">domain</span> <span class="p">)</span>
-
 	<span class="n">AddTextile</span><span class="p">(</span> <span class="n">Textile</span> <span class="p">)</span>
 	
 	<span class="c1">#save TG model</span>
-	<span class="n">SaveToXML</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;C:</span><span class="se">\\</span><span class="s2">Users</span><span class="se">\\</span><span class="s2">emxghs</span><span class="se">\\</span><span class="s2">IAA3DWeaveProject</span><span class="se">\\</span><span class="s2">parameterisedTextile</span><span class="se">\\</span><span class="s2">ptextile.tg3&quot;</span><span class="p">,</span> <span class="s2">&quot;3DWeave(W:2,H:3)&quot;</span><span class="p">,</span> <span class="n">OUTPUT_STANDARD</span><span class="p">)</span>
+	<span class="c1"># print(&quot;Saving textile model&quot;)</span>
+	<span class="n">voxelSize</span> <span class="o">=</span> <span class="mf">0.05</span>
+	<span class="n">SaveToXML</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;C:</span><span class="se">\\</span><span class="s2">Users</span><span class="se">\\</span><span class="s2">emxghs</span><span class="se">\\</span><span class="s2">Desktop</span><span class="se">\\</span><span class="s2">IAA3DWeaveProject</span><span class="se">\\</span><span class="s2">parameterisedTextile</span><span class="se">\\</span><span class="s2">ptextile.tg3&quot;</span><span class="p">,</span> <span class="n">Textile</span><span class="o">.</span><span class="n">GetName</span><span class="p">(),</span> <span class="n">OUTPUT_STANDARD</span><span class="p">)</span>
+	<span class="n">XVoxNum</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">length</span> <span class="o">/</span> <span class="n">voxelSize</span><span class="p">)</span>
+	<span class="n">YVoxNum</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">width</span>  <span class="o">/</span> <span class="n">voxelSize</span><span class="p">)</span>
+	<span class="n">ZVoxNum</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">height</span> <span class="o">/</span> <span class="n">voxelSize</span><span class="p">)</span>
+	<span class="n">numVoxels</span> <span class="o">=</span> <span class="n">XVoxNum</span> <span class="o">*</span> <span class="n">YVoxNum</span> <span class="o">*</span> <span class="n">ZVoxNum</span>
+	
+	<span class="c1"># #Get input file name</span>
+	
+	<span class="c1"># # Form the file name and open the file</span>
+	<span class="c1"># input = </span>
+	<span class="c1"># results_id = &quot;_&quot;.join([str(x) for x in input])</span>
+	
+	<span class="c1"># if numVoxels &lt; 100000:</span>
+		<span class="c1"># Mesh = COctreeVoxelMesh(&quot;CPeriodicBoundaries&quot;)</span>
+		<span class="c1"># #CTextile &amp;Textile, string OutputFilename, int XVoxNum, int YVoxNum, int ZVoxNum, int min_level, int refine_level, bool smoothing, int smoothIter, double smooth1, double smooth2, bool surfaceOuput</span>
+		<span class="c1"># Mesh.SaveVoxelMesh(Textile, os.getcwd() + &quot;\\FileName&quot;, XVoxNum, YVoxNum, ZVoxNum, 1, 3, False, 0, 0, 0, False)</span>
+	<span class="c1"># else:</span>
+		<span class="c1"># Mesh = CRectangularVoxelMesh(&quot;CPeriodicBoundaries&quot;)</span>
+		<span class="c1"># Mesh.SaveVoxelMesh(Textile, os.getcwd() + &quot;\\FileName&quot;, XVoxNum, YVoxNum, ZVoxNum, True, True, MATERIAL_CONTINUUM, 0 )</span>
+	
+	<span class="k">return</span> <span class="n">Textile</span><span class="p">,</span> <span class="n">XVoxNum</span><span class="p">,</span> <span class="n">YVoxNum</span><span class="p">,</span> <span class="n">ZVoxNum</span><span class="p">,</span> <span class="n">ArealWeight</span></div>
+	
+<div class="viewcode-block" id="SaveMesh"><a class="viewcode-back" href="../modules/parameterisedTextile.html#parameterisedTextile.SaveMesh">[docs]</a><span class="k">def</span> <span class="nf">SaveMesh</span><span class="p">(</span><span class="n">Textile</span><span class="p">,</span> <span class="n">XVoxNum</span><span class="p">,</span> <span class="n">YVoxNum</span><span class="p">,</span> <span class="n">ZVoxNum</span><span class="p">,</span> <span class="nb">input</span><span class="p">):</span>
+	
+	<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">	Function to save mesh</span>
+<span class="sd">	</span>
+<span class="sd">	Args:</span>
+<span class="sd">		Textile (CTextileDecoupledLToL): Textile object</span>
+<span class="sd">		XVoxNum (int) : Number of voxels in x direction</span>
+<span class="sd">		YVoxNum (int) : Number of voxels in y direction</span>
+<span class="sd">		ZVoxNum (int) : Number of voxels in z direction</span>
+<span class="sd">		input (list of ints) : Parameter list from optimisation algorithm</span>
+<span class="sd">		</span>
+<span class="sd">	Returns:</span>
+<span class="sd">		None</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+	<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Save mesh&quot;</span><span class="p">)</span>
+	
+	<span class="n">numVoxels</span> <span class="o">=</span> <span class="n">XVoxNum</span> <span class="o">*</span> <span class="n">YVoxNum</span> <span class="o">*</span><span class="n">ZVoxNum</span>
+	
+		<span class="c1">#Get input file name</span>
+	
+	<span class="c1"># Form the file name and open the file</span>
+	<span class="n">results_id</span> <span class="o">=</span> <span class="s2">&quot;_&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">input</span><span class="p">])</span>
+	
+	<span class="c1"># if numVoxels &lt; 100000:</span>
+		<span class="c1"># print(&quot;saving octree mesh&quot;)</span>
+		<span class="c1"># print(os.getcwd() + &quot;\\&quot; + &quot;optim_&quot; + results_id)</span>
+		<span class="c1"># Mesh = COctreeVoxelMesh(&quot;CPeriodicBoundaries&quot;)</span>
+		<span class="c1"># # CTextile &amp;Textile, string OutputFilename, int XVoxNum, int YVoxNum, int ZVoxNum, int min_level, int refine_level, bool smoothing, int smoothIter, double smooth1, double smooth2, bool surfaceOuput</span>
+		<span class="c1"># Mesh.SaveVoxelMesh(Textile, os.getcwd() + &quot;\\&quot; + &quot;optim_&quot; + results_id, XVoxNum, YVoxNum, ZVoxNum, 1, 3, False, 0, 0, 0, False)</span>
+	<span class="c1"># else:</span>
+		<span class="c1"># print(&quot;saving rectangular mesh&quot;)</span>
+	<span class="n">Mesh</span> <span class="o">=</span> <span class="n">CRectangularVoxelMesh</span><span class="p">(</span><span class="s2">&quot;CPeriodicBoundaries&quot;</span><span class="p">)</span>
+	<span class="n">Mesh</span><span class="o">.</span><span class="n">SaveVoxelMesh</span><span class="p">(</span><span class="n">Textile</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;optim_&quot;</span> <span class="o">+</span> <span class="n">results_id</span><span class="p">,</span> <span class="n">XVoxNum</span><span class="p">,</span> <span class="n">YVoxNum</span><span class="p">,</span> <span class="n">ZVoxNum</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="n">MATERIAL_CONTINUUM</span><span class="p">,</span> <span class="mi">0</span> <span class="p">)</span>
 	
 	<span class="k">return</span></div>
 
-
-<span class="c1"># def SetUpLayers(Textile, numWeftLayers, numWarpLayers, numBinderLayers):</span>
-		<span class="c1"># #Add layers and set ratio of warps to binders</span>
-	<span class="c1"># Textile.AddNoYarnLayer();</span>
-
-	<span class="c1"># # Add alternating layers</span>
-	<span class="c1"># while numWeftLayers &gt; 1:</span>
-
-		<span class="c1"># Textile.AddYLayers();</span>
-		<span class="c1"># if numWarpLayers &gt; 0:</span>
-		
-			<span class="c1"># Textile.AddWarpLayer();</span>
-			<span class="c1"># numWarpLayers -= 1;</span>
-		
-		<span class="c1"># numWeftLayers -= 1;</span>
-
-	<span class="c1"># #If more warp than weft layers, add remaining layers</span>
-	<span class="c1"># while numWarpLayers &gt; 0:</span>
-
-		<span class="c1"># Textile.AddWarpLayer();</span>
-		<span class="c1"># numWarpLayers -= 1;</span>
-
-	<span class="c1"># #Must have weft layer next to binders</span>
-	<span class="c1"># Textile.AddYLayers();</span>
-
-	<span class="c1"># Textile.AddBinderLayer();</span>
-	
-	<span class="c1"># return</span>
-
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
-    <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;c:</span><span class="se">\\</span><span class="s2">users</span><span class="se">\\</span><span class="s2">emxghs</span><span class="se">\\</span><span class="s2">desktop</span><span class="se">\\</span><span class="s2">IAA3DWeaveProject</span><span class="se">\\</span><span class="s2">parameterisedTextile</span><span class="se">\\</span><span class="s2">&quot;</span>
-    <span class="c1"># numXYarns = sys.argv[0]</span>
-    <span class="c1"># numWefts = sys.argv[1]</span>
-    <span class="c1"># warpSpacing = sys.argv[2]</span>
-    <span class="c1"># weftSpacing = sys.argv[3]</span>
-    <span class="c1"># warpHeight = sys.argv[4]</span>
-    <span class="c1"># weftHeight = sys.argv[5]</span>
-    <span class="c1"># warpRatio = sys.argv[6]</span>
-    <span class="c1"># binderRatio = sys.argv[7]</span>
-    <span class="c1"># length = sys.argv[8]</span>
-    <span class="c1"># width = sys.argv[9]</span>
-    <span class="c1"># height = sys.argv[10]</span>
-    <span class="c1"># binderYarns = sys.argv[11]</span>
-    <span class="c1"># numWeftLayers = sys.argv[12]</span>
-    <span class="c1"># numWarpLayers = sys.argv[13]</span>
-    <span class="c1"># numBinderLayers = sys.argv[14]</span>
-    <span class="n">numXYarns</span> <span class="o">=</span> <span class="mi">28</span>
-    <span class="n">numWefts</span> <span class="o">=</span> <span class="mi">14</span>
-    <span class="n">warpSpacing</span> <span class="o">=</span> <span class="mf">0.5</span>
-    <span class="n">weftSpacing</span> <span class="o">=</span> <span class="mf">0.5</span>
-    <span class="n">warpHeight</span> <span class="o">=</span> <span class="mf">0.3</span>
-    <span class="n">weftHeight</span> <span class="o">=</span> <span class="mf">0.3</span>
-    <span class="n">warpRatio</span> <span class="o">=</span> <span class="mi">1</span>
-    <span class="n">binderRatio</span> <span class="o">=</span> <span class="mi">1</span>
-    <span class="n">length</span> <span class="o">=</span> <span class="mi">14</span>
-    <span class="n">width</span> <span class="o">=</span> <span class="mi">7</span>
-    <span class="n">height</span> <span class="o">=</span> <span class="mf">8.1</span>
-    <span class="n">file</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="s2">&quot;binderpattern.dat&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span>
-    <span class="n">allLines</span><span class="o">=</span><span class="n">file</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">allLines</span><span class="p">)</span>
-    <span class="n">lastLine</span><span class="o">=</span><span class="n">allLines</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="n">lastLine</span>
-    <span class="n">binderYarns</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
-    <span class="n">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-    <span class="n">numWeftLayers</span> <span class="o">=</span> <span class="mi">14</span>
-    <span class="n">numWarpLayers</span> <span class="o">=</span> <span class="mi">13</span>
-    <span class="n">numBinderLayers</span> <span class="o">=</span> <span class="mi">1</span>
-    <span class="n">GenerateTextile</span><span class="p">(</span><span class="n">numXYarns</span><span class="p">,</span> <span class="n">numWefts</span><span class="p">,</span> <span class="n">warpSpacing</span><span class="p">,</span> <span class="n">weftSpacing</span><span class="p">,</span> <span class="n">warpHeight</span><span class="p">,</span> <span class="n">weftHeight</span><span class="p">,</span> <span class="n">warpRatio</span><span class="p">,</span> <span class="n">binderRatio</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">binderYarns</span><span class="p">,</span> <span class="n">numWeftLayers</span><span class="p">,</span> <span class="n">numWarpLayers</span><span class="p">,</span> <span class="n">numBinderLayers</span><span class="p">)</span>
+	<span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;c:</span><span class="se">\\</span><span class="s2">users</span><span class="se">\\</span><span class="s2">emxghs</span><span class="se">\\</span><span class="s2">desktop</span><span class="se">\\</span><span class="s2">IAA3DWeaveProject</span><span class="se">\\</span><span class="s2">parameterisedTextile</span><span class="se">\\</span><span class="s2">&quot;</span>
+	<span class="c1">#print(sys.argv)</span>
+	<span class="n">numXYarns</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+	<span class="n">numWefts</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+	<span class="n">warpSpacing</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+	<span class="n">weftSpacing</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span>
+	<span class="n">warpHeight</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">5</span><span class="p">])</span>
+	<span class="n">warpWidth</span> <span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">6</span><span class="p">])</span>
+	<span class="n">weftHeight</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">7</span><span class="p">])</span>
+	<span class="n">weftWidth</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">8</span><span class="p">])</span>
+	<span class="n">binderHeight</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">9</span><span class="p">])</span>
+	<span class="n">binderWidth</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">10</span><span class="p">])</span>
+	<span class="n">warpRatio</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">11</span><span class="p">])</span>
+	<span class="n">binderRatio</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">12</span><span class="p">])</span>
+	<span class="n">length</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">13</span><span class="p">])</span>
+	<span class="n">width</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">14</span><span class="p">])</span>
+	<span class="n">height</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">15</span><span class="p">])</span>
+	<span class="n">numWeftLayers</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">16</span><span class="p">])</span>
+	<span class="n">numWarpLayers</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">17</span><span class="p">])</span>
+	<span class="n">numBinderLayers</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">18</span><span class="p">])</span>
+	<span class="nb">input</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">19</span><span class="p">:</span><span class="mi">24</span><span class="p">]</span>
+	
+
+
+	<span class="n">file</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="s2">&quot;binderpattern.dat&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span>
+	<span class="n">allLines</span><span class="o">=</span><span class="n">file</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+	<span class="n">lastLine</span><span class="o">=</span><span class="n">allLines</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+	<span class="n">x</span> <span class="o">=</span> <span class="n">lastLine</span>
+	<span class="n">binderYarns</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+	<span class="n">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+	<span class="n">Textile</span><span class="p">,</span> <span class="n">XVoxNum</span><span class="p">,</span> <span class="n">YVoxNum</span><span class="p">,</span> <span class="n">ZVoxNum</span><span class="p">,</span> <span class="n">ArealDensity</span> <span class="o">=</span> <span class="n">GenerateTextile</span><span class="p">(</span><span class="n">numXYarns</span><span class="p">,</span> <span class="n">numWefts</span><span class="p">,</span> <span class="n">warpSpacing</span><span class="p">,</span> <span class="n">weftSpacing</span><span class="p">,</span> <span class="n">warpHeight</span><span class="p">,</span> <span class="n">warpWidth</span><span class="p">,</span> <span class="n">weftHeight</span><span class="p">,</span> <span class="n">weftWidth</span><span class="p">,</span> <span class="n">binderHeight</span><span class="p">,</span> <span class="n">binderWidth</span><span class="p">,</span> <span class="n">warpRatio</span><span class="p">,</span> <span class="n">binderRatio</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">binderYarns</span><span class="p">,</span> <span class="n">numWeftLayers</span><span class="p">,</span> <span class="n">numWarpLayers</span><span class="p">,</span> <span class="n">numBinderLayers</span><span class="p">)</span>
+	
+	<span class="n">SaveMesh</span><span class="p">(</span><span class="n">Textile</span><span class="p">,</span> <span class="n">XVoxNum</span><span class="p">,</span> <span class="n">YVoxNum</span><span class="p">,</span> <span class="n">ZVoxNum</span><span class="p">,</span> <span class="nb">input</span><span class="p">)</span>
+	
+	<span class="c1">#Going to need to write this to a file</span>
+	<span class="n">file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;ArealDensity.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">)</span>
+	<span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">ArealDensity</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+	<span class="n">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+	<span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
 </pre></div>
 
           </div>
@@ -363,11 +302,12 @@
 
 
 <h3>Navigation</h3>
-<p class="caption"><span class="caption-text">Contents:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage.html">How To Use the Tool</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Module reference</span></p>
+<p class="caption" role="heading"><span class="caption-text">Module reference</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../modules.html">Modules</a></li>
 </ul>
@@ -382,17 +322,15 @@
 </ul>
 </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
 
 
 
@@ -409,7 +347,7 @@
       &copy;2021, Louise Brown, Mikhail Matveev, George Spackman.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.5</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.4.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>
