@@ -132,8 +132,16 @@ class DesignSpaceWindow ( wx.Dialog ):
 		
 class RunOptimisationFrame(wx.Frame):
 
+	"""
+	Class to generate second window and set the parameters before launching the optimisation
+	"""
+
 
 	def __init__(self, thickness, vf, FilamentsDict, numberFilamentsWarp, numberFilamentsWeft, numberFilamentsBinder):
+		
+		"""
+		Initialises window with the information selected in the first dialog
+		"""
 		
 		self.thickness = thickness
 		self.vf = vf
@@ -227,21 +235,24 @@ class RunOptimisationFrame(wx.Frame):
 		
 		
 	def onSendAndClose(self, event):
+		"""
+		On pressing the "Optimise" button, starts the optimisation and closes the window
+		"""
 		
 		# scriptPath = "C:\\users\\emxghs\\desktop\\optimisationGUI\\GDS"
 		# os.chdir(scriptPath)
 		#subprocess.call(scriptPath + " python GeneticAlgorithm.py")
 		RunOptimisation(os.getcwd())
-		#subprocess.call("python GeneticAlgorithm.py")
 		self.Close()
 
 
+if __name__ == "__main__":
 
-# Create the weave tool app
-app = wx.App(False)  
-DesignSpaceFrame = DesignSpaceWindow(None) 
-DesignSpaceFrame.Show(True)     # Show the frame.
+	# Create the weave tool app
+	app = wx.App(False)  
+	DesignSpaceFrame = DesignSpaceWindow(None) 
+	DesignSpaceFrame.Show(True)     # Show the frame.
 
-app.MainLoop()
+	app.MainLoop()
 
 

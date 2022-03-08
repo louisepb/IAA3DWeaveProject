@@ -1,8 +1,10 @@
-Modules
-=======
+Code
+====
 
 .. toctree::
    :maxdepth: 4
 
-   modules/parameterisedTextile
-   
+   GeneticAlgorithm
+   OptimisationGUI
+   generateDesignSpace
+   parameterisedTextile
