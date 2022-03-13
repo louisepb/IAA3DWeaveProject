@@ -42,7 +42,7 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Module reference</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../modules.html">Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">Code</a></li>
 </ul>
 
         </div>
@@ -80,16 +80,16 @@
 
 <span class="c1">#user specified properties</span>
 
-<span class="k">def</span> <span class="nf">chunks</span><span class="p">(</span><span class="n">lst</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
-    <span class="k">return</span> <span class="p">[</span><span class="n">lst</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="n">n</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">lst</span><span class="p">),</span> <span class="n">n</span><span class="p">)]</span>
+<div class="viewcode-block" id="chunks"><a class="viewcode-back" href="../parameterisedTextile.html#parameterisedTextile.chunks">[docs]</a><span class="k">def</span> <span class="nf">chunks</span><span class="p">(</span><span class="n">lst</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">lst</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="n">n</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">lst</span><span class="p">),</span> <span class="n">n</span><span class="p">)]</span></div>
 
 
-<div class="viewcode-block" id="GenerateTextile"><a class="viewcode-back" href="../modules/parameterisedTextile.html#parameterisedTextile.GenerateTextile">[docs]</a><span class="k">def</span> <span class="nf">GenerateTextile</span><span class="p">(</span><span class="n">numXYarns</span><span class="p">,</span> <span class="n">numWefts</span><span class="p">,</span> <span class="n">warpSpacing</span><span class="p">,</span> <span class="n">weftSpacing</span><span class="p">,</span> <span class="n">warpHeight</span><span class="p">,</span> <span class="n">warpWidth</span><span class="p">,</span> <span class="n">weftHeight</span><span class="p">,</span> <span class="n">weftWidth</span><span class="p">,</span> <span class="n">binderHeight</span><span class="p">,</span> <span class="n">binderWidth</span><span class="p">,</span> <span class="n">warpRatio</span><span class="p">,</span> <span class="n">binderRatio</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">binderYarns</span><span class="p">,</span> <span class="n">numWeftLayers</span><span class="p">,</span> <span class="n">numWarpLayers</span><span class="p">,</span> <span class="n">numBinderLayers</span><span class="p">):</span>
+<div class="viewcode-block" id="GenerateTextile"><a class="viewcode-back" href="../parameterisedTextile.html#parameterisedTextile.GenerateTextile">[docs]</a><span class="k">def</span> <span class="nf">GenerateTextile</span><span class="p">(</span><span class="n">numXYarns</span><span class="p">,</span> <span class="n">numWefts</span><span class="p">,</span> <span class="n">warpSpacing</span><span class="p">,</span> <span class="n">weftSpacing</span><span class="p">,</span> <span class="n">warpHeight</span><span class="p">,</span> <span class="n">warpWidth</span><span class="p">,</span> <span class="n">weftHeight</span><span class="p">,</span> <span class="n">weftWidth</span><span class="p">,</span> <span class="n">binderHeight</span><span class="p">,</span> <span class="n">binderWidth</span><span class="p">,</span> <span class="n">warpRatio</span><span class="p">,</span> <span class="n">binderRatio</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">binderYarns</span><span class="p">,</span> <span class="n">numWeftLayers</span><span class="p">,</span> <span class="n">numWarpLayers</span><span class="p">,</span> <span class="n">numBinderLayers</span><span class="p">):</span>
 	<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">	Function to generate a textile </span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        numXYarns (int) : Total number of warp and binder yarns</span>
+<span class="sd">		numXYarns (int) : Total number of warp and binder yarns</span>
 <span class="sd">		numWefts (int) : Total number of weft yarns</span>
 <span class="sd">		warpSpacing (float) : Space between warp and binder yarns</span>
 <span class="sd">		weftSpacing (float) : Space between weft yarns</span>
@@ -245,7 +245,7 @@
 	
 	<span class="k">return</span> <span class="n">Textile</span><span class="p">,</span> <span class="n">XVoxNum</span><span class="p">,</span> <span class="n">YVoxNum</span><span class="p">,</span> <span class="n">ZVoxNum</span><span class="p">,</span> <span class="n">ArealWeight</span></div>
 	
-<div class="viewcode-block" id="SaveMesh"><a class="viewcode-back" href="../modules/parameterisedTextile.html#parameterisedTextile.SaveMesh">[docs]</a><span class="k">def</span> <span class="nf">SaveMesh</span><span class="p">(</span><span class="n">Textile</span><span class="p">,</span> <span class="n">XVoxNum</span><span class="p">,</span> <span class="n">YVoxNum</span><span class="p">,</span> <span class="n">ZVoxNum</span><span class="p">,</span> <span class="nb">input</span><span class="p">):</span>
+<div class="viewcode-block" id="SaveMesh"><a class="viewcode-back" href="../parameterisedTextile.html#parameterisedTextile.SaveMesh">[docs]</a><span class="k">def</span> <span class="nf">SaveMesh</span><span class="p">(</span><span class="n">Textile</span><span class="p">,</span> <span class="n">XVoxNum</span><span class="p">,</span> <span class="n">YVoxNum</span><span class="p">,</span> <span class="n">ZVoxNum</span><span class="p">,</span> <span class="nb">input</span><span class="p">):</span>
 	
 	<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">	Function to save mesh</span>

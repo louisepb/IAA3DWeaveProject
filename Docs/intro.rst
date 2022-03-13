@@ -4,6 +4,9 @@ Introduction
 3D Weave Optimisation Impact Acceleration Project
 -------------------------------------------------
 
+This project builds on the experience in carrying out optimisations of 3D weaves within the University of Nottingham's Composite Research Group to provide a tool to allow users to carry out their own optimisations. This works with
+TexGen, the University's geometric textile preprocessor and the commercial finite element software Abaqus. 
+
 
 The project team
 --------------------------
@@ -18,16 +21,19 @@ The project team
 
 Compatibility requirements
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
-
- +-----------------+---------+
- |   Python        |   3.9.7 |
- +-----------------+---------+
- |   NumPy         |   1.6.2 |
- +-----------------+---------+
- |   PyMoo         |   5.0   |
- +-----------------+---------+
- |   wxPython      |   4.1.1 |
- +-----------------+---------+
+ +-----------------+----------+
+ |   TexGen        |   3.12.2 |
+ +-----------------+----------+
+ |   Abaqus CAE    |   2018   |
+ +-----------------+----------+
+ |   Python        |   3.9.7  |
+ +-----------------+----------+
+ |   NumPy         |   1.6.2  |
+ +-----------------+----------+
+ |   PyMoo         |   5.0    |
+ +-----------------+----------+
+ |   wxPython      |   4.1.1  |
+ +-----------------+----------+
 
 
 Documentation

@@ -17,7 +17,7 @@ def GenerateTextile(numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, w
 	Function to generate a textile 
 
     Args:
-        numXYarns (int) : Total number of warp and binder yarns
+		numXYarns (int) : Total number of warp and binder yarns
 		numWefts (int) : Total number of weft yarns
 		warpSpacing (float) : Space between warp and binder yarns
 		weftSpacing (float) : Space between weft yarns

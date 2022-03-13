@@ -51,9 +51,10 @@ class FitnessFunction(Problem):
 		binderHeight=float(design_space[7])
 		binderWidth=float(design_space[8])
 
-		optim_params_file = open("optim_params.txt", "r")
+		optim_params_file = open("optim_params.txt")
 		optim_params = optim_params_file.readlines()
-		optim_param_file.close()
+		optim_params_file.close()
+		print(optim_params)
 		warpSpacing = float(optim_params[1][input[1]])
 		weftSpacing = warpSpacing
 		numBinderLayers = int(optim_params[2][input[2]])

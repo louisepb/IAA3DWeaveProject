@@ -6,7 +6,7 @@ import runpy
 #import subprocess
 import sys
 import os
-sys.path.append("C:\\users\\emxghs\\desktop\\IAA3DWeaveProject\\optimisationGUI")
+sys.path.append("C:\\users\\emxghs\\desktop\\IAA3DWeaveProject\\Code")
 from generateDesignSpace import *
 from GeneticAlgorithm import *
 #from GDS.GeneticAlgorithm import *
