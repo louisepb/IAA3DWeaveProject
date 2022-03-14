@@ -22,8 +22,20 @@ class FitnessFunction(Problem):
 	# %wrap function
 	def wrapN(i, N):
 		return (1 + mod(i-1, N))
-	
+		
 	def _evaluate(self, x, out, *args, **kwargs):
+	
+		"""
+		Function to run all the design variables in serial
+		
+		
+		"""
+		
+		for i in x:
+			candidate_result = _EvaluationFunction(self, i)
+		
+	
+	def _EvaluationFunction(self, x, out, *args, **kwargs):
 		# f1 = 100 * (x[:, 0]**2 + x[:, 1]**2)
 		# f2 = (x[:, 0]-1)**2 + x[:, 1]**2
 		# print(x)
@@ -33,8 +45,7 @@ class FitnessFunction(Problem):
 		# # f1, f2 = subprocess.call('python FitnessFun.py' + input)
 		# out["F"] = np.column_stack([f1, f2])
 		
-		input= x
-		
+		input= x.tolist()
 		
 		weaveDesignSpace_file = open("weaveDesignSpace.txt", "r")
 		#need these numbers from generateDesignSpace 
@@ -51,30 +62,40 @@ class FitnessFunction(Problem):
 		binderHeight=float(design_space[7])
 		binderWidth=float(design_space[8])
 
-		optim_params_file = open("optim_params.txt")
+		optim_params_file = open("optim_params.txt", "r")
 		optim_params = optim_params_file.readlines()
 		optim_params_file.close()
-		print(optim_params)
-		warpSpacing = float(optim_params[1][input[1]])
+		
+		spacingOptions = optim_params[1].split(' ')
+		numBinderOptions = optim_params[2].split(' ')
+		passOverOptions = optim_params[3].split(' ')
+		steppingOptions = optim_params[4].split(' ')
+		offsetOptions  = optim_params[5].split(' ')
+		print(numBinderOptions)
+		warpSpacing = float(spacingOptions[input[0][0]])
 		weftSpacing = warpSpacing
-		numBinderLayers = int(optim_params[2][input[2]])
-		passOverRatio = int(optim_params[3][input[3]])
-		SteppingRatio = int(optim_params[4][input[4]])
-		offset = int(optim_params[5][input[5]])
-
-		if mod( numWeftLayers - (numBinderLayers-1), SteppingRatio != 0 ):
+		numBinderLayers = int(float(numBinderOptions[input[0][1]]))
+		passOverRatio = int(float(passOverOptions[input[0][2]]))
+		SteppingRatio = int(float(steppingOptions[input[0][3]]))
+		offset = int(float(offsetOptions[input[0][4]]))
+		
+		if ( numWeftLayers - (numBinderLayers-1) % SteppingRatio != 0 ):
 			cons = [10]
 			f = [1e6, 2]
-			return
+			f1 = 1e6
+			f2 = 2
+			out["F"] = np.column_stack([f1, f2])
 
 		numWefts = 2 * (numWeftLayers - (numBinderLayers - 1))/SteppingRatio
 
 		if ( numWefts % passOverRatio != 0 ):
 			cons = [10]
 			f = [1e6, 2]
-			return
+			f1 = 1e6
+			f2 = 2
+			out["F"] = np.column_stack([f1, f2])
 		
-		ArealDensity = _GenerateModel(input) # Build textile here - need to be rewritten (?)
+		ArealDensity = self._GenerateModel(input[0]) # Build textile here - need to be rewritten (?)
 
 		
 
@@ -99,10 +120,10 @@ class FitnessFunction(Problem):
 
 		# %vals = str2double(split(cmdout));
 
-		f = [-str2double(val1), str2double(val2)]
 		cons=[0]
+		out["F"]=np.column_stack([-str2double(val1), str2double(val2)])
 		
-	def _GenerateModel(input):
+	def _GenerateModel(self, input):
 		
 		weaveDesignSpace_file = open("weaveDesignSpace.txt", "r")
 		#need these numbers from generateDesignSpace 
@@ -124,13 +145,21 @@ class FitnessFunction(Problem):
 		# % Parameters from the optimisation run
 		optim_params_file = open("optim_params.txt", "r")
 		optim_params = optim_params_file.readlines()
-		optim_param_file.close()
-		warpSpacing = float(optim_params[1][input[1]])
+		optim_params_file.close()
+		
+		
+		spacingOptions = optim_params[1].split(' ')
+		numBinderOptions = optim_params[2].split(' ')
+		passOverOptions = optim_params[3].split(' ')
+		steppingOptions = optim_params[4].split(' ')
+		offsetOptions  = optim_params[5].split(' ')
+		
+		warpSpacing = float(spacingOptions[input[0]])
 		weftSpacing = warpSpacing
-		numBinderLayers = int(optim_params[2][input[2]])
-		passOverRatio = int(optim_params[3][input[3]])
-		SteppingRatio = int(optim_params[4][input[4]])
-		offset = int(optim_params[5][input[5]])
+		numBinderLayers = int(float(numBinderOptions[input[1]]))
+		passOverRatio = int(float(passOverOptions[input[2]]))
+		SteppingRatio = int(float(steppingOptions[input[3]]))
+		offset = int(float(offsetOptions[input[4]]))
 		
 
 		# % warpSpacing = 0.8
@@ -160,7 +189,7 @@ class FitnessFunction(Problem):
 
 		# %if SteppingRatio = 0, only need two binders to cover the space. 
 		# %numBinderYarns = 2
-
+		print(numBinderYarns*numWefts*numBinderLayers)
 		bpattern=np.zeros((1, numBinderYarns*numWefts*numBinderLayers))
 		pattern=np.zeros((1, numWefts))
 
@@ -274,7 +303,7 @@ def RunOptimisation(path):
 
 	lb = [1, 1, 1, 1, 1]
 	ub = [len(spacings), len(num_binders), len(binder_over), len(stepping_ratios), len(offsets)]
-
+	print(ub)
 	# spacings, num_binders, binder_over, stepping_ratios, offsets
 	spacings_string, num_binders_string, binder_over_string, stepping_ratio_string, offsets_string = '', '', '', '', ''
 	for i in range(len(spacings)):
@@ -301,7 +330,7 @@ def RunOptimisation(path):
 	optim_param_file.write(binder_over_string + '\n')
 	optim_param_file.write(stepping_ratio_string + '\n')
 	optim_param_file.write(offsets_string + '\n')
-	
+	optim_param_file.close()
 	
 	problem = FitnessFunction(lb, ub)
 
@@ -310,7 +339,7 @@ def RunOptimisation(path):
 	crossover = get_crossover("int_sbx", prob=1.0, eta=3.0)
 	mutation = get_mutation("int_pm", eta=3.0)
 
-	method=get_algorithm("nsga2", pop_size=10, sampling=sampling, crossover=crossover, mutation=mutation, eliminate_duplicates=True)
+	method=get_algorithm("nsga2", pop_size=1, sampling=sampling, crossover=crossover, mutation=mutation, eliminate_duplicates=True)
 
 	res = minimize(problem,
 				   method,
@@ -324,4 +353,4 @@ def RunOptimisation(path):
 	plot.show()
 	return
 
-RunOptimisation('C:\\Users\\emxghs\\Desktop\\IAA3DWeaveProject\\OptimisationGUI')
+RunOptimisation('C:\\Users\\emxghs\\Desktop\\IAA3DWeaveProject\\Code')
