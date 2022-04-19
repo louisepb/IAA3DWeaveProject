@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OptimisationGUI &mdash; IAA 3D Weave Project  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> IAA 3D Weave Project
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">How to Install The Tool</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage.html">How To Use the Tool</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Module reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">Code</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">IAA 3D Weave Project</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">Module code</a> &raquo;</li>
+      <li>OptimisationGUI</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for OptimisationGUI</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">wx</span>
+<span class="kn">import</span> <span class="nn">wx.xrc</span>
+<span class="kn">import</span> <span class="nn">wx.adv</span>
+
+<span class="kn">import</span> <span class="nn">runpy</span>
+<span class="c1">#import subprocess</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;C:</span><span class="se">\\</span><span class="s2">users</span><span class="se">\\</span><span class="s2">emxghs</span><span class="se">\\</span><span class="s2">desktop</span><span class="se">\\</span><span class="s2">IAA3DWeaveProject</span><span class="se">\\</span><span class="s2">Code&quot;</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">generateDesignSpace</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">GeneticAlgorithm</span> <span class="kn">import</span> <span class="o">*</span>
+
+
+
+<div class="viewcode-block" id="DesignSpaceWindow"><a class="viewcode-back" href="../OptimisationGUI.html#OptimisationGUI.DesignSpaceWindow">[docs]</a><span class="k">class</span> <span class="nc">DesignSpaceWindow</span> <span class="p">(</span> <span class="n">wx</span><span class="o">.</span><span class="n">Dialog</span> <span class="p">):</span>
+
+	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">parent</span> <span class="p">):</span>
+		<span class="n">wx</span><span class="o">.</span><span class="n">Dialog</span><span class="o">.</span><span class="fm">__init__</span> <span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="nb">id</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">ID_ANY</span><span class="p">,</span> <span class="n">title</span> <span class="o">=</span> <span class="sa">u</span><span class="s2">&quot;Generate Design Space&quot;</span><span class="p">,</span> <span class="n">pos</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">DefaultPosition</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">Size</span><span class="p">(</span> <span class="mi">600</span><span class="p">,</span> <span class="mi">400</span> <span class="p">),</span> <span class="n">style</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">DEFAULT_DIALOG_STYLE</span> <span class="p">)</span>
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">SetSizeHints</span><span class="p">(</span> <span class="n">wx</span><span class="o">.</span><span class="n">DefaultSize</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">DefaultSize</span> <span class="p">)</span>
+
+		<span class="n">Sizer</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">BoxSizer</span><span class="p">(</span> <span class="n">wx</span><span class="o">.</span><span class="n">VERTICAL</span> <span class="p">)</span>
+
+		<span class="n">gbSizer</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">GridBagSizer</span><span class="p">(</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span> <span class="p">)</span>
+		<span class="n">gbSizer</span><span class="o">.</span><span class="n">SetFlexibleDirection</span><span class="p">(</span> <span class="n">wx</span><span class="o">.</span><span class="n">BOTH</span> <span class="p">)</span>
+		<span class="n">gbSizer</span><span class="o">.</span><span class="n">SetNonFlexibleGrowMode</span><span class="p">(</span> <span class="n">wx</span><span class="o">.</span><span class="n">FLEX_GROWMODE_SPECIFIED</span> <span class="p">)</span>
+
+		<span class="c1">#Add UI Buttons</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">GenDesignSpace</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">ID_ANY</span><span class="p">,</span> <span class="sa">u</span><span class="s2">&quot;Generate Design Space&quot;</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">DefaultPosition</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">DefaultSize</span><span class="p">,</span> <span class="mi">0</span> <span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">GenDesignSpace</span><span class="o">.</span><span class="n">SetToolTip</span><span class="p">(</span> <span class="sa">u</span><span class="s2">&quot;Generate design space.&quot;</span> <span class="p">)</span>
+
+		<span class="n">gbSizer</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">GenDesignSpace</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">GBPosition</span><span class="p">(</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">3</span> <span class="p">),</span> <span class="n">wx</span><span class="o">.</span><span class="n">GBSpan</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">),</span> <span class="n">wx</span><span class="o">.</span><span class="n">ALL</span><span class="p">,</span> <span class="mi">5</span> <span class="p">)</span>
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">CloseDialog</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">ID_ANY</span><span class="p">,</span> <span class="sa">u</span><span class="s2">&quot;Close&quot;</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">DefaultPosition</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">DefaultSize</span><span class="p">,</span> <span class="mi">0</span> <span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">CloseDialog</span><span class="o">.</span><span class="n">SetToolTip</span><span class="p">(</span><span class="sa">u</span><span class="s2">&quot;Close the dialog.&quot;</span><span class="p">)</span>
+
+		<span class="n">gbSizer</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">CloseDialog</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">GBPosition</span><span class="p">(</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">2</span> <span class="p">),</span> <span class="n">wx</span><span class="o">.</span><span class="n">GBSpan</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">),</span> <span class="n">wx</span><span class="o">.</span><span class="n">ALL</span><span class="p">,</span> <span class="mi">5</span> <span class="p">)</span>
+
+		<span class="c1">#Add UI Text boxes</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">m_staticText1</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">StaticText</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">ID_ANY</span><span class="p">,</span> <span class="sa">u</span><span class="s2">&quot;Composite Thickness (mm):&quot;</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">DefaultPosition</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">DefaultSize</span><span class="p">,</span> <span class="mi">0</span> <span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">m_staticText1</span><span class="o">.</span><span class="n">Wrap</span><span class="p">(</span> <span class="o">-</span><span class="mi">1</span> <span class="p">)</span>
+
+		<span class="n">gbSizer</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">m_staticText1</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">GBPosition</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">),</span> <span class="n">wx</span><span class="o">.</span><span class="n">GBSpan</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">),</span> <span class="n">wx</span><span class="o">.</span><span class="n">ALL</span><span class="p">,</span> <span class="mi">5</span> <span class="p">)</span>
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">m_textCtr1</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">TextCtrl</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">ID_ANY</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">EmptyString</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">DefaultPosition</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">DefaultSize</span><span class="p">,</span> <span class="mi">0</span> <span class="p">)</span>
+		<span class="n">gbSizer</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">m_textCtr1</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">GBPosition</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span> <span class="p">),</span> <span class="n">wx</span><span class="o">.</span><span class="n">GBSpan</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">),</span> <span class="n">wx</span><span class="o">.</span><span class="n">ALL</span><span class="p">,</span> <span class="mi">5</span> <span class="p">)</span>
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">m_staticText2</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">StaticText</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">ID_ANY</span><span class="p">,</span> <span class="sa">u</span><span class="s2">&quot;Volume Fraction (%):&quot;</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">DefaultPosition</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">DefaultSize</span><span class="p">,</span> <span class="mi">0</span> <span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">m_staticText2</span><span class="o">.</span><span class="n">Wrap</span><span class="p">(</span> <span class="o">-</span><span class="mi">1</span> <span class="p">)</span>
+
+		<span class="n">gbSizer</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">m_staticText2</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">GBPosition</span><span class="p">(</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span> <span class="p">),</span> <span class="n">wx</span><span class="o">.</span><span class="n">GBSpan</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">),</span> <span class="n">wx</span><span class="o">.</span><span class="n">ALL</span><span class="p">,</span> <span class="mi">5</span> <span class="p">)</span>
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">m_textCtr2</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">TextCtrl</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">ID_ANY</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">EmptyString</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">DefaultPosition</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">DefaultSize</span><span class="p">,</span> <span class="mi">0</span> <span class="p">)</span>
+		<span class="n">gbSizer</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">m_textCtr2</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">GBPosition</span><span class="p">(</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span> <span class="p">),</span> <span class="n">wx</span><span class="o">.</span><span class="n">GBSpan</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">),</span> <span class="n">wx</span><span class="o">.</span><span class="n">ALL</span><span class="p">,</span> <span class="mi">5</span> <span class="p">)</span>
+
+		<span class="c1">#Add UI Radio Boxes</span>
+		<span class="n">m_radioBoxChoices</span> <span class="o">=</span> <span class="p">[</span> <span class="sa">u</span><span class="s2">&quot;6K&quot;</span><span class="p">,</span> <span class="sa">u</span><span class="s2">&quot;12K&quot;</span><span class="p">,</span> <span class="sa">u</span><span class="s2">&quot;24K&quot;</span> <span class="p">]</span>
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">m_radioBox1</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">RadioBox</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">ID_ANY</span><span class="p">,</span> <span class="sa">u</span><span class="s2">&quot;Number of Warp Filaments&quot;</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">DefaultPosition</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">DefaultSize</span><span class="p">,</span> <span class="n">m_radioBoxChoices</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">RA_SPECIFY_COLS</span> <span class="p">)</span>
+		<span class="n">gbSizer</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">m_radioBox1</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">GBPosition</span><span class="p">(</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span> <span class="p">),</span> <span class="n">wx</span><span class="o">.</span><span class="n">GBSpan</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">),</span> <span class="n">wx</span><span class="o">.</span><span class="n">ALL</span><span class="p">,</span> <span class="mi">5</span> <span class="p">)</span>
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">m_radioBox2</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">RadioBox</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">ID_ANY</span><span class="p">,</span> <span class="sa">u</span><span class="s2">&quot;Number of Weft Filaments&quot;</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">DefaultPosition</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">DefaultSize</span><span class="p">,</span> <span class="n">m_radioBoxChoices</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">RA_SPECIFY_COLS</span> <span class="p">)</span>
+		<span class="n">gbSizer</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">m_radioBox2</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">GBPosition</span><span class="p">(</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">2</span> <span class="p">),</span> <span class="n">wx</span><span class="o">.</span><span class="n">GBSpan</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">),</span> <span class="n">wx</span><span class="o">.</span><span class="n">ALL</span><span class="p">,</span> <span class="mi">5</span> <span class="p">)</span>
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">m_radioBox3</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">RadioBox</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">ID_ANY</span><span class="p">,</span> <span class="sa">u</span><span class="s2">&quot;Number of Binder Filaments&quot;</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">DefaultPosition</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">DefaultSize</span><span class="p">,</span> <span class="n">m_radioBoxChoices</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">RA_SPECIFY_COLS</span> <span class="p">)</span>
+		<span class="n">gbSizer</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">m_radioBox3</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">GBPosition</span><span class="p">(</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">3</span> <span class="p">),</span> <span class="n">wx</span><span class="o">.</span><span class="n">GBSpan</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">),</span> <span class="n">wx</span><span class="o">.</span><span class="n">ALL</span><span class="p">,</span> <span class="mi">5</span> <span class="p">)</span>
+
+
+		<span class="n">Sizer</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span> <span class="n">gbSizer</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">EXPAND</span><span class="p">,</span> <span class="mi">5</span> <span class="p">)</span>
+
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">SetSizer</span><span class="p">(</span> <span class="n">Sizer</span> <span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">Layout</span><span class="p">()</span>
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">Centre</span><span class="p">(</span> <span class="n">wx</span><span class="o">.</span><span class="n">BOTH</span> <span class="p">)</span>
+
+		<span class="c1">#close frame</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">Bind</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">EVT_CLOSE</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">OnClose</span><span class="p">)</span>
+
+		<span class="c1"># Connect Events</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">GenDesignSpace</span><span class="o">.</span><span class="n">Bind</span><span class="p">(</span> <span class="n">wx</span><span class="o">.</span><span class="n">EVT_BUTTON</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">GenerateDesignSpace</span> <span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">CloseDialog</span><span class="o">.</span><span class="n">Bind</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">EVT_BUTTON</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">OnExit</span><span class="p">)</span>
+
+	<span class="k">def</span> <span class="fm">__del__</span><span class="p">(</span> <span class="bp">self</span> <span class="p">):</span>
+		<span class="k">pass</span>
+		
+<div class="viewcode-block" id="DesignSpaceWindow.OnClose"><a class="viewcode-back" href="../OptimisationGUI.html#OptimisationGUI.DesignSpaceWindow.OnClose">[docs]</a>	<span class="k">def</span> <span class="nf">OnClose</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">event</span> <span class="p">):</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">Destroy</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="DesignSpaceWindow.OnExit"><a class="viewcode-back" href="../OptimisationGUI.html#OptimisationGUI.DesignSpaceWindow.OnExit">[docs]</a>	<span class="k">def</span> <span class="nf">OnExit</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">event</span> <span class="p">):</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">Destroy</span><span class="p">()</span>	</div>
+		
+	<span class="c1"># Event Handlers</span>
+<div class="viewcode-block" id="DesignSpaceWindow.GenerateDesignSpace"><a class="viewcode-back" href="../OptimisationGUI.html#OptimisationGUI.DesignSpaceWindow.GenerateDesignSpace">[docs]</a>	<span class="k">def</span> <span class="nf">GenerateDesignSpace</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">event</span> <span class="p">):</span>
+		<span class="n">dlg</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">DirDialog</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;Choose Location for Design Space File&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">DD_DEFAULT_STYLE</span> <span class="o">|</span> <span class="n">wx</span><span class="o">.</span><span class="n">DD_DIR_MUST_EXIST</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">dlg</span><span class="o">.</span><span class="n">ShowModal</span><span class="p">()</span> <span class="o">==</span> <span class="n">wx</span><span class="o">.</span><span class="n">ID_OK</span><span class="p">:</span>
+			<span class="n">path</span> <span class="o">=</span> <span class="n">dlg</span><span class="o">.</span><span class="n">GetPath</span><span class="p">()</span>
+			<span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+			
+			<span class="n">tol</span> <span class="o">=</span> <span class="mf">0.05</span>  <span class="c1">#to do: add UI box for this</span>
+			<span class="n">thickness</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_textCtr1</span><span class="o">.</span><span class="n">GetValue</span><span class="p">())</span>
+			<span class="n">vf</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_textCtr2</span><span class="o">.</span><span class="n">GetValue</span><span class="p">())</span>
+
+			<span class="n">FilamentsDict</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;6K&#39;</span><span class="p">:</span><span class="mi">6000</span><span class="p">,</span> <span class="s1">&#39;12K&#39;</span><span class="p">:</span><span class="mi">12000</span><span class="p">,</span> <span class="s1">&#39;24K&#39;</span><span class="p">:</span><span class="mi">240000</span><span class="p">}</span>
+			<span class="n">indexWarp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">m_radioBox1</span><span class="o">.</span><span class="n">GetSelection</span><span class="p">()</span>
+			<span class="n">indexWeft</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">m_radioBox2</span><span class="o">.</span><span class="n">GetSelection</span><span class="p">()</span>
+			<span class="n">indexBinder</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">m_radioBox3</span><span class="o">.</span><span class="n">GetSelection</span><span class="p">()</span>
+			<span class="n">numberFilamentsWarp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">m_radioBox1</span><span class="o">.</span><span class="n">GetString</span><span class="p">(</span><span class="n">indexWarp</span><span class="p">)</span>
+			<span class="n">numberFilamentsWeft</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">m_radioBox1</span><span class="o">.</span><span class="n">GetString</span><span class="p">(</span><span class="n">indexWeft</span><span class="p">)</span>
+			<span class="n">numberFilamentsBinder</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">m_radioBox1</span><span class="o">.</span><span class="n">GetString</span><span class="p">(</span><span class="n">indexBinder</span><span class="p">)</span>
+			<span class="n">SaveDesignSpace</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">vf</span><span class="p">,</span> <span class="n">tol</span><span class="p">,</span> <span class="n">thickness</span><span class="p">,</span> <span class="n">FilamentsDict</span><span class="p">[</span><span class="n">numberFilamentsWarp</span><span class="p">],</span> <span class="n">FilamentsDict</span><span class="p">[</span><span class="n">numberFilamentsWeft</span><span class="p">],</span> <span class="n">FilamentsDict</span><span class="p">[</span><span class="n">numberFilamentsBinder</span><span class="p">])</span>
+			<span class="n">Message</span> <span class="o">=</span> <span class="s1">&#39;Textile design space saved to &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">InfoBox</span><span class="p">(</span> <span class="n">Message</span> <span class="p">)</span>
+		<span class="n">dlg</span><span class="o">.</span><span class="n">Destroy</span><span class="p">()</span>
+		<span class="c1">#event.Skip()</span>
+
+		<span class="n">frame</span> <span class="o">=</span> <span class="n">RunOptimisationFrame</span><span class="p">(</span><span class="n">thickness</span><span class="p">,</span> <span class="n">vf</span><span class="p">,</span> <span class="n">FilamentsDict</span><span class="p">,</span> <span class="n">numberFilamentsWarp</span><span class="p">,</span> <span class="n">numberFilamentsWeft</span><span class="p">,</span> <span class="n">numberFilamentsBinder</span><span class="p">)</span>
+		<span class="n">frame</span><span class="o">.</span><span class="n">Show</span><span class="p">()</span></div>
+
+
+	<span class="c1"># Message Boxes</span>
+<div class="viewcode-block" id="DesignSpaceWindow.ErrorBox"><a class="viewcode-back" href="../OptimisationGUI.html#OptimisationGUI.DesignSpaceWindow.ErrorBox">[docs]</a>	<span class="k">def</span> <span class="nf">ErrorBox</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">message</span> <span class="p">):</span>
+		<span class="n">dlg</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">MessageDialog</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span><span class="s1">&#39;Error&#39;</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">OK</span> <span class="o">|</span> <span class="n">wx</span><span class="o">.</span><span class="n">ICON_WARNING</span> <span class="p">)</span>
+		<span class="n">dlg</span><span class="o">.</span><span class="n">ShowModal</span><span class="p">()</span>
+		<span class="n">dlg</span><span class="o">.</span><span class="n">Destroy</span><span class="p">()</span></div>
+		
+<div class="viewcode-block" id="DesignSpaceWindow.InfoBox"><a class="viewcode-back" href="../OptimisationGUI.html#OptimisationGUI.DesignSpaceWindow.InfoBox">[docs]</a>	<span class="k">def</span> <span class="nf">InfoBox</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">message</span> <span class="p">):</span>
+		<span class="n">dlg</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">MessageDialog</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span><span class="s1">&#39;Info&#39;</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">OK</span> <span class="o">|</span> <span class="n">wx</span><span class="o">.</span><span class="n">ICON_INFORMATION</span> <span class="p">)</span>
+		<span class="n">dlg</span><span class="o">.</span><span class="n">ShowModal</span><span class="p">()</span>
+		<span class="n">dlg</span><span class="o">.</span><span class="n">Destroy</span><span class="p">()</span></div></div>
+		
+<div class="viewcode-block" id="RunOptimisationFrame"><a class="viewcode-back" href="../OptimisationGUI.html#OptimisationGUI.RunOptimisationFrame">[docs]</a><span class="k">class</span> <span class="nc">RunOptimisationFrame</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">Frame</span><span class="p">):</span>
+
+	<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">	Class to generate second window and set the parameters before launching the optimisation</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+
+
+	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">thickness</span><span class="p">,</span> <span class="n">vf</span><span class="p">,</span> <span class="n">FilamentsDict</span><span class="p">,</span> <span class="n">numberFilamentsWarp</span><span class="p">,</span> <span class="n">numberFilamentsWeft</span><span class="p">,</span> <span class="n">numberFilamentsBinder</span><span class="p">):</span>
+		
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Initialises window with the information selected in the first dialog</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		
+		<span class="bp">self</span><span class="o">.</span><span class="n">thickness</span> <span class="o">=</span> <span class="n">thickness</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">vf</span> <span class="o">=</span> <span class="n">vf</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">FilamentsDict</span> <span class="o">=</span> <span class="n">FilamentsDict</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">numberFilamentsWarp</span> <span class="o">=</span> <span class="n">numberFilamentsWarp</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">numberFilamentsWeft</span> <span class="o">=</span> <span class="n">numberFilamentsWeft</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">numberFilamentsBinder</span> <span class="o">=</span> <span class="n">numberFilamentsBinder</span>
+		
+		<span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Run Optimisation&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">wx</span><span class="o">.</span><span class="n">Size</span><span class="p">(</span> <span class="mi">600</span><span class="p">,</span> <span class="mi">400</span> <span class="p">))</span>
+		<span class="n">panel</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">Panel</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+		
+		<span class="bp">self</span><span class="o">.</span><span class="n">SetSizeHints</span><span class="p">(</span> <span class="n">wx</span><span class="o">.</span><span class="n">DefaultSize</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">DefaultSize</span> <span class="p">)</span>
+
+		<span class="n">Sizer</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">BoxSizer</span><span class="p">(</span> <span class="n">wx</span><span class="o">.</span><span class="n">VERTICAL</span> <span class="p">)</span>
+
+		<span class="n">ThicknessString</span> <span class="o">=</span> <span class="s2">&quot;Composite Thickness (mm): &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">thickness</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">m_ThicknessText</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">StaticText</span><span class="p">(</span> <span class="n">panel</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">ThicknessString</span> <span class="p">)</span>
+
+		<span class="n">VolFractionString</span> <span class="o">=</span> <span class="s2">&quot;Composite Volume Fraction: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vf</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">m_VolFractionText</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">StaticText</span><span class="p">(</span> <span class="n">panel</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="n">VolFractionString</span><span class="p">)</span>
+
+		<span class="n">WarpString</span> <span class="o">=</span> <span class="s2">&quot;Warp Filament Number : &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">FilamentsDict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">numberFilamentsWarp</span><span class="p">])</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">m_WarpFilamentText</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">StaticText</span><span class="p">(</span> <span class="n">panel</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="n">WarpString</span><span class="p">)</span>
+
+		<span class="n">WeftString</span> <span class="o">=</span> <span class="s2">&quot;Weft Filament Number : &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">FilamentsDict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">numberFilamentsWeft</span><span class="p">])</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">m_WeftFilamentText</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">StaticText</span><span class="p">(</span> <span class="n">panel</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="n">WeftString</span><span class="p">)</span>
+
+		<span class="n">BinderString</span> <span class="o">=</span> <span class="s2">&quot;Binder Filament Number : &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">FilamentsDict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">numberFilamentsBinder</span><span class="p">])</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">m_BinderFilamentText</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">StaticText</span><span class="p">(</span> <span class="n">panel</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="n">BinderString</span><span class="p">)</span>
+		
+		<span class="c1">#Values from WeaveDesignSpace file</span>
+		<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;weavedesignspace.txt&quot;</span> <span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+			<span class="n">line</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+		<span class="n">designSpaceList</span> <span class="o">=</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;, &quot;</span><span class="p">)</span>
+		
+		
+		<span class="n">numWeftLayers</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">designSpaceList</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+		<span class="n">maxnumBinderLayers</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">designSpaceList</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+		<span class="n">maxSpacing</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">designSpaceList</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+		<span class="n">warpHeight</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">designSpaceList</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+		<span class="n">warpWidth</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">designSpaceList</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span>
+		<span class="n">weftHeight</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">designSpaceList</span><span class="p">[</span><span class="mi">5</span><span class="p">])</span>
+		<span class="n">weftWidth</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">designSpaceList</span><span class="p">[</span><span class="mi">6</span><span class="p">])</span>
+		<span class="n">binderHeight</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">designSpaceList</span><span class="p">[</span><span class="mi">7</span><span class="p">])</span>
+		<span class="n">binderWidth</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">designSpaceList</span><span class="p">[</span><span class="mi">8</span><span class="p">])</span>
+		
+		<span class="c1"># warpHeight, warpWidth, weftHeight, weftWidth, binderHeight, binderWidth</span>
+		<span class="n">NumWeftLayersString</span> <span class="o">=</span> <span class="s2">&quot;Number of Weft Layers : &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">numWeftLayers</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">m_NumWeftLayersText</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">StaticText</span><span class="p">(</span> <span class="n">panel</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="n">NumWeftLayersString</span><span class="p">)</span>
+		
+		<span class="n">NumWarpLayersString</span> <span class="o">=</span> <span class="s2">&quot;Number of Warp Layers : &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">numWeftLayers</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">m_NumWarpLayersText</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">StaticText</span><span class="p">(</span> <span class="n">panel</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="n">NumWarpLayersString</span><span class="p">)</span>
+		
+		<span class="n">MaxNumBinderLayersString</span> <span class="o">=</span> <span class="s2">&quot;Maximum Number of Binder Layers : &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">maxnumBinderLayers</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">m_MaxNumBinderLayersText</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">StaticText</span><span class="p">(</span> <span class="n">panel</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="n">MaxNumBinderLayersString</span><span class="p">)</span>
+		
+		<span class="n">MaxSpacingString</span> <span class="o">=</span> <span class="s2">&quot;Maximum Spacing Between Yarns (mm) : &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">maxSpacing</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">m_MaxSpacingText</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">StaticText</span><span class="p">(</span> <span class="n">panel</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="n">MaxSpacingString</span><span class="p">)</span>
+
+		
+		<span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Check parameters are correct and run optimisation.&quot;</span>
+		<span class="n">instructions</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">StaticText</span><span class="p">(</span><span class="n">panel</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">msg</span><span class="p">)</span>
+		<span class="n">close_btn</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span><span class="n">panel</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Optimise&quot;</span><span class="p">)</span>
+		<span class="n">close_btn</span><span class="o">.</span><span class="n">Bind</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">EVT_BUTTON</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">onSendAndClose</span><span class="p">)</span>
+		
+		
+		<span class="n">gbsizer</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">GridBagSizer</span><span class="p">(</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span> <span class="p">)</span>
+		<span class="n">gbsizer</span><span class="o">.</span><span class="n">SetFlexibleDirection</span><span class="p">(</span> <span class="n">wx</span><span class="o">.</span><span class="n">BOTH</span> <span class="p">)</span>
+		<span class="n">gbsizer</span><span class="o">.</span><span class="n">SetNonFlexibleGrowMode</span><span class="p">(</span> <span class="n">wx</span><span class="o">.</span><span class="n">FLEX_GROWMODE_SPECIFIED</span> <span class="p">)</span>
+
+		<span class="n">gbsizer</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_ThicknessText</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">GBPosition</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">),</span> <span class="n">wx</span><span class="o">.</span><span class="n">GBSpan</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">),</span> <span class="n">wx</span><span class="o">.</span><span class="n">ALL</span><span class="p">,</span> <span class="mi">5</span> <span class="p">)</span>
+		<span class="n">gbsizer</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_VolFractionText</span><span class="p">,</span><span class="n">wx</span><span class="o">.</span><span class="n">GBPosition</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span> <span class="p">),</span> <span class="n">wx</span><span class="o">.</span><span class="n">GBSpan</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">),</span> <span class="n">wx</span><span class="o">.</span><span class="n">ALL</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+		<span class="n">gbsizer</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_WarpFilamentText</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">GBPosition</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span> <span class="p">),</span> <span class="n">wx</span><span class="o">.</span><span class="n">GBSpan</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">),</span> <span class="n">wx</span><span class="o">.</span><span class="n">ALL</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+		<span class="n">gbsizer</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_WeftFilamentText</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">GBPosition</span><span class="p">(</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span> <span class="p">),</span> <span class="n">wx</span><span class="o">.</span><span class="n">GBSpan</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">),</span> <span class="n">wx</span><span class="o">.</span><span class="n">ALL</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+		<span class="n">gbsizer</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_BinderFilamentText</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">GBPosition</span><span class="p">(</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span> <span class="p">),</span> <span class="n">wx</span><span class="o">.</span><span class="n">GBSpan</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">),</span> <span class="n">wx</span><span class="o">.</span><span class="n">ALL</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+		
+		<span class="n">gbsizer</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_NumWeftLayersText</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">GBPosition</span><span class="p">(</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span> <span class="p">),</span> <span class="n">wx</span><span class="o">.</span><span class="n">GBSpan</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">),</span> <span class="n">wx</span><span class="o">.</span><span class="n">ALL</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+		<span class="n">gbsizer</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_NumWarpLayersText</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">GBPosition</span><span class="p">(</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span> <span class="p">),</span> <span class="n">wx</span><span class="o">.</span><span class="n">GBSpan</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">),</span> <span class="n">wx</span><span class="o">.</span><span class="n">ALL</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+		<span class="n">gbsizer</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_MaxNumBinderLayersText</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">GBPosition</span><span class="p">(</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">2</span> <span class="p">),</span> <span class="n">wx</span><span class="o">.</span><span class="n">GBSpan</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">),</span> <span class="n">wx</span><span class="o">.</span><span class="n">ALL</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+		<span class="n">gbsizer</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_MaxSpacingText</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">GBPosition</span><span class="p">(</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">3</span> <span class="p">),</span> <span class="n">wx</span><span class="o">.</span><span class="n">GBSpan</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">),</span> <span class="n">wx</span><span class="o">.</span><span class="n">ALL</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+		
+		<span class="n">gbsizer</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="n">instructions</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">GBPosition</span><span class="p">(</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">1</span> <span class="p">),</span> <span class="n">wx</span><span class="o">.</span><span class="n">GBSpan</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">),</span> <span class="n">wx</span><span class="o">.</span><span class="n">ALL</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+		<span class="n">gbsizer</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="n">close_btn</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">GBPosition</span><span class="p">(</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">3</span> <span class="p">),</span> <span class="n">wx</span><span class="o">.</span><span class="n">GBSpan</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">),</span> <span class="n">wx</span><span class="o">.</span><span class="n">ALL</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+		
+		
+		
+		<span class="n">Sizer</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span> <span class="n">gbsizer</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">EXPAND</span><span class="p">,</span> <span class="mi">5</span> <span class="p">)</span>
+
+
+		<span class="n">panel</span><span class="o">.</span><span class="n">SetSizer</span><span class="p">(</span> <span class="n">Sizer</span> <span class="p">)</span>
+		
+		
+<div class="viewcode-block" id="RunOptimisationFrame.onSendAndClose"><a class="viewcode-back" href="../OptimisationGUI.html#OptimisationGUI.RunOptimisationFrame.onSendAndClose">[docs]</a>	<span class="k">def</span> <span class="nf">onSendAndClose</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		On pressing the &quot;Optimise&quot; button, starts the optimisation and closes the window</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		
+		<span class="n">RunOptimisation</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">())</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">Close</span><span class="p">()</span></div></div>
+
+
+<span class="c1">#if __name__==&quot;__main__&quot;:</span>
+	
+
+
+<span class="c1"># Create the weave tool app</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">App</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">DesignSpaceFrame</span> <span class="o">=</span> <span class="n">DesignSpaceWindow</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span> 
+<span class="n">DesignSpaceFrame</span><span class="o">.</span><span class="n">Show</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>     <span class="c1"># Show the frame.</span>
+
+<span class="n">app</span><span class="o">.</span><span class="n">MainLoop</span><span class="p">()</span>
+
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Louise Brown, Mikhail Matveev, George Spackman.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
