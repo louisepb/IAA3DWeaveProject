@@ -60,20 +60,14 @@ def GenerateDesignSpace(path, vf, tol, thickness, numberFilamentsWarp, numberFil
 	cellFibreVolume = vf * cellVolume
 	
 	yarnfvf = (filamentArea * numberFilamentsWarp) / warpYarnArea
-	#print("yarnfvf ", yarnfvf)
-	
-	cellYarnVolume = cellVolume * vf / yarnfvf
-	#print("cellVolume ", cellVolume)
-	#print("cellYarnVolume ", cellYarnVolume)
-	#
+
+	cellVolume * vf / yarnfvf
 	#calculate the yarn volume in each layer (both warp and weft)
 	cellLayerVolume = (warpHeight + weftHeight)*cellLength*cellWidth
-	#print("cellLayerVolume is ", cellLayerVolume)
 	
 	weftlayerVolume = weftHeight*cellLength*cellWidth
 	
 	numLayers = int(cellYarnVolume / cellLayerVolume)
-	#print("numLayers = ", numLayers)
 	
 
 
@@ -84,7 +78,6 @@ def GenerateDesignSpace(path, vf, tol, thickness, numberFilamentsWarp, numberFil
 	#numWarpLayers = int(Volume / layerVolume)
 	numWeftLayers = numWarpLayers + 1
 	numLayers = numWarpLayers + numWeftLayers
-	#print("numLayers = ", numLayers)
 	
 	#max binder volume given by numWarpLayers
 	maxBinderVolume = (numWeftLayers)* binderHeight * cellWidth * cellLength
@@ -95,20 +88,14 @@ def GenerateDesignSpace(path, vf, tol, thickness, numberFilamentsWarp, numberFil
 	binderVolume=6*binderYarnArea*weftWidth
 	
 	minSpacing = binderHeight + weftWidth
-	#upper = ((2*cellYarnVolume*yarnfvf + (binderVolume+cellYarnVolume)*yarnfvf)/(vf-tol*vf)) - cellVolume
 	X = (1.5*cellYarnVolume*yarnfvf + (binderVolume)*yarnfvf)/0.8
-	#print("X ", X)
 
 	ans2 = (X)/(warpWidth*thickness) - weftWidth
 	
-	#print(ans2)
 	maxSpacing = round(ans2, 2)
 	
 	#For now
 	maxSpacing = minSpacing
-	#print("maxSpacing ", maxSpacing)
-	#print("minVolume ", 2*cellVolume)
-	#print("actVolume ", (maxSpacing)*thickness*warpWidth + cellVolume)
 
 	
 	return numWeftLayers, numWarpLayers, maxnumBinderLayers, maxSpacing, warpHeight, warpWidth, weftHeight, weftWidth, binderHeight, binderWidth 

@@ -4,7 +4,7 @@ from TexGen.Core import *
 import math
 import sys
 import os
-path = "c:\\users\\emxghs\\desktop\\IAA3DWeaveProject\\parameterisedTextile\\"
+path = "c:\\users\\emxghs\\desktop\\IAA3DWeaveProject\\Code\\"
 
 #user specified properties
 
@@ -87,7 +87,7 @@ def GenerateTextile(numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, w
 			# Calculate the binder y position (ie warp yarn index)
 			ind = z/binderRatio
 			BinderIndex = warpRatio + (ind * repeat) + z%binderRatio
-			Textile.SetBinderPosition(x, BinderIndex, list)
+			Textile.SetBinderPosition(x, int(BinderIndex), list)
 	
 	
 	Textile.SetYYarnWidths( weftWidth )
@@ -149,9 +149,8 @@ def GenerateTextile(numXYarns, numWefts, warpSpacing, weftSpacing, warpHeight, w
 	AddTextile( Textile )
 	
 	#save TG model
-	# print("Saving textile model")
-	voxelSize = 0.05
-	SaveToXML(r"C:\\Users\\emxghs\\Desktop\\IAA3DWeaveProject\\parameterisedTextile\\ptextile.tg3", Textile.GetName(), OUTPUT_STANDARD)
+	voxelSize = 0.5
+	SaveToXML(r"C:\\Users\\emxghs\\Desktop\\IAA3DWeaveProject\\Code\\ptextile.tg3", Textile.GetName(), OUTPUT_STANDARD)
 	XVoxNum = int(length / voxelSize)
 	YVoxNum = int(width  / voxelSize)
 	ZVoxNum = int(height / voxelSize)
@@ -188,7 +187,6 @@ def SaveMesh(Textile, XVoxNum, YVoxNum, ZVoxNum, input):
 	Returns:
 		None
 	"""
-	print("Save mesh")
 	
 	numVoxels = XVoxNum * YVoxNum *ZVoxNum
 	
@@ -198,21 +196,16 @@ def SaveMesh(Textile, XVoxNum, YVoxNum, ZVoxNum, input):
 	results_id = "_".join([str(x) for x in input])
 	
 	# if numVoxels < 100000:
-		# print("saving octree mesh")
-		# print(os.getcwd() + "\\" + "optim_" + results_id)
 		# Mesh = COctreeVoxelMesh("CPeriodicBoundaries")
 		# # CTextile &Textile, string OutputFilename, int XVoxNum, int YVoxNum, int ZVoxNum, int min_level, int refine_level, bool smoothing, int smoothIter, double smooth1, double smooth2, bool surfaceOuput
 		# Mesh.SaveVoxelMesh(Textile, os.getcwd() + "\\" + "optim_" + results_id, XVoxNum, YVoxNum, ZVoxNum, 1, 3, False, 0, 0, 0, False)
-	# else:
-		# print("saving rectangular mesh")
 	Mesh = CRectangularVoxelMesh("CPeriodicBoundaries")
 	Mesh.SaveVoxelMesh(Textile, os.getcwd() + "\\" + "optim_" + results_id, XVoxNum, YVoxNum, ZVoxNum, True, True, MATERIAL_CONTINUUM, 0 )
 	
 	return
 
 if __name__ == '__main__':
-	path = "c:\\users\\emxghs\\desktop\\IAA3DWeaveProject\\parameterisedTextile\\"
-	#print(sys.argv)
+	path = "c:\\users\\emxghs\\desktop\\IAA3DWeaveProject\\Code\\"
 	numXYarns = int(sys.argv[1])
 	numWefts = int(sys.argv[2])
 	warpSpacing = float(sys.argv[3])

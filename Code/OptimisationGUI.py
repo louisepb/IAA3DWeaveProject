@@ -9,13 +9,12 @@ import os
 sys.path.append("C:\\users\\emxghs\\desktop\\IAA3DWeaveProject\\Code")
 from generateDesignSpace import *
 from GeneticAlgorithm import *
-#from GDS.GeneticAlgorithm import *
+
 
 
 class DesignSpaceWindow ( wx.Dialog ):
 
 	def __init__( self, parent ):
-	
 		wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = u"Generate Design Space", pos = wx.DefaultPosition, size = wx.Size( 600, 400 ), style = wx.DEFAULT_DIALOG_STYLE )
 
 		self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
@@ -239,20 +238,19 @@ class RunOptimisationFrame(wx.Frame):
 		On pressing the "Optimise" button, starts the optimisation and closes the window
 		"""
 		
-		# scriptPath = "C:\\users\\emxghs\\desktop\\optimisationGUI\\GDS"
-		# os.chdir(scriptPath)
-		#subprocess.call(scriptPath + " python GeneticAlgorithm.py")
 		RunOptimisation(os.getcwd())
 		self.Close()
 
 
-if __name__ == "__main__":
+#if __name__=="__main__":
+	
 
-	# Create the weave tool app
-	app = wx.App(False)  
-	DesignSpaceFrame = DesignSpaceWindow(None) 
-	DesignSpaceFrame.Show(True)     # Show the frame.
 
-	app.MainLoop()
+# Create the weave tool app
+app = wx.App(False)
+DesignSpaceFrame = DesignSpaceWindow(None) 
+DesignSpaceFrame.Show(True)     # Show the frame.
+
+app.MainLoop()
 
 
